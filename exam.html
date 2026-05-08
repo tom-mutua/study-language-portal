@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<link rel="icon" type="image/png" href="sla-logo.png"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>SEA — Level Exam</title>
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,700&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet"/>
+<style>
+:root{--green:#2a5c3f;--green2:#1e4530;--green-lt:#d6ead9;--sage:#7aaa80;--gold:#c98a1a;--gold-bg:#fdf3dc;--cream:#f5f0e8;--cream2:#ede7d9;--ink:#1b2a1e;--muted:#7a8f7e;--white:#fff;--blue:#1a5276;--purple:#5b3fa0;--red:#c0392b;--red-lt:#fde8e8;--r:12px;--r-sm:7px;}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Nunito',sans-serif;background:var(--cream);color:var(--ink);min-height:100vh;}
+.exam-bar{background:var(--green);color:#fff;padding:0 2rem;height:58px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:50;}
+.eb-logo{display:flex;align-items:center;gap:7px;}.eb-logo img{height:32px;width:32px;object-fit:contain;}.eb-logo span{font-family:'Lora',serif;font-size:.9rem;font-weight:700;}
+.eb-center{display:flex;flex-direction:column;align-items:center;}.eb-title{font-size:.78rem;font-weight:700;opacity:.85;}.eb-lvl{font-size:.67rem;opacity:.52;}
+.timer{display:flex;align-items:center;gap:5px;background:rgba(255,255,255,.14);border-radius:3px;padding:5px 12px;font-size:.82rem;font-weight:700;}
+.timer.warn{background:rgba(201,138,26,.4);}.timer.danger{background:rgba(192,57,43,.5);animation:pulse 1s infinite;}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.7}}
+.prog-top{position:fixed;top:58px;left:0;right:0;height:3px;background:rgba(255,255,255,.18);z-index:49;}
+.prog-fill{height:100%;background:var(--gold);transition:width .4s;}
+.screen{display:none;max-width:700px;margin:0 auto;padding:1.8rem 1.3rem;}
+.screen.active{display:block;}
+.intro-card{background:var(--white);border-radius:var(--r);padding:2rem;text-align:center;border:1px solid var(--cream2);}
+.intro-card h2{font-family:'Lora',serif;font-size:1.4rem;margin-bottom:.4rem;}
+.intro-card p{color:var(--muted);font-size:.85rem;max-width:420px;margin:0 auto 1.2rem;}
+.info-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:.75rem;margin-bottom:1.3rem;}
+.ib{background:var(--cream);border-radius:var(--r-sm);padding:.85rem;text-align:center;}.ib-val{font-size:1.25rem;font-weight:800;font-family:'Lora',serif;color:var(--green);margin-bottom:.18rem;}.ib-lbl{font-size:.67rem;color:var(--muted);font-weight:600;}
+.rules{text-align:left;background:var(--cream);border-radius:var(--r-sm);padding:1rem 1.2rem;margin-bottom:1.5rem;list-style:none;}
+.rules li{font-size:.8rem;color:#3a4d3e;padding:.25rem 0;border-bottom:1px solid var(--cream2);display:flex;align-items:flex-start;gap:5px;}
+.rules li:last-child{border:none;}.rules li::before{content:'—';color:var(--sage);font-weight:700;flex-shrink:0;}
+.btn-start{padding:11px 34px;border:none;border-radius:3px;background:var(--green);color:#fff;font-family:'Nunito',sans-serif;font-weight:800;font-size:.95rem;cursor:pointer;transition:background .2s;}
+.btn-start:hover{background:var(--green2);}
+.q-card{background:var(--white);border-radius:var(--r);padding:1.7rem;border:1px solid var(--cream2);margin-bottom:1.2rem;}
+.q-meta{display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem;}
+.q-num{font-size:.72rem;font-weight:800;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);}
+.q-unit-tag{font-size:.67rem;padding:2px 8px;border-radius:3px;font-weight:700;}
+.q-text{font-family:'Lora',serif;font-size:1.08rem;font-weight:600;line-height:1.7;margin-bottom:1.2rem;color:#1a2a1e;}
+.options{display:flex;flex-direction:column;gap:.55rem;}
+.option{display:flex;align-items:center;gap:10px;padding:.82rem .98rem;border-radius:var(--r-sm);border:1.5px solid var(--cream2);cursor:pointer;transition:all .2s;font-size:.9rem;font-weight:600;color:#1a2a1e;}
+.option:hover{border-color:var(--sage);background:var(--green-lt);}
+.option.selected{border-color:var(--green);background:var(--green-lt);color:var(--green);}
+.option.correct{border-color:var(--sage);background:var(--green-lt);color:var(--green);}
+.option.wrong{border-color:#e74c3c;background:var(--red-lt);color:var(--red);}
+.opt-letter{width:25px;height:25px;border-radius:50%;background:var(--cream2);display:flex;align-items:center;justify-content:center;font-size:.72rem;font-weight:800;flex-shrink:0;transition:all .2s;}
+.option.selected .opt-letter{background:var(--green);color:#fff;}
+.option.correct .opt-letter{background:var(--green);color:#fff;}
+.option.wrong .opt-letter{background:#e74c3c;color:#fff;}
+/* Speaking question */
+.speaking-card{background:var(--blue-lt);border:1px solid #b0ccdf;border-radius:var(--r-sm);padding:1rem 1.2rem;margin-top:.8rem;}
+.speaking-card h4{font-size:.82rem;font-weight:700;color:var(--blue);margin-bottom:.4rem;}
+.speaking-card p{font-size:.78rem;color:#3a4d3e;margin-bottom:.7rem;line-height:1.6;}
+.rec-btns{display:flex;gap:.5rem;flex-wrap:wrap;}
+.btn-rec{padding:7px 16px;border-radius:3px;border:none;font-family:'Nunito',sans-serif;font-weight:700;font-size:.78rem;cursor:pointer;}
+.btn-rec.start-rec{background:var(--red);color:#fff;}
+.btn-rec.stop-rec{background:var(--green);color:#fff;}
+.btn-rec.play-rec{background:var(--blue);color:#fff;}
+.rec-status{font-size:.72rem;color:var(--muted);margin-top:.4rem;}
+.rec-status.recording{color:var(--red);font-weight:700;}
+.audio-note{font-size:.72rem;color:var(--muted);margin-top:.5rem;font-style:italic;}
+.q-nav{display:flex;justify-content:space-between;align-items:center;}
+.btn-prev,.btn-next,.btn-submit-main{padding:8px 20px;border-radius:3px;font-family:'Nunito',sans-serif;font-weight:700;font-size:.84rem;cursor:pointer;border:none;}
+.btn-prev{background:none;border:1.5px solid var(--cream2);color:var(--muted);transition:all .2s;}
+.btn-prev:hover{border-color:var(--sage);color:var(--green);}
+.btn-next{background:var(--green);color:#fff;}
+.btn-submit-main{background:var(--gold);color:#fff;}
+.q-dots{display:flex;flex-wrap:wrap;gap:4px;max-width:300px;}
+.q-dot{width:19px;height:19px;border-radius:50%;border:1.5px solid var(--cream2);cursor:pointer;font-size:.58rem;font-weight:700;display:flex;align-items:center;justify-content:center;color:var(--muted);transition:all .2s;}
+.q-dot.answered{background:var(--green);border-color:var(--green);color:#fff;}
+.q-dot.speaking-answered{background:var(--blue);border-color:var(--blue);color:#fff;}
+.q-dot.current{border-color:var(--gold);color:var(--gold);}
+.result-card{background:var(--white);border-radius:var(--r);padding:2rem;text-align:center;border:1px solid var(--cream2);}
+.r-circle{width:120px;height:120px;border-radius:50%;margin:0 auto 1.2rem;display:flex;flex-direction:column;align-items:center;justify-content:center;border:6px solid;}
+.r-pct{font-size:1.9rem;font-weight:800;font-family:'Lora',serif;line-height:1;}
+.r-lbl{font-size:.72rem;font-weight:700;margin-top:.12rem;}
+.r-grade{font-family:'Lora',serif;font-size:1.5rem;font-weight:700;margin-bottom:.4rem;}
+.r-sub{color:var(--muted);font-size:.84rem;max-width:380px;margin:0 auto 1.2rem;}
+.r-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:.75rem;margin:1.1rem 0;}
+.rsb{background:var(--cream);border-radius:var(--r-sm);padding:.8rem;text-align:center;}.rsb-val{font-size:1.2rem;font-weight:800;font-family:'Lora',serif;margin-bottom:.18rem;}.rsb-lbl{font-size:.67rem;color:var(--muted);font-weight:600;}
+.r-actions{display:flex;gap:.65rem;justify-content:center;flex-wrap:wrap;}
+.btn-rev{padding:9px 20px;border-radius:3px;background:none;border:1.5px solid var(--cream2);color:var(--muted);font-family:'Nunito',sans-serif;font-weight:700;font-size:.83rem;cursor:pointer;transition:all .2s;}
+.btn-rev:hover{border-color:var(--sage);color:var(--green);}
+.btn-dash{padding:9px 20px;border-radius:3px;background:var(--green);border:none;color:#fff;font-family:'Nunito',sans-serif;font-weight:700;font-size:.83rem;cursor:pointer;}
+.speaking-pending-notice{background:var(--blue-lt);border:1px solid #b0ccdf;border-radius:var(--r-sm);padding:.75rem 1rem;font-size:.8rem;color:var(--blue);margin:.8rem 0;}
+.review-item{background:var(--white);border-radius:var(--r-sm);padding:1rem;margin-bottom:.65rem;border:1px solid var(--cream2);}
+.rev-q{font-size:.84rem;font-weight:700;margin-bottom:.5rem;}
+.rev-opts{display:flex;flex-direction:column;gap:.25rem;}
+.ro{padding:.35rem .62rem;border-radius:var(--r-sm);font-size:.76rem;display:flex;align-items:center;gap:5px;}
+.ro.correct{background:var(--green-lt);color:var(--green);font-weight:700;}
+.ro.user-wrong{background:var(--red-lt);color:var(--red);}
+.ro.neutral{color:var(--muted);}
+.rtag{font-size:.6rem;font-weight:800;padding:1px 5px;border-radius:5px;margin-left:auto;flex-shrink:0;}
+.rtag-c{background:var(--green);color:#fff;}.rtag-w{background:#e74c3c;color:#fff;}.rtag-a{background:var(--green-lt);color:var(--green);}
+.confirm-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.48);z-index:200;align-items:center;justify-content:center;}
+.confirm-overlay.open{display:flex;}
+.confirm-box{background:#fff;border-radius:var(--r);padding:1.7rem;max-width:340px;width:90%;text-align:center;}
+.confirm-box h3{font-family:'Lora',serif;font-size:1.05rem;margin-bottom:.38rem;}
+.confirm-box p{color:var(--muted);font-size:.8rem;margin-bottom:1rem;}
+.confirm-btns{display:flex;gap:.5rem;justify-content:center;}
+
+@media(max-width:700px){
+  .exam-bar{padding:0 1rem;height:52px;}
+  .eb-logo span{display:none;}
+  .screen{padding:1.2rem .9rem;}
+  .info-grid{grid-template-columns:1fr 1fr 1fr;}
+  .q-card{padding:1.2rem 1rem;}
+  .q-nav{flex-wrap:wrap;gap:.5rem;}
+  .q-dots{max-width:100%;justify-content:center;}
+  .r-stats{grid-template-columns:1fr 1fr 1fr;}
+  .r-circle{width:100px;height:100px;}
+  .r-pct{font-size:1.6rem;}
+}
+@media(max-width:400px){
+  .info-grid{grid-template-columns:1fr;}
+  .r-stats{grid-template-columns:1fr;}
+  .r-actions{flex-direction:column;}
+  .r-actions button{width:100%;}
+}
+</style>
+</head>
+<body>
+<header class="exam-bar">
+  <div class="eb-logo"><img src="sla-logo.png" alt="SEA" onerror="this.style.display='none'"/><span>Study Language Academy</span></div>
+  <div class="eb-center"><div class="eb-title" id="barTitle">Level Exam</div><div class="eb-lvl" id="barLvl"></div></div>
+  <div style="display:flex;align-items:center;gap:.7rem;">
+    <div class="timer" id="timerWrap">&#9200; <span id="timerDisp">120:00</span></div>
+    <button onclick="confirmExit()" style="background:rgba(255,255,255,.13);border:none;border-radius:3px;padding:5px 12px;color:#fff;font-family:'Nunito',sans-serif;font-size:.74rem;cursor:pointer;">Exit</button>
+  </div>
+</header>
+<div class="prog-top"><div class="prog-fill" id="progFill" style="width:0%"></div></div>
+
+<div class="screen active" id="screen-intro">
+  <div class="intro-card">
+    <h2 id="intro-title">Level Exam</h2>
+    <p id="intro-desc">Read all questions carefully. This exam has one attempt only.</p>
+    <div class="info-grid">
+      <div class="ib"><div class="ib-val" id="intro-qs">—</div><div class="ib-lbl">Questions</div></div>
+      <div class="ib"><div class="ib-val">120 min</div><div class="ib-lbl">Time Allowed</div></div>
+      <div class="ib"><div class="ib-val">70%</div><div class="ib-lbl">Pass Mark</div></div>
+    </div>
+    <ul class="rules">
+      <li>This exam allows ONE attempt only. You cannot retake once submitted.</li>
+      <li>Answer all questions — no penalty for guessing on multiple choice.</li>
+      <li>Level 2 and 3 include speaking/reading questions graded by your instructor.</li>
+      <li>Your written answers are auto-marked immediately. Speaking is graded within 48 hours.</li>
+      <li>Score 70% or above to qualify for certification.</li>
+      <li>Do not close or refresh the browser during the exam.</li>
+    </ul>
+    <button class="btn-start" onclick="startExam()">Begin Exam</button>
+  </div>
+</div>
+
+<div class="screen" id="screen-question">
+  <div class="q-card">
+    <div class="q-meta">
+      <span class="q-num" id="qNum">Question 1</span>
+      <span class="q-unit-tag" id="qUnit"></span>
+    </div>
+    <div class="q-text" id="qText"></div>
+    <div id="qBody"></div>
+  </div>
+  <div class="q-nav">
+    <button class="btn-prev" id="btnPrev" onclick="prevQ()">Previous</button>
+    <div class="q-dots" id="qDots"></div>
+    <button class="btn-next" id="btnNext" onclick="nextQ()">Next</button>
+  </div>
+</div>
+
+<div class="screen" id="screen-result">
+  <div class="result-card">
+    <div class="r-circle" id="rCircle"><div class="r-pct" id="rPct">—</div><div class="r-lbl">Score</div></div>
+    <div class="r-grade" id="rGrade">—</div>
+    <div class="r-sub" id="rSub"></div>
+    <div class="r-stats">
+      <div class="rsb"><div class="rsb-val" id="rs-c">—</div><div class="rsb-lbl">Correct (MC)</div></div>
+      <div class="rsb"><div class="rsb-val" id="rs-w">—</div><div class="rsb-lbl">Incorrect</div></div>
+      <div class="rsb"><div class="rsb-val" id="rs-sp">—</div><div class="rsb-lbl">Speaking Tasks</div></div>
+    </div>
+    <div id="r-cert-msg" style="margin-bottom:1rem;"></div>
+    <div id="r-speaking-msg" style="margin-bottom:1rem;"></div>
+    <div class="r-actions">
+      <button class="btn-rev" onclick="showReview()">Review Answers</button>
+      <button class="btn-dash" onclick="window.location.href='student.html'">Go to Dashboard</button>
+    </div>
+  </div>
+</div>
+
+<div class="screen" id="screen-review">
+  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem;">
+    <h2 style="font-family:'Lora',serif;font-size:1.15rem;">Answer Review</h2>
+    <button onclick="showS('result')" style="padding:5px 14px;border-radius:3px;border:1.5px solid var(--cream2);background:none;font-family:'Nunito',sans-serif;font-weight:700;font-size:.78rem;cursor:pointer;color:var(--muted);">Back</button>
+  </div>
+  <div id="review-list"></div>
+</div>
+
+<div class="confirm-overlay" id="confirmOverlay">
+  <div class="confirm-box">
+    <h3>Submit Exam?</h3>
+    <p id="confirmMsg">Are you ready to submit?</p>
+    <div class="confirm-btns">
+      <button onclick="document.getElementById('confirmOverlay').classList.remove('open')" style="padding:8px 18px;border-radius:3px;border:1.5px solid var(--cream2);background:none;font-family:'Nunito',sans-serif;font-weight:700;cursor:pointer;color:var(--muted);">Review More</button>
+      <button onclick="submitExam()" style="padding:8px 18px;border-radius:3px;border:none;background:var(--green);color:#fff;font-family:'Nunito',sans-serif;font-weight:700;cursor:pointer;">Submit Now</button>
+    </div>
+  </div>
+</div>
+
+
+  <!-- Firebase v9 Compat SDKs -->
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+  <!-- EmailJS for email notifications -->
+  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+  <!-- SEA Shared Data Layer -->
+  <script src="sea-shared.js"></script>
+  <!-- SEA Firebase Integration -->
+  <script src="sea-firebase.js"></script>
+<script>
+let _SEA_INIT_DONE=false;
+async function ensureInit(){if(!_SEA_INIT_DONE){await SEA_FIREBASE_INIT();_SEA_INIT_DONE=true;}}
+
+let examLevel=1,questions=[],answers={},speakingAnswers={},currentQ=0,timerInterval=null,timeLeft=7200,examStarted=false,currentStudent=null;
+const LVL_COLORS={1:'#2a5c3f',2:'#1a5276',3:'#5b3fa0'};
+let mediaRecorder=null,audioChunks=[],currentRecording=null;
+
+async function init(){
+  await ensureInit();
+  const uid=DB.currentUser();if(!uid){window.location.href='index.html';return;}
+  currentStudent=DB.getStudent(uid);if(!currentStudent){window.location.href='index.html';return;}
+  examLevel=parseInt(localStorage.getItem('sea_exam_level')||currentStudent.currentLevel);
+  const lv=SEA.levels[examLevel-1];
+  const fs=studentFeeStatus(currentStudent,examLevel);
+  if(!fs.hasAccess){alert('Please activate Level '+examLevel+' before taking the exam.');window.location.href='student.html';return;}
+  if(currentStudent.progress[examLevel]?.attempts>=1&&currentStudent.progress[examLevel]?.examScore!==null){
+    alert('You have already taken the Level '+examLevel+' exam. One attempt is allowed per level.');window.location.href='student.html';return;
+  }
+  document.getElementById('barTitle').textContent='Level '+examLevel+' Exam';
+  document.getElementById('barLvl').textContent=lv.name+' · '+lv.cefr;
+  document.getElementById('intro-title').textContent='Level '+examLevel+' — '+lv.name+' Exam';
+  document.getElementById('intro-desc').textContent='This exam covers all '+lv.units+' units of Level '+examLevel+' (CEFR '+lv.cefr+'). One attempt only. 120 minutes.';
+  // Get questions — check for custom exam set by instructor
+  let qs=QUIZ_BANKS[examLevel];
+  const customExams=DB.getCustomExams();
+  if(currentStudent.assignedClass){
+    const custom=customExams.find(e=>e.level===examLevel&&e.classId===currentStudent.assignedClass&&e.isActive);
+    if(custom&&custom.questions&&custom.questions.length>0)qs=custom.questions;
+  }
+  questions=[...qs];
+  // Shuffle MC questions but keep speaking at end
+  const mcQs=questions.filter(q=>q.type==='mc'||!q.type);
+  const spQs=questions.filter(q=>q.type==='speaking'||q.type==='reading_aloud');
+  for(let i=mcQs.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[mcQs[i],mcQs[j]]=[mcQs[j],mcQs[i]];}
+  questions=[...mcQs,...spQs];
+  document.getElementById('intro-qs').textContent=questions.length;
+}
+
+function startExam(){
+  examStarted=true;showS('question');renderQ();renderDots();startTimer();
+}
+function startTimer(){
+  timerInterval=setInterval(()=>{
+    timeLeft--;
+    const m=Math.floor(timeLeft/60),s=timeLeft%60;
+    document.getElementById('timerDisp').textContent=String(m).padStart(2,'0')+':'+String(s).padStart(2,'0');
+    const tw=document.getElementById('timerWrap');
+    if(timeLeft<=600)tw.classList.add('warn');
+    if(timeLeft<=120){tw.classList.remove('warn');tw.classList.add('danger');}
+    if(timeLeft<=0){clearInterval(timerInterval);submitExam();}
+  },1000);
+}
+
+function renderQ(){
+  const q=questions[currentQ];const total=questions.length;const color=LVL_COLORS[examLevel];
+  document.getElementById('qNum').textContent='Question '+(currentQ+1)+' of '+total;
+  document.getElementById('qUnit').textContent='Unit '+q.unit;
+  document.getElementById('qUnit').style.cssText='background:'+color+'22;color:'+color+';';
+  document.getElementById('qText').textContent=q.q;
+  document.getElementById('progFill').style.width=Math.round((Object.keys(answers).length/total)*100)+'%';
+
+  const isLast=currentQ===total-1;
+  const btnPrev=document.getElementById('btnPrev');
+  const btnNext=document.getElementById('btnNext');
+  btnPrev.style.visibility=currentQ===0?'hidden':'visible';
+  if(isLast){btnNext.textContent='Submit Exam';btnNext.style.background='var(--gold)';btnNext.onclick=confirmSubmit;}
+  else{btnNext.textContent='Next';btnNext.style.background='var(--green)';btnNext.onclick=nextQ;}
+
+  const body=document.getElementById('qBody');
+  if(q.type==='speaking'||q.type==='reading_aloud'){
+    const hasSpeakingAns=speakingAnswers[currentQ];
+    body.innerHTML=`<div class="speaking-card">
+      <h4>${q.type==='reading_aloud'?'Reading Aloud Task':'Speaking Task'}</h4>
+      <p>${q.instruction||'Record your response below.'}</p>
+      <div class="rec-btns">
+        <button class="btn-rec start-rec" id="btnStartRec" onclick="startRecording(${currentQ})">Start Recording</button>
+        <button class="btn-rec stop-rec" id="btnStopRec" onclick="stopRecording(${currentQ})" style="display:none;">Stop Recording</button>
+        ${hasSpeakingAns?`<button class="btn-rec play-rec" onclick="playRecording(${currentQ})">Play Recording</button>`:''}
+      </div>
+      <div class="rec-status" id="recStatus${currentQ}">${hasSpeakingAns?'Recording saved. You can re-record if needed.':'Not yet recorded.'}</div>
+      <div class="audio-note">Your recording will be submitted to your instructor for grading. Speak clearly.</div>
+    </div>`;
+    if(!answers.hasOwnProperty(currentQ)&&hasSpeakingAns){answers[currentQ]='speaking_submitted';}
+  } else {
+    const letters=['A','B','C','D'];
+    body.innerHTML=`<div class="options">${q.opts.map((opt,i)=>{const sel=answers[currentQ]===i;return`<div class="option${sel?' selected':''}" onclick="selectAns(${i})"><div class="opt-letter">${letters[i]}</div><span>${opt}</span></div>`;}).join('')}</div>`;
+  }
+  renderDots();
+}
+
+function selectAns(idx){answers[currentQ]=idx;renderQ();}
+function nextQ(){if(currentQ<questions.length-1){currentQ++;renderQ();}}
+function prevQ(){if(currentQ>0){currentQ--;renderQ();}}
+function renderDots(){
+  document.getElementById('qDots').innerHTML=questions.map((_,i)=>{
+    const isSp=questions[i].type==='speaking'||questions[i].type==='reading_aloud';
+    let cls='q-dot';
+    if(i===currentQ)cls+=' current';
+    else if(isSp&&speakingAnswers[i])cls+=' speaking-answered';
+    else if(!isSp&&answers[i]!==undefined)cls+=' answered';
+    return`<div class="${cls}" onclick="jumpTo(${i})" title="Q${i+1}">${i+1}</div>`;
+  }).join('');
+}
+function jumpTo(i){currentQ=i;renderQ();}
+
+// RECORDING
+async function startRecording(qIdx){
+  try{
+    const stream=await navigator.mediaDevices.getUserMedia({audio:true});
+    audioChunks=[];
+    mediaRecorder=new MediaRecorder(stream);
+    mediaRecorder.ondataavailable=e=>audioChunks.push(e.data);
+    mediaRecorder.onstop=()=>{
+      const blob=new Blob(audioChunks,{type:'audio/webm'});
+      const reader=new FileReader();
+      reader.onload=()=>{speakingAnswers[qIdx]=reader.result;answers[qIdx]='speaking_submitted';renderQ();renderDots();};
+      reader.readAsDataURL(blob);
+      stream.getTracks().forEach(t=>t.stop());
+    };
+    mediaRecorder.start();
+    document.getElementById('btnStartRec').style.display='none';
+    document.getElementById('btnStopRec').style.display='inline-block';
+    const st=document.getElementById('recStatus'+qIdx);if(st){st.textContent='Recording... Speak now.';st.className='rec-status recording';}
+  }catch(e){
+    alert('Microphone access required for speaking questions. Please allow microphone access and try again. If on a device without a microphone, type your answer in the notes.');
+  }
+}
+function stopRecording(qIdx){
+  if(mediaRecorder&&mediaRecorder.state!=='inactive')mediaRecorder.stop();
+}
+function playRecording(qIdx){
+  if(!speakingAnswers[qIdx])return;
+  const audio=new Audio(speakingAnswers[qIdx]);audio.play();
+}
+
+function confirmSubmit(){
+  const total=questions.length;const mc=questions.filter(q=>!q.type||q.type==='mc').length;const sp=questions.filter(q=>q.type==='speaking'||q.type==='reading_aloud').length;
+  const answeredMC=Object.keys(answers).filter(i=>questions[i]&&(questions[i].type==='mc'||!questions[i].type)).length;
+  const answeredSP=Object.keys(speakingAnswers).length;
+  const un=mc-answeredMC;
+  document.getElementById('confirmMsg').textContent=(un>0?un+' MC question(s) unanswered (will count as wrong). ':'All MC questions answered. ')+answeredSP+'/'+sp+' speaking tasks recorded.';
+  document.getElementById('confirmOverlay').classList.add('open');
+}
+
+function submitExam(){
+  clearInterval(timerInterval);document.getElementById('confirmOverlay').classList.remove('open');
+  const mcQs=questions.filter((q,i)=>!q.type||q.type==='mc');
+  const spQs=questions.filter(q=>q.type==='speaking'||q.type==='reading_aloud');
+  let correct=0;
+  mcQs.forEach((q,i)=>{const origIdx=questions.indexOf(q);if(answers[origIdx]===q.ans)correct++;});
+  const total=mcQs.length;const score=pct(correct,total);const g=grade(score);const passed=score>=CONFIG.passMarkAllLevels;
+  const lv=SEA.levels[examLevel-1];
+
+  // Save to student
+  currentStudent.progress[examLevel].examScore=correct;
+  currentStudent.progress[examLevel].examDate=Date.now();
+  currentStudent.progress[examLevel].attempts=(currentStudent.progress[examLevel].attempts||0)+1;
+  // Save speaking answers for instructor review
+  if(spQs.length>0&&Object.keys(speakingAnswers).length>0){
+    currentStudent.progress[examLevel].speakingAnswers=spQs.map((q,i)=>{
+      const origIdx=questions.indexOf(q);
+      return{question:q.q,instruction:q.instruction,type:q.type,unit:q.unit,audioData:speakingAnswers[origIdx]||null,graded:false,score:null};
+    });
+  }
+  DB.saveStudent(currentStudent);
+  DB.addResult({studentId:currentStudent.id,studentName:currentStudent.name,admissionNumber:currentStudent.admissionNumber||'',level:examLevel,score:correct,total,pct:score,passed,grade:g,speakingCount:spQs.length,speakingSubmitted:Object.keys(speakingAnswers).length,date:Date.now()});
+  logActivity(currentStudent.id,currentStudent.name,'student','Exam submitted: Level '+examLevel,'Score: '+score+'% ('+g+')');
+
+  const color=passed?'#2a5c3f':'#c0392b';
+  const rc=document.getElementById('rCircle');rc.style.borderColor=color;rc.style.color=color;
+  document.getElementById('rPct').textContent=score+'%';
+  document.getElementById('rGrade').textContent=g;document.getElementById('rGrade').style.color=color;
+  document.getElementById('rs-c').textContent=correct;document.getElementById('rs-w').textContent=total-correct;document.getElementById('rs-sp').textContent=Object.keys(speakingAnswers).length+'/'+spQs.length;
+  if(passed){
+    document.getElementById('rSub').textContent='You passed Level '+examLevel+' with '+score+'%. Your result has been recorded.';
+    document.getElementById('r-cert-msg').innerHTML=`<div style="background:var(--green-lt);border-radius:var(--r-sm);padding:.75rem 1rem;color:var(--green);font-size:.8rem;font-weight:700;">You qualify for certification. Contact the Academy to complete your fee payment and receive your certificate: <strong>${SEA_CONTACT.email}</strong> · <strong>${SEA_CONTACT.phone}</strong></div>`;
+  } else {
+    document.getElementById('rSub').textContent='You scored '+score+'%, below the pass mark of 70%. You have used your one attempt. Contact your instructor for guidance.';
+    document.getElementById('r-cert-msg').innerHTML=`<div style="background:var(--red-lt);border-radius:var(--r-sm);padding:.75rem 1rem;color:var(--red);font-size:.8rem;font-weight:700;">Contact the Academy: ${SEA_CONTACT.email} · ${SEA_CONTACT.phone}</div>`;
+  }
+  if(spQs.length>0){
+    document.getElementById('r-speaking-msg').innerHTML=`<div class="speaking-pending-notice">Your ${Object.keys(speakingAnswers).length} speaking/reading recording(s) have been submitted to your instructor for grading within 48 hours. Your final score may be updated after grading.</div>`;
+  }
+  showS('result');
+}
+
+function showReview(){
+  const letters=['A','B','C','D'];
+  document.getElementById('review-list').innerHTML=questions.map((q,i)=>{
+    if(q.type==='speaking'||q.type==='reading_aloud'){
+      return`<div class="review-item" style="border-left:4px solid var(--blue);">
+        <div class="rev-q">Q${i+1}: [Speaking Task] ${q.q}</div>
+        <div style="font-size:.76rem;color:var(--blue);">${speakingAnswers[i]?'Recording submitted for instructor grading.':'Not recorded.'}</div>
+      </div>`;
+    }
+    const ua=answers[i];const ca=q.ans;const isC=ua===ca;
+    const opts=q.opts.map((opt,oi)=>{
+      let cls='ro neutral';let tag='';
+      if(oi===ca){cls='ro correct';tag=`<span class="rtag rtag-a">Correct</span>`;}
+      if(oi===ua&&!isC){cls='ro user-wrong';tag=`<span class="rtag rtag-w">Your Answer</span>`;}
+      if(oi===ua&&isC){tag=`<span class="rtag rtag-c">Your Answer</span>`;}
+      return`<div class="${cls}">${letters[oi]}. ${opt} ${tag}</div>`;
+    }).join('');
+    return`<div class="review-item" style="border-left:4px solid ${isC?'var(--sage)':'#e74c3c'};">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:.42rem;">
+        <div class="rev-q">Q${i+1}: ${q.q}</div>
+        <span style="display:inline-block;padding:2px 7px;border-radius:3px;font-size:.65rem;font-weight:800;background:${isC?'var(--green-lt)':'var(--red-lt)'};color:${isC?'var(--green)':'var(--red)'};flex-shrink:0;margin-left:.3rem;">${isC?'Correct':'Wrong'}</span>
+      </div>
+      <div class="rev-opts">${opts}</div>
+    </div>`;
+  }).join('');
+  showS('review');
+}
+
+function showS(id){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));document.getElementById('screen-'+id).classList.add('active');window.scrollTo(0,0);}
+function confirmExit(){if(!examStarted||confirm('Exit the exam? Your progress will be lost and this will count as your one attempt.'))window.location.href='student.html';}
+init().catch(e=>console.error(e));
+</script>
+</body>
+</html>
