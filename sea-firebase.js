@@ -44,7 +44,7 @@ const _COL = {
   students:'students', staff:'staff', results:'results3',
   materials:'materials', classes:'classes', recruiters:'recruiters',
   messages:'messages', logs:'logs', examWindows:'exam_windows',
-  customExams:'custom_exams', langRequests:'lang_requests'
+  customExams:'custom_exams', langRequests:'lang_requests', recruiters:'recruiters'
 };
 const _LS = k => 'sea3_' + k;
 

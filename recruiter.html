@@ -59,7 +59,7 @@ table.dtable tr:last-child td{border:none;}
 <div class="sidebar">
   <div class="sb-logo">
     <img src="sla-logo.png" alt="SLA" onerror="this.style.display='none'"/>
-    <div><strong>Study Language Academy</strong><span>Recruiter Portal</span></div>
+    <div><strong>Study Language Academy</strong><span>Recruitment Officer Portal</span></div>
   </div>
   <div class="sb-profile">
     <div class="sb-avatar" id="recAvatar">R</div>
@@ -178,7 +178,7 @@ table.dtable tr:last-child td{border:none;}
 let REC = null;
 
 async function init(){
-  if(typeof SEA_FIREBASE_INIT==='function') await SEA_FIREBASE_INIT();
+  try{if(typeof SEA_FIREBASE_INIT==='function') await SEA_FIREBASE_INIT();}catch(e){console.warn('[SLA] Offline');}
   const rid = DB.currentRecruiter();
   if(!rid){ window.location.href='index.html'; return; }
   REC = DB.getRecruiter(rid);

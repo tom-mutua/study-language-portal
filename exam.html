@@ -4,7 +4,7 @@
 <meta charset="UTF-8"/>
 <link rel="icon" type="image/png" href="sla-logo.png"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>SEA — Level Exam</title>
+<title>Study Language Academy — Level Exam</title>
 <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,700&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet"/>
 <style>
 :root{--green:#2a5c3f;--green2:#1e4530;--green-lt:#d6ead9;--sage:#7aaa80;--gold:#c98a1a;--gold-bg:#fdf3dc;--cream:#f5f0e8;--cream2:#ede7d9;--ink:#1b2a1e;--muted:#7a8f7e;--white:#fff;--blue:#1a5276;--purple:#5b3fa0;--red:#c0392b;--red-lt:#fde8e8;--r:12px;--r-sm:7px;}
@@ -233,12 +233,24 @@ async function init(){
   if(currentStudent.progress[examLevel]?.attempts>=1&&currentStudent.progress[examLevel]?.examScore!==null){
     alert('You have already taken the Level '+examLevel+' exam. One attempt is allowed per level.');window.location.href='student.html';return;
   }
-  document.getElementById('barTitle').textContent='Level '+examLevel+' Exam';
-  document.getElementById('barLvl').textContent=lv.name+' · '+lv.cefr;
-  document.getElementById('intro-title').textContent='Level '+examLevel+' — '+lv.name+' Exam';
-  document.getElementById('intro-desc').textContent='This exam covers all '+lv.units+' units of Level '+examLevel+' (CEFR '+lv.cefr+'). One attempt only. 120 minutes.';
-  // Get questions — check for custom exam set by instructor
-  let qs=QUIZ_BANKS[examLevel];
+  document.getElementById('barTitle').textContent='Level '+examLevel+' Final Exam';
+  document.getElementById('barLvl').textContent=lv.name+' · '+lv.cefr+' · '+(currentStudent.targetLanguageLabel||'English');
+  document.getElementById('intro-title').textContent='Level '+examLevel+' — '+lv.name+' Final Exam';
+  document.getElementById('intro-desc').textContent='This exam covers all '+lv.units+' units of Level '+examLevel+' ('+lv.cefr+'). Score 70%+ to pass. 120 minutes. You may retake once if needed.';
+  // Get questions — use student's language first, fall back to EXAM_QUESTIONS
+  const studentLang=(currentStudent.targetLanguage||'english').toLowerCase();
+  let qs=null;
+  // Try EXAM_QUESTIONS first (most complete), then fall back to CAT_QUESTIONS
+  if(typeof EXAM_QUESTIONS!=='undefined'&&EXAM_QUESTIONS[examLevel]&&EXAM_QUESTIONS[examLevel].length>0){
+    qs=EXAM_QUESTIONS[examLevel];
+  } else if(typeof CAT_QUESTIONS!=='undefined'&&CAT_QUESTIONS[studentLang]&&CAT_QUESTIONS[studentLang][examLevel]){
+    qs=CAT_QUESTIONS[studentLang][examLevel];
+  }
+  if(!qs||!qs.length){
+    alert('No exam questions found for this level. Please contact your instructor.');
+    window.location.href='student.html';return;
+  }
+  // Check for custom exam set by instructor
   const customExams=DB.getCustomExams();
   if(currentStudent.assignedClass){
     const custom=customExams.find(e=>e.level===examLevel&&e.classId===currentStudent.assignedClass&&e.isActive);
@@ -380,7 +392,7 @@ function submitExam(){
     });
   }
   DB.saveStudent(currentStudent);
-  DB.addResult({studentId:currentStudent.id,studentName:currentStudent.name,admissionNumber:currentStudent.admissionNumber||'',level:examLevel,score:correct,total,pct:score,passed,grade:g,speakingCount:spQs.length,speakingSubmitted:Object.keys(speakingAnswers).length,date:Date.now()});
+  const resId='final_'+Date.now();DB.addResult({id:resId,studentId:currentStudent.id,studentName:currentStudent.name,admissionNumber:currentStudent.admissionNumber||'',level:examLevel,type:'final',language:currentStudent.targetLanguage||'english',score:correct,total,pct:score,passed,grade:g,speakingCount:spQs.length,speakingSubmitted:Object.keys(speakingAnswers).length,date:Date.now()});if(typeof _fsSet!=='undefined')_fsSet('results3',resId,{id:resId,studentId:currentStudent.id,level:examLevel,type:'final',score:correct,total,pct:score,passed,grade:g,date:Date.now()});
   logActivity(currentStudent.id,currentStudent.name,'student','Exam submitted: Level '+examLevel,'Score: '+score+'% ('+g+')');
 
   const color=passed?'#2a5c3f':'#c0392b';

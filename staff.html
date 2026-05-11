@@ -281,7 +281,7 @@ async function ensureInit(){
   if(_SEA_INIT_DONE) return;
   try{
     if(typeof SEA_FIREBASE_INIT==='function') await SEA_FIREBASE_INIT();
-  }catch(e){ console.warn('[SLA] Firebase init failed — using localStorage',e); }
+  }catch(e){ console.warn('[SLA] Offline — localStorage mode'); }
   // Ensure default admin staff exists
   if(DB.getStaff().length===0){
     DB.saveStaffMember({id:'staff_001',name:'Administrator',email:'musautom54@gmail.com',phone:'+254735567826',pass:'sea2026admin',role:'chief_admin',isActive:true,isSuspended:false,assignedStudents:[],assignedClasses:[],joinDate:Date.now(),lastLogin:null});
