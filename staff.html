@@ -3,14 +3,14 @@
 <head>
 <meta charset="UTF-8"/>
 <link rel="icon" type="image/png" href="sla-logo.png"/>
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
 <title>Study Language Academy — Staff Portal</title>
 <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,700&family=Nunito:wght@300;400;600;700;800&display=swap" rel="stylesheet"/>
 <style>
 :root{--green:#2a5c3f;--green2:#1e4530;--green-lt:#d6ead9;--sage:#7aaa80;--gold:#c98a1a;--gold-bg:#fdf3dc;--cream:#f5f0e8;--cream2:#ede7d9;--ink:#1b2a1e;--muted:#5a7060;--white:#fff;--blue:#1a5276;--blue-lt:#d6e8fa;--purple:#5b3fa0;--purple-lt:#e4d9f5;--red:#c0392b;--red-lt:#fde8e8;--r:12px;--r-sm:7px;--sw:245px;}
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
 body{font-family:'Nunito',sans-serif;background:var(--cream);color:#1a2a1e;display:flex;min-height:100vh;font-size:15px;}
-.sidebar{width:var(--sw);background:var(--ink);min-height:100vh;position:fixed;top:0;left:0;display:flex;flex-direction:column;z-index:50;overflow-y:auto;}
+.sidebar{width:var(--sw);background:var(--ink);min-height:100vh;position:fixed;top:0;left:0;display:flex;flex-direction:column;z-index:50;overflow:hidden;}
 .sb-logo{padding:1rem 1.1rem;border-bottom:1px solid rgba(255,255,255,.09);display:flex;align-items:center;gap:7px;}
 .sb-logo img{height:32px;width:32px;object-fit:contain;filter:brightness(0) invert(1);opacity:.88;}
 .sb-logo-text strong{font-family:'Lora',serif;font-size:.87rem;font-weight:700;color:#fff;display:block;}
@@ -19,7 +19,9 @@ body{font-family:'Nunito',sans-serif;background:var(--cream);color:#1a2a1e;displ
 .role-badge{display:inline-flex;align-items:center;gap:4px;padding:3px 9px;border-radius:3px;font-size:.68rem;font-weight:800;margin-bottom:.45rem;}
 .sb-sname{font-size:.8rem;font-weight:700;color:#fff;}
 .sb-srole{font-size:.63rem;color:rgba(255,255,255,.38);}
-.sb-nav{padding:.4rem 0;flex:1;}
+.sb-nav{padding:.4rem 0;flex:1;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;scroll-behavior:smooth;}
+.sb-nav::-webkit-scrollbar{width:3px;}
+.sb-nav::-webkit-scrollbar-thumb{background:rgba(255,255,255,.18);border-radius:2px;}
 .ns{font-size:.58rem;font-weight:800;text-transform:uppercase;letter-spacing:.1em;color:rgba(255,255,255,.2);padding:.38rem 1.1rem .18rem;}
 .ni{display:flex;align-items:center;gap:7px;padding:.5rem 1.1rem;color:rgba(255,255,255,.58);font-size:.79rem;font-weight:600;cursor:pointer;transition:all .2s;border-left:3px solid transparent;text-decoration:none;}
 .ni:hover{background:rgba(255,255,255,.05);color:#fff;}
@@ -103,11 +105,11 @@ body{font-family:'Nunito',sans-serif;background:var(--cream);color:#1a2a1e;displ
 /* ── MOBILE ── */
 @media(max-width:900px){
   :root{--sw:0px;}
-  .sidebar{width:270px;transform:translateX(-100%);transition:transform .28s;z-index:200;}
+  .sidebar{width:280px;transform:translateX(-100%);transition:transform .28s ease;z-index:200;}
   .sidebar.sb-open{transform:translateX(0);}
   .main{margin-left:0!important;}
   .topbar{padding:0 1rem;}
-  .page{padding:1rem;}
+  .page{padding:1rem;padding-bottom:80px;}
   .stat-row{grid-template-columns:1fr 1fr;}
   #dash-panels{grid-template-columns:1fr!important;}
   .search-row{flex-wrap:wrap;}
@@ -116,19 +118,22 @@ body{font-family:'Nunito',sans-serif;background:var(--cream);color:#1a2a1e;displ
   .data-table{font-size:.72rem;}
   .data-table th,.data-table td{padding:.42rem .55rem;}
   .mob-sb-btn{display:flex!important;}
-  .modal{max-width:96vw;padding:1.1rem;}
+  .modal{max-width:96vw;padding:1.1rem;max-height:88vh;overflow-y:auto;}
+  .form-row{grid-template-columns:1fr;}
+  .btn-full{min-height:48px;}
+  .btn-a{min-height:34px;}
+  .fg input,.fg select,.fg textarea{padding:10px 11px;font-size:.88rem;}
 }
 @media(max-width:500px){
   .stat-row{grid-template-columns:1fr;}
   .phd{flex-wrap:wrap;gap:.4rem;}
   .phd h3{font-size:.82rem;}
   .form-row{grid-template-columns:1fr;}
+  .tb-right .role-chip{display:none;}
 }
-.mob-sb-btn{display:none;background:none;border:none;cursor:pointer;padding:5px;}
-/* sidebar overlay on mobile */
+/* Ensure sidebar overlay on mobile hides body scroll */
 .sb-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.38);z-index:199;}
 .sb-overlay.show{display:block;}
-/* recruiter dropdown */
 .rec-history{display:none;margin-top:.55rem;border-top:1px solid var(--cream2);padding-top:.55rem;}
 .rec-history.open{display:block;}
 .rh-row{display:flex;justify-content:space-between;font-size:.72rem;padding:.22rem 0;border-bottom:1px solid var(--cream2);color:#1a2a1e;}
@@ -260,32 +265,134 @@ body{font-family:'Nunito',sans-serif;background:var(--cream);color:#1a2a1e;displ
     </div>
   </div>
 
+  <!-- NOTES EDITOR PAGE — Google-doc style editing -->
+  <div class="page" id="page-notes_editor">
+    <div class="ph">
+      <h2>Notes Editor</h2>
+      <p>Edit lesson notes for any language and level. Changes save automatically. Use Undo to revert, or Reset to restore the original lesson content.</p>
+    </div>
+    <!-- Language + Level + Unit selector -->
+    <div class="search-row" style="flex-wrap:wrap;gap:.5rem;margin-bottom:1rem;">
+      <select id="ne-lang" onchange="loadNotesList()" style="min-width:130px;">
+        <option value="english">English</option>
+        <option value="swahili">Swahili</option>
+        <option value="french">French</option>
+        <option value="arabic">Arabic</option>
+        <option value="german">German</option>
+        <option value="spanish">Spanish</option>
+        <option value="portuguese">Portuguese</option>
+        <option value="greek">Koine Greek</option>
+        <option value="hebrew">Biblical Hebrew</option>
+      </select>
+      <select id="ne-level" onchange="loadNotesList()" style="min-width:100px;">
+        <option value="1">Level 1</option>
+        <option value="2">Level 2</option>
+        <option value="3">Level 3</option>
+      </select>
+      <select id="ne-unit" onchange="loadNoteEditor()" style="min-width:220px;">
+        <option value="">— Select Unit —</option>
+      </select>
+      <button class="btn-a btn-approve" onclick="saveNotes()" id="ne-save-btn" disabled>💾 Save Changes</button>
+      <button class="btn-a btn-view"    onclick="undoNotes()"  id="ne-undo-btn" disabled>↩ Undo</button>
+      <button class="btn-a btn-del"     onclick="resetNotes()" id="ne-reset-btn" disabled>🔄 Reset to Default</button>
+    </div>
+    <!-- Editor status -->
+    <div id="ne-status" style="font-size:.75rem;color:var(--muted);margin-bottom:.5rem;height:18px;"></div>
+    <!-- Unit meta fields -->
+    <div id="ne-meta" style="display:none;">
+      <div class="panel" style="margin-bottom:.7rem;">
+        <div class="phd"><h3>Unit Settings</h3></div>
+        <div class="pbd">
+          <div class="form-row" style="grid-template-columns:1fr 1fr;">
+            <div class="fg"><label>Lesson Title</label><input type="text" id="ne-title" oninput="markEdited()"/></div>
+            <div class="fg"><label>Learning Objective</label><input type="text" id="ne-objective" oninput="markEdited()"/></div>
+            <div class="fg"><label>YouTube Embed URL</label><input type="text" id="ne-youtube" placeholder="https://www.youtube.com/embed/..." oninput="markEdited()"/></div>
+            <div class="fg"><label>Swahili Note (kwa wanafunzi)</label><input type="text" id="ne-swahili" oninput="markEdited()"/></div>
+          </div>
+        </div>
+      </div>
+      <!-- Rich text editor area -->
+      <div class="panel">
+        <div class="phd">
+          <h3>Lesson Content</h3>
+          <div style="display:flex;gap:.4rem;flex-wrap:wrap;">
+            <button class="btn-a btn-view" onclick="neFormat('bold')" title="Bold">B</button>
+            <button class="btn-a btn-view" onclick="neFormat('italic')" title="Italic" style="font-style:italic;">I</button>
+            <button class="btn-a btn-view" onclick="neFormat('underline')" title="Underline" style="text-decoration:underline;">U</button>
+            <button class="btn-a btn-view" onclick="neInsert('h3')" title="Heading">H3</button>
+            <button class="btn-a btn-view" onclick="neInsert('table')" title="Insert Table">⊞ Table</button>
+            <button class="btn-a btn-view" onclick="neInsert('tip')" title="Insert Tip Box">💡 Tip</button>
+            <button class="btn-a btn-view" onclick="neInsert('dialogue')" title="Insert Dialogue">💬 Dialogue</button>
+            <button class="btn-a btn-view" onclick="neInsert('exercise')" title="Insert Exercise">🎯 Exercise</button>
+            <button class="btn-a btn-view" onclick="neToggleMode()" id="ne-mode-btn">🔤 HTML Mode</button>
+          </div>
+        </div>
+        <div class="pbd" style="padding:0;">
+          <!-- Visual editor (contenteditable) -->
+          <div id="ne-visual"
+               contenteditable="true"
+               oninput="markEdited()"
+               style="min-height:420px;padding:1.2rem 1.4rem;font-size:.88rem;line-height:1.7;outline:none;border-radius:0 0 var(--r) var(--r);font-family:'Nunito',sans-serif;">
+          </div>
+          <!-- HTML source editor (hidden by default) -->
+          <textarea id="ne-html"
+                    oninput="markEdited()"
+                    style="display:none;width:100%;min-height:420px;padding:1.2rem;font-family:monospace;font-size:.8rem;border:none;border-radius:0 0 var(--r) var(--r);resize:vertical;outline:none;background:#1e1e1e;color:#d4d4d4;">
+          </textarea>
+        </div>
+      </div>
+    </div>
+    <!-- No unit selected placeholder -->
+    <div id="ne-placeholder" class="panel">
+      <div class="pbd" style="text-align:center;padding:2.5rem;color:var(--muted);">
+        <div style="font-size:2rem;margin-bottom:.5rem;">📝</div>
+        <p>Select a language, level, and unit above to start editing lesson notes.</p>
+      </div>
+    </div>
+  </div>
+  <div class="page" id="page-pending_apps">
+    <div class="ph"><h2>Pending Applications</h2><p>Review and approve or reject staff and recruiter applications submitted from the public portal.</p></div>
+    <div class="search-row">
+      <select id="paTypeFilter" onchange="renderPendingApps()"><option value="">All Types</option><option value="staff">Staff</option><option value="recruiter">Recruiter</option></select>
+      <select id="paStatusFilter" onchange="renderPendingApps()"><option value="pending">Pending Review</option><option value="approved">Approved</option><option value="rejected">Rejected</option><option value="">All Statuses</option></select>
+      <button class="btn-gold-sm" onclick="renderPendingApps()">Refresh</button>
+    </div>
+    <div id="paList"></div>
+  </div>
+
 </div>
 <div class="overlay" id="modalOverlay" onclick="if(event.target===this)closeModal()">
   <div class="modal" id="modalBox"><button class="mc" onclick="closeModal()">x</button><h3 id="modalTitle">Modal</h3><div class="err-sm" id="modalErr"></div><div id="modalBody"></div></div>
 </div>
 
-  <!-- Firebase v9 Compat SDKs -->
-  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
-  <!-- EmailJS for email notifications -->
-  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
-  <!-- SEA Shared Data Layer -->
+  <!-- Shared data layer and auth — always load these (local files) -->
   <script src="sea-shared.js"></script>
-  <!-- SEA Firebase Integration -->
+  <script src="sea-curriculum.js"></script>
   <script src="sea-firebase.js"></script>
+  <!-- Firebase + EmailJS: only injected when online so offline never hangs -->
+  <script>
+  (function(){
+    if(!navigator.onLine) return;
+    ['https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js',
+     'https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js',
+     'https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js',
+     'https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js'
+    ].forEach(src=>{const s=document.createElement('script');s.src=src;s.async=true;document.head.appendChild(s);});
+  })();
+  </script>
 <script>
 let _SEA_INIT_DONE=false;
 async function ensureInit(){
   if(_SEA_INIT_DONE) return;
   try{
-    if(typeof SEA_FIREBASE_INIT==='function') await SEA_FIREBASE_INIT();
-  }catch(e){ console.warn('[SLA] Offline — localStorage mode'); }
-  // Ensure default admin staff exists
-  if(DB.getStaff().length===0){
-    DB.saveStaffMember({id:'staff_001',name:'Administrator',email:'musautom54@gmail.com',phone:'+254735567826',pass:'sea2026admin',role:'chief_admin',isActive:true,isSuspended:false,assignedStudents:[],assignedClasses:[],joinDate:Date.now(),lastLogin:null});
-  }
+    await Promise.race([
+      (typeof SEA_FIREBASE_INIT==='function' ? SEA_FIREBASE_INIT() : Promise.resolve()),
+      new Promise(r=>setTimeout(r,2000))
+    ]);
+  }catch(e){ console.warn('[SLA] Offline — using localStorage',e.message); }
+  // Force-write both admin accounts every time — ensures credentials always match
+  DB.saveStaffMember({id:'staff_admin_001',name:'Chief Admin',email:'admin@studylanguage.ac.ke',phone:'+254735567826',pass:'sla2025admin',role:'chief_admin',isActive:true,isSuspended:false,assignedStudents:[],assignedClasses:[],joinDate:Date.now(),lastLogin:null});
+  DB.saveStaffMember({id:'staff_owner_001',name:'Administrator',email:'musautom54@gmail.com',phone:'+254735567826',pass:'sea2026admin',role:'chief_admin',isActive:true,isSuspended:false,assignedStudents:[],assignedClasses:[],joinDate:Date.now(),lastLogin:null});
   _SEA_INIT_DONE=true;
 }
 
@@ -306,6 +413,7 @@ const NAV_CONFIG=[
   {id:'my_exams',label:'My Exam Sets',section:'Academic'},
   {id:'exams_admin',label:'All Exams',section:'Academic'},
   {id:'materials',label:'Learning Materials',section:'Academic'},
+  {id:'notes_editor',label:'Notes Editor',section:'Academic'},
   {id:'certificates',label:'Certificates',section:'Academic'},
   {id:'student_questions',label:'Student Questions',section:'Academic'},
   {id:'feedback',label:'Student Feedback',section:'Academic'},
@@ -314,6 +422,7 @@ const NAV_CONFIG=[
   {id:'staff',label:'Staff Management',section:'Admin'},
   {id:'activitylog',label:'Activity Log',section:'Admin'},
   {id:'rec_letters',label:'Appointment Letters',section:'Admin'},
+  {id:'pending_apps',label:'Pending Applications',section:'Admin'},
   {id:'settings',label:'Settings',section:'Admin'},
 ];
 async function init(){
@@ -367,7 +476,7 @@ function showPage(id,item){
   if(item)item.classList.add('active');
   document.getElementById('topTitle').textContent=NAV_CONFIG.find(n=>n.id===id)?.label||id;
   logActivity(CS.id,CS.name,CS.role,'Viewed: '+(NAV_CONFIG.find(n=>n.id===id)?.label||id),'');
-  const renders={students:renderStudents,my_students:renderMyStudents,my_classes:renderMyClasses,classes:renderAllClasses,finance:()=>{renderFinanceStats();renderFinance();},waivers:renderWaivers,recruiters:renderRecruiters,results:renderResults,speaking:renderSpeaking,my_exams:renderMyExams,exams_admin:renderAllExams,certificates:renderCerts,materials:()=>renderMaterials(activeMatLevel),staff:renderStaffList,messages:renderMsgHistory,contacts:renderContactsTable,activitylog:renderLog,registry:renderRegistry,feedback:loadFeedbackStudents,reports:renderReports,settings:loadSettings,student_questions:renderStudentQuestions,rec_letters:renderRecLetters};
+  const renders={students:renderStudents,my_students:renderMyStudents,my_classes:renderMyClasses,classes:renderAllClasses,finance:()=>{renderFinanceStats();renderFinance();},waivers:renderWaivers,recruiters:renderRecruiters,results:renderResults,speaking:renderSpeaking,my_exams:renderMyExams,exams_admin:renderAllExams,certificates:renderCerts,materials:()=>renderMaterials(activeMatLevel),notes_editor:initNotesEditor,staff:renderStaffList,messages:renderMsgHistory,contacts:renderContactsTable,activitylog:renderLog,registry:renderRegistry,feedback:loadFeedbackStudents,reports:renderReports,settings:loadSettings,student_questions:renderStudentQuestions,rec_letters:renderRecLetters,pending_apps:renderPendingApps};
   if(renders[id])renders[id]();window.scrollTo(0,0);
 }
 function renderDashboard(){
@@ -382,15 +491,17 @@ function renderDashboard(){
     finance:[{cls:'gd',val:'$'+revenue.toFixed(2),lbl:'Collected'},{cls:'g',val:students.filter(s=>studentFeeStatus(s,s.currentLevel).hasAccess).length,lbl:'Active'},{cls:'r',val:students.filter(s=>!studentFeeStatus(s,s.currentLevel).hasAccess).length,lbl:'Unpaid'},{cls:'b',val:'$'+DB.getRecruiters().reduce((a,r)=>a+(r.earnings?.pending||0),0).toFixed(2),lbl:'Recruiter Pending'}],
     admissions:[{cls:'g',val:students.length,lbl:'Total'},{cls:'gd',val:students.filter(s=>Date.now()-s.joinDate<7*86400000).length,lbl:'This Week'},{cls:'b',val:students.filter(s=>s.isActive).length,lbl:'Active'},{cls:'r',val:students.filter(s=>!s.isActive).length,lbl:'Suspended'}],
   };
-  const stats=statsMap[role]||statsMap.chief_admin;
-  if(stats) stats.innerHTML=statList.map(s=>'<div class="sc '+s.cls+'"><div class="sc-val">'+s.val+'</div><div class="sc-lbl">'+s.lbl+'</div></div>').join('');
+  const statList=statsMap[role]||statsMap.chief_admin;
+  const statEl=document.getElementById('dash-stats');
+  if(statEl)statEl.innerHTML=statList.map(s=>'<div class="sc '+s.cls+'"><div class="sc-val">'+s.val+'</div><div class="sc-lbl">'+s.lbl+'</div></div>').join('');
+  const panels=document.getElementById('dash-panels');
   const r5=students.slice(-5).reverse();const rr5=results.slice(-5).reverse();
   if(panels) panels.innerHTML=
-    '<div class="panel"><div class="phd"><h3>Recent Students</h3></div><div class="pbd" style="overflow-x:auto;"><table class="data-table"><thead><tr><th>Adm No.</th><th>Name</th><th>Level</th><th>Access</th></tr></thead><tbody>'+
-    r5.map(s=>{const f=studentFeeStatus(s,s.currentLevel);return'<tr><td style="font-size:.68rem;">'+( s.admissionNumber||'—')+'</td><td>'+s.name+'</td><td>L'+s.currentLevel+'</td><td><span class="badge '+(f.hasAccess?'b-g':'b-r')+'">'+(f.hasAccess?'Active':'Locked')+'</span></td></tr>';}).join('')+
+    '<div class="panel"><div class="phd"><h3>Recent Students</h3><button class="btn-a btn-view" onclick="showPage(\'students\',null)">View All</button></div><div class="pbd" style="overflow-x:auto;"><table class="data-table"><thead><tr><th>Adm No.</th><th>Name</th><th>Level</th><th>Access</th></tr></thead><tbody>'+
+    (r5.length?r5.map(s=>{const f=studentFeeStatus(s,s.currentLevel);return'<tr><td style="font-size:.68rem;">'+(s.admissionNumber||'—')+'</td><td>'+s.name+'</td><td>L'+s.currentLevel+'</td><td><span class="badge '+(f.hasAccess?'b-g':'b-r')+'">'+(f.hasAccess?'Active':'Locked')+'</span></td></tr>';}).join(''):'<tr><td colspan="4" style="text-align:center;color:var(--muted);padding:.8rem;">No students yet.</td></tr>')+
     '</tbody></table></div></div>'+
-    '<div class="panel"><div class="phd"><h3>Recent Results</h3></div><div class="pbd" style="overflow-x:auto;"><table class="data-table"><thead><tr><th>Student</th><th>Level</th><th>Score</th><th>Grade</th></tr></thead><tbody>'+
-    rr5.map(r=>'<tr><td>'+r.studentName+'</td><td>L'+r.level+'</td><td>'+r.pct+'%</td><td><span class="badge '+(r.passed?'b-g':'b-r')+'">'+r.grade+'</span></td></tr>').join('')+
+    '<div class="panel"><div class="phd"><h3>Recent Results</h3><button class="btn-a btn-view" onclick="showPage(\'results\',null)">View All</button></div><div class="pbd" style="overflow-x:auto;"><table class="data-table"><thead><tr><th>Student</th><th>Level</th><th>Score</th><th>Grade</th></tr></thead><tbody>'+
+    (rr5.length?rr5.map(r=>'<tr><td>'+r.studentName+'</td><td>L'+r.level+'</td><td>'+r.pct+'%</td><td><span class="badge '+(r.passed?'b-g':'b-r')+'">'+r.grade+'</span></td></tr>').join(''):'<tr><td colspan="4" style="text-align:center;color:var(--muted);padding:.8rem;">No exam results yet.</td></tr>')+
     '</tbody></table></div></div>';
 }
 function renderStudents(){
@@ -867,6 +978,7 @@ function saveNewStudent(){
   showToast('Added — Adm: '+admNo,'success');
 }
 function saveNewStaff(){
+  if(CS.role!=='chief_admin'){showToast('Only the Chief Admin can create staff accounts.','error');return;}
   const name=document.getElementById('sf2-name')?.value?.trim();
   const email=document.getElementById('sf2-email')?.value?.trim()?.toLowerCase();
   const pass=document.getElementById('sf2-pass')?.value;
@@ -932,6 +1044,242 @@ function toggleSB(){
 // Show mobile button on small screens
 function checkMobBtn(){const b=document.querySelector('.mob-sb-btn');if(b)b.style.display=window.innerWidth<=900?'flex':'none';}
 checkMobBtn();window.addEventListener('resize',checkMobBtn);
+// ══════════════════════════════════════════════════════════════
+// NOTES EDITOR — Google-doc style lesson content editor
+// ══════════════════════════════════════════════════════════════
+let _neEditedContent=null; // current working copy
+let _neUndoStack=[];       // undo history (max 50 steps)
+let _neHtmlMode=false;     // toggle between visual / HTML source view
+
+function initNotesEditor(){
+  loadNotesList();
+}
+
+function loadNotesList(){
+  const lang=document.getElementById('ne-lang')?.value||'english';
+  const level=parseInt(document.getElementById('ne-level')?.value||'1');
+  const unitSel=document.getElementById('ne-unit');
+  if(!unitSel) return;
+  unitSel.innerHTML='<option value="">— Select Unit —</option>';
+  const langData=LESSON_CONTENT[lang];
+  if(!langData||!langData[level]){unitSel.innerHTML+='<option disabled>No units for this level yet</option>';return;}
+  const units=langData[level];
+  Object.keys(units).forEach(u=>{
+    const opt=document.createElement('option');
+    opt.value=u;opt.textContent='Unit '+u+': '+(units[u].title||'Untitled');unitSel.appendChild(opt);
+  });
+  // clear editor
+  document.getElementById('ne-meta').style.display='none';
+  document.getElementById('ne-placeholder').style.display='block';
+  _neEditedContent=null;_neUndoStack=[];
+  ['ne-save-btn','ne-undo-btn','ne-reset-btn'].forEach(id=>{const b=document.getElementById(id);if(b)b.disabled=true;});
+  neSetStatus('');
+}
+
+function loadNoteEditor(){
+  const lang=document.getElementById('ne-lang')?.value||'english';
+  const level=parseInt(document.getElementById('ne-level')?.value||'1');
+  const unit=parseInt(document.getElementById('ne-unit')?.value);
+  if(!unit){document.getElementById('ne-meta').style.display='none';document.getElementById('ne-placeholder').style.display='block';return;}
+
+  // Get saved overrides first, fallback to LESSON_CONTENT default
+  const key='notes_override_'+lang+'_'+level+'_'+unit;
+  const saved=DB.load(key,null);
+  const def=LESSON_CONTENT[lang]?.[level]?.[unit];
+  if(!def){neSetStatus('⚠ No content found for this unit.');return;}
+
+  const data=saved||{...def};
+  _neEditedContent={...data,_original:{...def}};
+  _neUndoStack=[];
+
+  // Populate meta fields
+  document.getElementById('ne-title').value=data.title||'';
+  document.getElementById('ne-objective').value=data.objective||'';
+  document.getElementById('ne-youtube').value=data.youtube||'';
+  document.getElementById('ne-swahili').value=data.swahili_note||'';
+
+  // Populate editor
+  const visual=document.getElementById('ne-visual');
+  const html=document.getElementById('ne-html');
+  if(visual){visual.innerHTML=data.content||'<p>Start typing your lesson content here...</p>';}
+  if(html){html.value=data.content||'';}
+
+  document.getElementById('ne-meta').style.display='block';
+  document.getElementById('ne-placeholder').style.display='none';
+  ['ne-save-btn','ne-undo-btn','ne-reset-btn'].forEach(id=>{const b=document.getElementById(id);if(b)b.disabled=false;});
+  neSetStatus(saved?'📂 Loaded saved version':'📖 Loaded default content — no changes yet');
+}
+
+function markEdited(){
+  neSetStatus('✏️ Unsaved changes…');
+  document.getElementById('ne-save-btn').style.background='var(--gold)';
+}
+
+function saveNotes(){
+  const lang=document.getElementById('ne-lang')?.value;
+  const level=parseInt(document.getElementById('ne-level')?.value);
+  const unit=parseInt(document.getElementById('ne-unit')?.value);
+  if(!lang||!unit) return;
+
+  // Push to undo stack before saving
+  const key='notes_override_'+lang+'_'+level+'_'+unit;
+  const prev=DB.load(key,null);
+  if(prev) _neUndoStack.push(JSON.stringify(prev));
+  if(_neUndoStack.length>50) _neUndoStack.shift();
+
+  // Gather content
+  const visual=document.getElementById('ne-visual');
+  const html=document.getElementById('ne-html');
+  const content=_neHtmlMode?(html?.value||''):(visual?.innerHTML||'');
+
+  const data={
+    title:document.getElementById('ne-title')?.value||'',
+    objective:document.getElementById('ne-objective')?.value||'',
+    youtube:document.getElementById('ne-youtube')?.value||'',
+    swahili_note:document.getElementById('ne-swahili')?.value||'',
+    content,
+    savedAt:Date.now(),
+    savedBy:CS.name,
+  };
+
+  DB.save(key,data);
+  logActivity(CS.id,CS.name,CS.role,'Saved notes: '+lang+' L'+level+' U'+unit,'');
+  neSetStatus('✅ Saved at '+new Date().toLocaleTimeString());
+  const btn=document.getElementById('ne-save-btn');
+  if(btn)btn.style.background='';
+  showToast('Notes saved successfully!','success');
+}
+
+function undoNotes(){
+  const lang=document.getElementById('ne-lang')?.value;
+  const level=parseInt(document.getElementById('ne-level')?.value);
+  const unit=parseInt(document.getElementById('ne-unit')?.value);
+  if(!lang||!unit||!_neUndoStack.length){showToast('Nothing to undo.','error');return;}
+  const prev=JSON.parse(_neUndoStack.pop());
+  const key='notes_override_'+lang+'_'+level+'_'+unit;
+  DB.save(key,prev);
+  // Reload into editor
+  document.getElementById('ne-title').value=prev.title||'';
+  document.getElementById('ne-objective').value=prev.objective||'';
+  document.getElementById('ne-youtube').value=prev.youtube||'';
+  document.getElementById('ne-swahili').value=prev.swahili_note||'';
+  const visual=document.getElementById('ne-visual');
+  const html=document.getElementById('ne-html');
+  if(visual) visual.innerHTML=prev.content||'';
+  if(html) html.value=prev.content||'';
+  neSetStatus('↩ Undone — restored previous version');
+  showToast('Undo successful','success');
+}
+
+function resetNotes(){
+  const lang=document.getElementById('ne-lang')?.value;
+  const level=parseInt(document.getElementById('ne-level')?.value);
+  const unit=parseInt(document.getElementById('ne-unit')?.value);
+  if(!lang||!unit) return;
+  if(!confirm('Reset this lesson to the original default content? Your custom edits will be permanently deleted.')) return;
+  const key='notes_override_'+lang+'_'+level+'_'+unit;
+  localStorage.removeItem('sea3_'+key);
+  loadNoteEditor(); // reload from LESSON_CONTENT default
+  neSetStatus('🔄 Reset to default content');
+  showToast('Lesson reset to default','success');
+}
+
+function neSetStatus(msg){
+  const el=document.getElementById('ne-status');
+  if(el) el.textContent=msg;
+}
+
+function neFormat(cmd){
+  if(_neHtmlMode){showToast('Switch to visual mode to use formatting buttons','error');return;}
+  document.getElementById('ne-visual')?.focus();
+  document.execCommand(cmd,false,null);
+  markEdited();
+}
+
+function neInsert(type){
+  if(_neHtmlMode){showToast('Switch to visual mode to insert snippets','error');return;}
+  const visual=document.getElementById('ne-visual');
+  if(!visual) return;
+  visual.focus();
+  const snippets={
+    h3:'<h3>📖 New Section Heading</h3>',
+    table:'<div class="lesson-table"><table><tr><th>Column 1</th><th>Column 2</th><th>Column 3</th></tr><tr><td>Row 1</td><td>Data</td><td>Data</td></tr><tr><td>Row 2</td><td>Data</td><td>Data</td></tr></table></div>',
+    tip:'<div class="lesson-tip">💡 <b>Tip:</b> Write your tip here.</div>',
+    dialogue:'<div class="lesson-dialogue"><div class="dialogue-line coach">Teacher: Say something here.</div><div class="dialogue-line student">Student: Respond here.</div></div>',
+    exercise:'<div class="lesson-exercise"><p><b>🎯 Practice:</b> Write the exercise instructions here.</p></div>',
+  };
+  document.execCommand('insertHTML',false,snippets[type]||'');
+  markEdited();
+}
+
+function neToggleMode(){
+  _neHtmlMode=!_neHtmlMode;
+  const visual=document.getElementById('ne-visual');
+  const html=document.getElementById('ne-html');
+  const btn=document.getElementById('ne-mode-btn');
+  if(_neHtmlMode){
+    // Visual → HTML: copy innerHTML to textarea
+    if(html){html.value=visual?.innerHTML||'';html.style.display='block';}
+    if(visual) visual.style.display='none';
+    if(btn) btn.textContent='👁 Visual Mode';
+  } else {
+    // HTML → Visual: copy textarea value to contenteditable
+    if(visual){visual.innerHTML=html?.value||'';visual.style.display='block';}
+    if(html) html.style.display='none';
+    if(btn) btn.textContent='🔤 HTML Mode';
+  }
+  markEdited();
+}
+
+function renderPendingApps(){
+  const tf=document.getElementById('paTypeFilter')?.value||'';
+  const sf=(document.getElementById('paStatusFilter')?.value??'pending');
+  let apps=DB.getPendingApps();
+  if(tf)apps=apps.filter(a=>a.type===tf);
+  if(sf!=='')apps=apps.filter(a=>a.status===sf);
+  const typeColor={staff:'var(--blue)',recruiter:'var(--purple)'};
+  const statusBadge=s=>({pending:'<span class="badge b-gold">Pending</span>',approved:'<span class="badge b-g">Approved</span>',rejected:'<span class="badge b-r">Rejected</span>'}[s]||s);
+  document.getElementById('paList').innerHTML=apps.length?apps.map(a=>{
+    const roleLabel=STAFF_ROLES[a.role]?.label||a.role||'—';
+    return '<div class="panel" style="margin-bottom:.75rem;">'+
+    '<div class="phd" style="background:'+(typeColor[a.type]||'#888')+'15;">'+
+    '<div><h3 style="color:'+(typeColor[a.type]||'#888')+';">'+a.name+' — '+(a.type==='staff'?roleLabel:'Recruiter')+'</h3>'+
+    '<div style="font-size:.72rem;color:var(--muted);">'+a.email+' · '+(a.phone||'—')+' · Applied: '+fmtDate(a.submittedAt)+'</div></div>'+
+    '<div style="display:flex;gap:.4rem;align-items:center;">'+statusBadge(a.status)+
+    (a.status==='pending'?'<button class="btn-a btn-approve" onclick="approvePendingApp(\''+a.id+'\')">✓ Approve</button><button class="btn-a btn-del" onclick="rejectPendingApp(\''+a.id+'\')">✕ Reject</button>':'')+
+    '</div></div>'+
+    '<div class="pbd" style="font-size:.78rem;">'+
+    (a.idNo?'<div style="margin-bottom:.3rem;"><strong>ID/Passport:</strong> '+a.idNo+'</div>':'')+
+    (a.role?'<div style="margin-bottom:.3rem;"><strong>Role applied:</strong> '+roleLabel+'</div>':'')+
+    (a.reviewedAt?'<div style="margin-bottom:.3rem;"><strong>Reviewed:</strong> '+fmtDate(a.reviewedAt)+' by '+(a.reviewedBy||'—')+'</div>':'')+
+    (a.bio?'<div style="background:var(--cream);border-radius:var(--r-sm);padding:.5rem .75rem;line-height:1.6;margin-top:.4rem;"><strong>Bio / Plan:</strong><br/>'+a.bio+'</div>':'')+
+    '</div></div>';
+  }).join(''):'<div class="panel"><div class="pbd" style="text-align:center;padding:1.8rem;color:var(--muted);">No '+(sf==='pending'?'pending':sf||'')+' applications'+(tf?' of type '+tf:'')+' found.</div></div>';
+}
+function approvePendingApp(id){
+  const app=DB.getPendingApp(id);if(!app||!confirm('Approve application from '+app.name+'?'))return;
+  if(app.type==='staff'){
+    if(DB.getStaff().find(s=>s.email===app.email)){showToast('Email already in use by a staff account','error');return;}
+    DB.saveStaffMember({id:generateId('staff'),name:app.name,email:app.email,phone:app.phone||'',pass:app.pass||generateId('pw').slice(0,8),role:app.role||'admissions',isActive:true,isSuspended:false,assignedStudents:[],assignedClasses:[],joinDate:Date.now(),lastLogin:null});
+    logActivity(CS.id,CS.name,CS.role,'Approved staff application: '+app.name,'Role: '+(app.role||'—'));
+    showToast('Staff account created for '+app.name,'success');
+  } else if(app.type==='recruiter'){
+    if(DB.getRecruiters().find(r=>r.email===app.email)){showToast('Email already registered as recruiter','error');return;}
+    const code='REC'+String(DB.getRecruiters().length+1).padStart(3,'0');
+    DB.saveRecruiter({id:generateId('rec'),name:app.name,email:app.email,phone:app.phone||'',pass:app.pass||generateId('pw').slice(0,8),code,idNo:app.idNo||'',earnings:{total:0,paid:0,pending:0},earningsHistory:[],joinDate:Date.now()});
+    logActivity(CS.id,CS.name,CS.role,'Approved recruiter: '+app.name,'Code: '+code);
+    showToast('Recruiter account created — Code: '+code,'success');
+  }
+  app.status='approved';app.reviewedBy=CS.name;app.reviewedAt=Date.now();
+  DB.updatePendingApp(app);renderPendingApps();
+}
+function rejectPendingApp(id){
+  const app=DB.getPendingApp(id);if(!app||!confirm('Reject application from '+app.name+'?'))return;
+  app.status='rejected';app.reviewedBy=CS.name;app.reviewedAt=Date.now();
+  DB.updatePendingApp(app);renderPendingApps();
+  logActivity(CS.id,CS.name,CS.role,'Rejected application: '+app.name,'Type: '+app.type);
+  showToast('Application rejected','success');
+}
 function doLogout(){DB.logoutStaff();window.location.href='index.html';}
 
 // ── STUDENT QUESTIONS ─────────────────────────────────────────

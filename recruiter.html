@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover"/>
 <title>Recruiter Dashboard — Study Language Academy</title>
 <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,600;0,700&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet"/>
 <link rel="icon" href="sla-logo.png"/>
@@ -59,7 +59,7 @@ table.dtable tr:last-child td{border:none;}
 <div class="sidebar">
   <div class="sb-logo">
     <img src="sla-logo.png" alt="SLA" onerror="this.style.display='none'"/>
-    <div><strong>Study Language Academy</strong><span>Recruitment Officer Portal</span></div>
+    <div><strong>Study Language Academy</strong><span>Recruiter Portal</span></div>
   </div>
   <div class="sb-profile">
     <div class="sb-avatar" id="recAvatar">R</div>
@@ -178,7 +178,7 @@ table.dtable tr:last-child td{border:none;}
 let REC = null;
 
 async function init(){
-  try{if(typeof SEA_FIREBASE_INIT==='function') await SEA_FIREBASE_INIT();}catch(e){console.warn('[SLA] Offline');}
+  if(typeof SEA_FIREBASE_INIT==='function') await SEA_FIREBASE_INIT();
   const rid = DB.currentRecruiter();
   if(!rid){ window.location.href='index.html'; return; }
   REC = DB.getRecruiter(rid);

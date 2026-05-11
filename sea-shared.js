@@ -42,17 +42,30 @@ const SEA = {
 };
 
 const STAFF_ROLES = {
-  chief_admin:   { label:"Chief Admin",        color:"#c0392b", pages:["dashboard","students","staff","finance","waivers","recruiters","reports","results","materials","certificates","student_questions","feedback","messages","contacts","activitylog","rec_letters","settings","classes","exams_admin","my_exams","registry"] },
-  academic_dean: { label:"Academic Dean",      color:"#5b3fa0", pages:["dashboard","students","results","materials","certificates","student_questions","feedback","messages","contacts","classes","exams_admin","my_exams","registry"] },
-  instructor:    { label:"Instructor",         color:"#2a5c3f", pages:["dashboard","my_students","my_classes","materials","my_exams","student_questions","feedback","results"] },
+  chief_admin:   { label:"Chief Admin",        color:"#c0392b", pages:["dashboard","students","staff","finance","waivers","recruiters","reports","results","materials","notes_editor","certificates","student_questions","feedback","messages","contacts","activitylog","rec_letters","settings","classes","exams_admin","my_exams","registry","pending_apps"] },
+  academic_dean: { label:"Academic Dean",      color:"#5b3fa0", pages:["dashboard","students","results","materials","notes_editor","certificates","student_questions","feedback","messages","contacts","classes","exams_admin","my_exams","registry"] },
+  instructor:    { label:"Instructor",         color:"#2a5c3f", pages:["dashboard","my_students","my_classes","materials","notes_editor","my_exams","student_questions","feedback","results"] },
   finance:       { label:"Finance Officer",    color:"#1a5276", pages:["dashboard","finance","waivers","recruiters","reports","students","contacts"] },
-  admissions:    { label:"Admissions & Comms", color:"#c98a1a", pages:["dashboard","registry","students","messages","contacts","feedback"] },
+  admissions:    { label:"Admissions & Comms", color:"#c98a1a", pages:["dashboard","registry","students","messages","contacts","feedback","pending_apps"] },
 };
 
 function generateAdmissionNumber() {
   const year = new Date().getFullYear();
-  const seq = String((DB.getStudents().length || 0) + 1).padStart(4, '0');
-  return `SLA/${year}/${seq}`;
+  // Use a dedicated counter key — never based on array length (which can repeat after deletions)
+  const counterKey = 'sea3_adm_counter_'+year;
+  let counter = parseInt(localStorage.getItem(counterKey)||'0',10)+1;
+  localStorage.setItem(counterKey, String(counter));
+  const seq = String(counter).padStart(4,'0');
+  const proposed = `SLA/${year}/${seq}`;
+  // Safety: if by any chance this number exists, keep incrementing
+  const existing = (JSON.parse(localStorage.getItem('sea3_students')||'[]')||[]).map(s=>s.admissionNumber);
+  let final = proposed;
+  while(existing.includes(final)){
+    counter++;
+    localStorage.setItem(counterKey, String(counter));
+    final = `SLA/${year}/${String(counter).padStart(4,'0')}`;
+  }
+  return final;
 }
 
 // ── DATABASE ─────────────────────────────────────────────────
@@ -109,6 +122,13 @@ const DB = {
   currentRecruiter: () => DB.load("sess3_recruiter",null),
   setCurrentRecruiter: id => DB.save("sess3_recruiter",id),
   logoutRecruiter: () => localStorage.removeItem("sea3_sess3_recruiter"),
+  // ── PENDING APPLICATIONS (staff & recruiter self-registration) ──
+  getPendingApps: () => DB.load("pending_apps",[]),
+  savePendingApps: a => DB.save("pending_apps",a),
+  addPendingApp: app => { const all=DB.getPendingApps(); all.unshift(app); DB.savePendingApps(all); },
+  getPendingApp: id => DB.getPendingApps().find(a=>a.id===id)||null,
+  updatePendingApp: app => { const all=DB.getPendingApps(); const i=all.findIndex(a=>a.id===app.id); if(i>=0)all[i]=app; else all.unshift(app); DB.savePendingApps(all); },
+  removePendingApp: id => DB.savePendingApps(DB.getPendingApps().filter(a=>a.id!==id)),
 };
 
 // ── FEE HELPERS ──────────────────────────────────────────────
@@ -177,6 +197,42 @@ function showToast(msg,type='info'){
 }
 
 function seedMaterials(){if(DB.getMaterials().length>0)return;DB.saveMaterials([]);}
+
+// ── ALIASES (staff.html uses short names) ────────────────────────
+const fmtDate     = formatDate;
+const fmtDateTime = formatDateTime;
+
+// pct(rawScore, totalQuestions) → integer percentage 0-100
+function pct(score, total){ return total>0 ? Math.min(100, Math.round((score/total)*100)) : 0; }
+
+// grade(pctScore) → grade label string
+function grade(p){
+  if(p>=90) return 'Distinction';
+  if(p>=75) return 'Merit';
+  if(p>=CONFIG.passMarkAllLevels) return 'Pass';
+  return 'Fail';
+}
+
+// downloadCSV(arrayOfObjects, filename) — triggers browser download
+function downloadCSV(rows, filename='export.csv'){
+  if(!rows||!rows.length)return;
+  const headers=Object.keys(rows[0]);
+  const escape=v=>'"'+String(v==null?'':v).replace(/"/g,'""')+'"';
+  const csv=[headers.map(escape).join(','),...rows.map(r=>headers.map(h=>escape(r[h])).join(','))].join('\n');
+  const a=document.createElement('a');
+  a.href='data:text/csv;charset=utf-8,'+encodeURIComponent(csv);
+  a.download=filename;a.click();
+}
+
+// QUIZ_BANKS — alias for EXAM_QUESTIONS (staff.html uses this name)
+// Defined after EXAM_QUESTIONS is declared below.
+
+// UNIT_TITLES — per-level unit name arrays used in materials editor
+const UNIT_TITLES = {
+  1: ['Greetings & Introductions','Numbers, Time & Dates','Family & Home','Daily Routines','Food & Shopping','Health, Places & Community'],
+  2: ['Talking About the Past','Experiences & Life Events','Plans & the Future','Describing & Comparing','Expressing Opinions','Workplace English','Academic Reading & Writing','Speaking Skills'],
+  3: ['Complex Grammar','Critical Reading & Vocabulary','Academic Essay Writing','Debates & Discussion','Research & Presentations','Advanced Professional English','Literature & Media','IELTS/TOEFL Preparation','Independent Research Project'],
+};
 
 
 // ── LESSON CONTENT — 9 LANGUAGES ─────────────────────────────
@@ -678,8 +734,309 @@ const EXAM_QUESTIONS = {
  ],
 };
 
-// ── WEEKLY CAT QUIZ BANKS (per language, per level) ───────────
-// These are used for weekly continuous assessment tests (40% of grade)
+// QUIZ_BANKS is the alias staff.html uses for EXAM_QUESTIONS
+const QUIZ_BANKS = EXAM_QUESTIONS;
+
+// ── WEEKLY CURRICULUM SCHEDULE (15 weeks = 4 months per level) ──
+// Week 1-5: Units 1-5 (one unit per week)
+// Week 6-10: Units 6-10 (review + deeper content)
+// Week 11-14: Advanced practice + speaking
+// Week 15: Revision + Final Exam Prep
+const WEEK_SCHEDULE = {
+  // level → array of 15 week descriptors
+  1: [
+    {week:1,  topic:"Greetings & Introductions",          unit:1, catMarks:20, type:"foundation"},
+    {week:2,  topic:"Numbers, Time & Dates",              unit:2, catMarks:20, type:"foundation"},
+    {week:3,  topic:"Family & Home Vocabulary",           unit:3, catMarks:20, type:"foundation"},
+    {week:4,  topic:"Daily Routines & Present Simple",    unit:4, catMarks:20, type:"foundation"},
+    {week:5,  topic:"Food, Shopping & Countables",        unit:5, catMarks:20, type:"foundation"},
+    {week:6,  topic:"Health, Body & Directions",          unit:6, catMarks:22, type:"application"},
+    {week:7,  topic:"Review: Grammar Structures 1–3",     unit:null, catMarks:22, type:"review"},
+    {week:8,  topic:"Review: Vocabulary & Pronunciation", unit:null, catMarks:22, type:"review"},
+    {week:9,  topic:"Speaking Practice: Dialogues",       unit:null, catMarks:25, type:"speaking"},
+    {week:10, topic:"Writing Practice: Paragraphs",       unit:null, catMarks:25, type:"writing"},
+    {week:11, topic:"Reading Comprehension",              unit:null, catMarks:25, type:"reading"},
+    {week:12, topic:"Integrated Skills Test",             unit:null, catMarks:25, type:"integrated"},
+    {week:13, topic:"Speaking Assessment",                unit:null, catMarks:30, type:"speaking_formal"},
+    {week:14, topic:"Mock Exam + Corrections",            unit:null, catMarks:30, type:"mock"},
+    {week:15, topic:"Final Exam Revision",                unit:null, catMarks:0,  type:"revision"},
+  ],
+  2: [
+    {week:1,  topic:"Past Simple Tense",                     unit:1, catMarks:20, type:"foundation"},
+    {week:2,  topic:"Present Perfect & Life Experiences",    unit:2, catMarks:20, type:"foundation"},
+    {week:3,  topic:"Future Forms: will / going to",         unit:3, catMarks:20, type:"foundation"},
+    {week:4,  topic:"Comparatives & Superlatives",           unit:4, catMarks:20, type:"foundation"},
+    {week:5,  topic:"Expressing Opinions & Modal Verbs",     unit:5, catMarks:22, type:"foundation"},
+    {week:6,  topic:"Passive Voice & Formal Writing",        unit:6, catMarks:22, type:"application"},
+    {week:7,  topic:"Academic Reading & Paragraph Writing",  unit:7, catMarks:22, type:"application"},
+    {week:8,  topic:"Speaking Skills & Presentations",       unit:8, catMarks:22, type:"application"},
+    {week:9,  topic:"Review: Tenses & Structures",           unit:null, catMarks:25, type:"review"},
+    {week:10, topic:"Review: Vocabulary & Formal Register",  unit:null, catMarks:25, type:"review"},
+    {week:11, topic:"Extended Writing: Essay",               unit:null, catMarks:25, type:"writing"},
+    {week:12, topic:"Oral Presentation Assessment",          unit:null, catMarks:25, type:"speaking_formal"},
+    {week:13, topic:"Reading Comprehension & Analysis",      unit:null, catMarks:30, type:"reading"},
+    {week:14, topic:"Mock Exam + Feedback",                  unit:null, catMarks:30, type:"mock"},
+    {week:15, topic:"Final Exam Revision",                   unit:null, catMarks:0,  type:"revision"},
+  ],
+  3: [
+    {week:1,  topic:"Complex Conditionals & Wish",           unit:1, catMarks:20, type:"foundation"},
+    {week:2,  topic:"Critical Reading & Academic Vocab",     unit:2, catMarks:20, type:"foundation"},
+    {week:3,  topic:"Academic Essay Writing (PEEL)",         unit:3, catMarks:20, type:"foundation"},
+    {week:4,  topic:"Debates & Logical Arguments",           unit:4, catMarks:20, type:"foundation"},
+    {week:5,  topic:"Research Skills & Citations",           unit:5, catMarks:22, type:"foundation"},
+    {week:6,  topic:"Advanced Professional English",         unit:6, catMarks:22, type:"application"},
+    {week:7,  topic:"Literature & Media Language",           unit:7, catMarks:22, type:"application"},
+    {week:8,  topic:"IELTS/TOEFL: Reading & Listening",     unit:8, catMarks:22, type:"application"},
+    {week:9,  topic:"Independent Research: Draft 1",         unit:9, catMarks:25, type:"project"},
+    {week:10, topic:"Research: Peer Review Session",         unit:null, catMarks:25, type:"project"},
+    {week:11, topic:"IELTS Writing Task 1 & 2 Practice",    unit:null, catMarks:25, type:"ielts"},
+    {week:12, topic:"Oral Exam Preparation",                 unit:null, catMarks:25, type:"speaking_formal"},
+    {week:13, topic:"Research Essay Submission",             unit:null, catMarks:30, type:"project"},
+    {week:14, topic:"Mock Final Exam",                       unit:null, catMarks:30, type:"mock"},
+    {week:15, topic:"Final Exam Revision",                   unit:null, catMarks:0,  type:"revision"},
+  ],
+};
+
+// ── GRADING WEIGHTS ──────────────────────────────────────────────
+const GRADE_WEIGHTS = {
+  cats:       0.40,  // 40% — Continuous Assessment Tests (all 14 weeks combined)
+  attendance: 0.10,  // 10% — Class attendance (logged by instructor)
+  exam:       0.50,  // 50% — End-of-level examination
+  passmark:   70,    // Must score 70%+ to certify
+};
+
+// ── CAT QUESTION BANKS — 15 weeks × 3 levels (English shown; apply to all languages) ─
+// Format: {q, opts (MCQ) OR blanks (short answer) OR prompt (voice/explain), type, marks, ans}
+const CAT_BANKS = {
+  // ────────────────── LEVEL 1 ──────────────────
+  1: {
+    1: [ // Week 1: Greetings & Introductions
+      {type:"mcq",    marks:2, q:"Which greeting is correct before noon?",                               opts:["Good evening","Good afternoon","Good morning","Good night"],         ans:2},
+      {type:"mcq",    marks:2, q:"'My name is Tom.' — What verb is used?",                              opts:["have","do","am","is"],                                               ans:3},
+      {type:"mcq",    marks:2, q:"How do you respond to 'Nice to meet you'?",                           opts:["See you later","Nice to meet you too","Good night","Thank you"],     ans:1},
+      {type:"mcq",    marks:2, q:"Which is an informal greeting?",                                      opts:["Good morning","Good evening","Hi!","How do you do?"],                ans:2},
+      {type:"mcq",    marks:2, q:"'I ___ a student.' Fill in:",                                         opts:["are","is","am","be"],                                                ans:2},
+      {type:"short",  marks:2, q:"Write the correct form: 'She ___ (be) from Nairobi.'",               ans:"is"},
+      {type:"short",  marks:2, q:"Translate to English: 'Habari ya asubuhi'",                          ans:"Good morning"},
+      {type:"short",  marks:2, q:"Write ONE sentence introducing yourself (name + country).",           ans:"open"},
+      {type:"explain",marks:4, q:"In 2–3 sentences, explain when you use 'Good evening' vs 'Good night' in English.", ans:"open"},
+    ],
+    2: [ // Week 2: Numbers, Time & Dates
+      {type:"mcq",    marks:2, q:"How do you say 3:30 in English?",                                    opts:["Three thirty past","Half past three","Quarter to three","Three and half"], ans:1},
+      {type:"mcq",    marks:2, q:"What is 40 in words?",                                               opts:["fourty","forty","fourtey","forthy"],                                  ans:1},
+      {type:"mcq",    marks:2, q:"Which preposition: 'The class starts ___ Monday'?",                  opts:["in","at","on","by"],                                                  ans:2},
+      {type:"mcq",    marks:2, q:"'It is quarter past six.' — What digital time is that?",             opts:["6:15","6:45","6:30","5:45"],                                           ans:0},
+      {type:"mcq",    marks:2, q:"What comes after Wednesday?",                                        opts:["Tuesday","Friday","Thursday","Monday"],                               ans:2},
+      {type:"short",  marks:2, q:"Write 47 in words.",                                                 ans:"forty-seven"},
+      {type:"short",  marks:2, q:"What is today's date? Write in full English (e.g. Monday, 5th May 2026).", ans:"open"},
+      {type:"short",  marks:2, q:"Use AT, ON or IN: 'I was born ___ 2005 ___ Nairobi.'",              ans:"in / in"},
+      {type:"explain",marks:4, q:"Explain the difference between AT, ON and IN when talking about time. Give one example each.", ans:"open"},
+    ],
+    3: [ // Week 3: Family & Home Vocabulary
+      {type:"mcq",    marks:2, q:"Your mother's mother is your:",                                       opts:["aunt","grandmother","sister","cousin"],                               ans:1},
+      {type:"mcq",    marks:2, q:"'___ house is big.' (She) — correct possessive:",                    opts:["His","Her","Their","Our"],                                            ans:1},
+      {type:"mcq",    marks:2, q:"Where do you cook food in a house?",                                 opts:["bedroom","living room","kitchen","bathroom"],                         ans:2},
+      {type:"mcq",    marks:2, q:"'We ___ students.' — correct form of 'to be':",                      opts:["am","is","are","be"],                                                 ans:2},
+      {type:"mcq",    marks:2, q:"Which word means 'baba' in English?",                                opts:["brother","uncle","father","grandfather"],                             ans:2},
+      {type:"short",  marks:2, q:"Complete: 'John has a dog. ___ dog is black.'",                      ans:"His"},
+      {type:"short",  marks:2, q:"Name 3 rooms in a typical house.",                                   ans:"open"},
+      {type:"short",  marks:2, q:"Write a sentence about your family using 'our'.",                    ans:"open"},
+      {type:"explain",marks:4, q:"Describe your family in 3–4 sentences. Mention at least 3 family members.", ans:"open"},
+    ],
+    4: [ // Week 4: Daily Routines & Present Simple
+      {type:"mcq",    marks:2, q:"'She ___ (wake up) at 6am.' Correct form:",                          opts:["wake up","wakes up","waked up","is waking"],                          ans:1},
+      {type:"mcq",    marks:2, q:"Negative of 'He goes to school': ",                                  opts:["He not go","He doesn't go","He don't go","He isn't go"],             ans:1},
+      {type:"mcq",    marks:2, q:"Adverb for 100% frequency:",                                         opts:["sometimes","never","always","often"],                                 ans:2},
+      {type:"mcq",    marks:2, q:"'___ you eat breakfast every day?' — correct question word:",        opts:["Is","Are","Do","Does"],                                               ans:2},
+      {type:"mcq",    marks:2, q:"Correct sentence:",                                                  opts:["She study at night","She studies at night","She studys at night","She is studying always"], ans:1},
+      {type:"short",  marks:2, q:"Write the correct form: 'He ___ (not eat) meat.'",                  ans:"doesn't eat"},
+      {type:"short",  marks:2, q:"Put the adverb correctly: 'I / late / am / never'",                 ans:"I am never late"},
+      {type:"short",  marks:2, q:"Write a question: your partner wakes up at 5:30. Ask them!",        ans:"open"},
+      {type:"explain",marks:4, q:"Describe your own daily routine in 4–5 sentences using present simple and at least 2 frequency adverbs.", ans:"open"},
+    ],
+    5: [ // Week 5: Food, Shopping & Countables
+      {type:"mcq",    marks:2, q:"'Rice' is:",                                                         opts:["countable","uncountable","plural","a verb"],                          ans:1},
+      {type:"mcq",    marks:2, q:"'How ___ sugar do you need?'",                                       opts:["many","much","some","any"],                                           ans:1},
+      {type:"mcq",    marks:2, q:"Correct shopping phrase for asking price:",                          opts:["How many is this?","How much is this?","What price are you?","Is it expensive?"], ans:1},
+      {type:"mcq",    marks:2, q:"'I don't have ___ eggs.' (negative):",                               opts:["some","any","much","a few"],                                          ans:1},
+      {type:"mcq",    marks:2, q:"'A few tomatoes' — tomatoes is:",                                    opts:["uncountable","a verb","countable","singular"],                        ans:2},
+      {type:"short",  marks:2, q:"Fill in: 'She bought ___ bread and ___ avocados from the market.'", ans:"some / some"},
+      {type:"short",  marks:2, q:"Write a sentence using 'How many' with eggs.",                      ans:"open"},
+      {type:"short",  marks:2, q:"Is 'milk' countable or uncountable? Give a correct example sentence.", ans:"open"},
+      {type:"explain",marks:4, q:"Write a short market dialogue (6 lines) between a buyer and a seller. Include greeting, price negotiation, and payment.", ans:"open"},
+    ],
+    6: [ // Week 6: Health, Body & Directions
+      {type:"mcq",    marks:2, q:"'There ___ a hospital near here.' (singular):",                      opts:["are","is","be","am"],                                                 ans:1},
+      {type:"mcq",    marks:2, q:"Correct health phrase:",                                             opts:["I have a headache","I has headache","My head hurts me a lot pain","I am headache"], ans:0},
+      {type:"mcq",    marks:2, q:"'Turn left' means:",                                                 opts:["geuka kulia","nenda moja kwa moja","geuka kushoto","rudi nyuma"],     ans:2},
+      {type:"mcq",    marks:2, q:"'There ___ any taxis.' (negative plural):",                         opts:["isn't","aren't","is not","am not"],                                   ans:1},
+      {type:"mcq",    marks:2, q:"'My stomach ___.' (hurts — correct):",                              opts:["hurt","hurts","is hurting me bad","hurting"],                         ans:1},
+      {type:"short",  marks:2, q:"Give directions: hospital → bank (use left, right, straight ahead)", ans:"open"},
+      {type:"short",  marks:2, q:"Write: 'There is a school in this village.' as a question.",        ans:"Is there a school in this village?"},
+      {type:"short",  marks:2, q:"Name 3 body parts and one health complaint for each.",              ans:"open"},
+      {type:"explain",marks:4, q:"Write a short paragraph (5 sentences) describing your neighbourhood using 'there is / there are'.", ans:"open"},
+    ],
+    7: [ // Week 7: Grammar Review 1–3
+      {type:"mcq",    marks:2, q:"Choose the correct verb: 'They ___ doctors.'",                       opts:["am","is","are","be"],                                                 ans:2},
+      {type:"mcq",    marks:2, q:"Possessive for 'she':",                                              opts:["his","its","their","her"],                                            ans:3},
+      {type:"mcq",    marks:2, q:"'My ___ is kind and hardworking.' (mother's mother):",               opts:["aunt","sister","grandmother","cousin"],                               ans:2},
+      {type:"mcq",    marks:2, q:"'She is NOT a teacher.' is a:",                                     opts:["question","negative sentence","positive sentence","command"],         ans:1},
+      {type:"mcq",    marks:2, q:"Which sentence is correct?",                                        opts:["He live in Nairobi","She live Nairobi","They lives here","We live in Mombasa"], ans:3},
+      {type:"short",  marks:2, q:"Write a question for this answer: 'Yes, I am from Kenya.'",         ans:"Are you from Kenya?"},
+      {type:"short",  marks:2, q:"Correct this: 'She is not from Mombasa? Yes, she is not.'",        ans:"open"},
+      {type:"short",  marks:2, q:"Fill: 'We ___ students. ___ you a student too?'",                   ans:"are / Are"},
+      {type:"explain",marks:4, q:"Write 4 sentences about yourself: name, age, country, occupation. Use 'to be' correctly.", ans:"open"},
+    ],
+    8: [ // Week 8: Vocabulary & Pronunciation Review
+      {type:"mcq",    marks:2, q:"'Bibi' in English is:",                                              opts:["aunt","mother","grandmother","sister"],                               ans:2},
+      {type:"mcq",    marks:2, q:"'Forty' is spelled correctly?",                                     opts:["fourty","forty","fourtee","fortee"],                                  ans:1},
+      {type:"mcq",    marks:2, q:"Which is NOT a greeting?",                                          opts:["Good morning","How are you","Goodbye","Two plus two"],                ans:3},
+      {type:"mcq",    marks:2, q:"'Habari ya mchana' in English:",                                    opts:["Good morning","Good night","Good afternoon","Good evening"],          ans:2},
+      {type:"mcq",    marks:2, q:"'Ninakula kifungua kinywa' means:",                                 opts:["I eat lunch","I eat dinner","I eat breakfast","I am eating ugali"],   ans:2},
+      {type:"short",  marks:2, q:"Write the English for 'ukumbi'.",                                   ans:"living room"},
+      {type:"short",  marks:2, q:"Translate: 'Ninaenda kazini kwa matatu.'",                          ans:"I go to work by matatu."},
+      {type:"short",  marks:2, q:"Write 3 food items in English with their Kiswahili translations.",  ans:"open"},
+      {type:"explain",marks:4, q:"Why is learning vocabulary important? Explain in 3 sentences using examples from Level 1.", ans:"open"},
+    ],
+    9: [ // Week 9: Speaking Practice (voice-graded)
+      {type:"voice",  marks:5, q:"Record yourself greeting your teacher in the morning and introducing yourself. (30–60 seconds)", ans:"open"},
+      {type:"voice",  marks:5, q:"Record a short conversation asking for directions to the hospital from the market. (30–60 seconds)", ans:"open"},
+      {type:"voice",  marks:5, q:"Record yourself describing your daily routine. Use at least 5 sentences and 2 frequency adverbs. (45–90 seconds)", ans:"open"},
+      {type:"short",  marks:2, q:"Write 3 greetings for different times of day.",                     ans:"open"},
+      {type:"short",  marks:3, q:"Write the meaning of these adverbs: always, sometimes, never.",     ans:"open"},
+    ],
+    10: [ // Week 10: Writing Practice
+      {type:"explain",marks:5, q:"Write a paragraph (80–100 words) about your daily routine. Use present simple and frequency adverbs.", ans:"open"},
+      {type:"explain",marks:5, q:"Write a market dialogue (10 lines) between a customer and a seller. Include price negotiation.", ans:"open"},
+      {type:"mcq",    marks:2, q:"A 'paragraph' starts with a:",                                      opts:["conclusion","topic sentence","bibliography","title"],                 ans:1},
+      {type:"mcq",    marks:2, q:"Correct punctuation: 'hello my name is tom'",                       opts:["Hello, my name is Tom.","Hello my name is Tom","hello, my name is tom.","Hello My Name Is Tom"], ans:0},
+      {type:"short",  marks:4, q:"Describe your home in 4–5 sentences. Use 'there is / there are'.", ans:"open"},
+      {type:"short",  marks:2, q:"Write your full name, admission number, and today's date in English.", ans:"open"},
+    ],
+    11: [ // Week 11: Reading Comprehension
+      {type:"mcq",    marks:2, q:"'He is twenty-eight years old.' How old is he?",                    opts:["18","38","28","82"],                                                   ans:2},
+      {type:"mcq",    marks:2, q:"'She goes to class on Tuesday and Thursday.' How many days?",       opts:["1","2","3","4"],                                                       ans:1},
+      {type:"mcq",    marks:2, q:"'The class finishes at eight o'clock.' When does it finish?",       opts:["6:00","7:00","8:00","9:00"],                                           ans:2},
+      {type:"mcq",    marks:2, q:"'I have a sore throat and a cough.' The person is:",               opts:["hungry","unwell","happy","travelling"],                               ans:1},
+      {type:"short",  marks:3, q:"Read: 'My name is Brian. I live in Eastlands, Nairobi. I study English every evening.' — Where does Brian live?", ans:"Eastlands, Nairobi"},
+      {type:"short",  marks:3, q:"From the same text: When does Brian study English?",               ans:"every evening"},
+      {type:"explain",marks:4, q:"Why is reading in English important for your life or work? Write 3–4 sentences.", ans:"open"},
+      {type:"short",  marks:2, q:"Find 3 adjectives in this sentence: 'She is a tall, kind, hardworking teacher.'", ans:"tall, kind, hardworking"},
+    ],
+    12: [ // Week 12: Integrated Skills
+      {type:"mcq",    marks:2, q:"'Does she eat breakfast?' — correct short answer:",                 opts:["Yes, she do","Yes, she does","Yes, she is","Yes, she eats"],            ans:1},
+      {type:"mcq",    marks:2, q:"Which is the most formal greeting?",                               opts:["Hey!","Yo!","Good morning, sir.","Wassup!"],                           ans:2},
+      {type:"mcq",    marks:2, q:"Correct preposition: 'I was born ___ 1998.'",                      opts:["on","at","in","by"],                                                   ans:2},
+      {type:"short",  marks:3, q:"Write a 3-sentence description of a person using adjectives.",     ans:"open"},
+      {type:"short",  marks:3, q:"Complete the conversation: 'What time does the bus leave?' / '___ '", ans:"open"},
+      {type:"voice",  marks:4, q:"Record: Describe a typical day in your life in English. (60 seconds minimum)", ans:"open"},
+      {type:"explain",marks:4, q:"Write a formal letter of introduction (50–70 words) to a new English teacher.", ans:"open"},
+    ],
+    13: [ // Week 13: Speaking Assessment (formal)
+      {type:"voice",  marks:8, q:"FORMAL SPEAKING TEST: Introduce yourself for 60–90 seconds. Include: name, age, country, occupation, family, and why you are learning English. Speak clearly and confidently.", ans:"open"},
+      {type:"voice",  marks:7, q:"ROLE PLAY: You are a patient at a clinic. Record a conversation with the doctor. Describe your symptoms clearly. (60–90 seconds)", ans:"open"},
+      {type:"voice",  marks:8, q:"NARRATIVE: Tell the story of your typical Saturday. Use present simple and at least 3 time expressions. (60–90 seconds)", ans:"open"},
+      {type:"short",  marks:4, q:"Write 4 key vocabulary words from Level 1 with their Swahili translations.", ans:"open"},
+      {type:"short",  marks:3, q:"Write the questions you would ask a new classmate on the first day of class.", ans:"open"},
+    ],
+    14: [ // Week 14: Mock Exam
+      {type:"mcq",    marks:2, q:"Correct sentence:",                                                 opts:["She go to market","She goes to the market","She going market","She is go market"], ans:1},
+      {type:"mcq",    marks:2, q:"'Good morning!' is used:",                                         opts:["After 6pm","Any time","Before noon","At night"],                      ans:2},
+      {type:"mcq",    marks:2, q:"'There ___ two hospitals in our town.'",                           opts:["is","am","are","be"],                                                  ans:2},
+      {type:"mcq",    marks:2, q:"'How ___ water do you drink daily?'",                              opts:["many","much","some","few"],                                            ans:1},
+      {type:"mcq",    marks:2, q:"Possessive adjective for 'they':",                                 opts:["his","her","our","their"],                                             ans:3},
+      {type:"short",  marks:3, q:"Write 3 sentences about your family using possessive adjectives.", ans:"open"},
+      {type:"short",  marks:3, q:"Give directions from the school to the nearest market.",           ans:"open"},
+      {type:"explain",marks:5, q:"Write a paragraph (80 words) about your neighbourhood. Use there is/are, adjectives, and prepositions.", ans:"open"},
+      {type:"voice",  marks:5, q:"Mock Speaking: Greet, introduce yourself, and describe your home in 60 seconds.", ans:"open"},
+    ],
+  },
+
+  // ────────────────── LEVEL 2 ──────────────────
+  2: {
+    1: [ // Week 1: Past Simple
+      {type:"mcq",    marks:2, q:"'She ___ (go) to Mombasa last year.' Correct past:",               opts:["goed","gone","went","goes"],                                           ans:2},
+      {type:"mcq",    marks:2, q:"Negative of 'He bought the book':",                               opts:["He didn't bought","He didn't buy","He doesn't bought","He not buy"],   ans:1},
+      {type:"mcq",    marks:2, q:"Which is a past simple time expression?",                         opts:["since Monday","for 3 years","last week","already"],                   ans:2},
+      {type:"mcq",    marks:2, q:"Past simple of 'teach':",                                         opts:["teached","taught","tought","teachd"],                                  ans:1},
+      {type:"mcq",    marks:2, q:"Correct question:",                                               opts:["Did she went?","Did she go?","Does she went?","Was she go?"],          ans:1},
+      {type:"short",  marks:2, q:"Write: 'They ___ (not travel) to Uganda last month.'",            ans:"didn't travel"},
+      {type:"short",  marks:2, q:"Give the past simple of: eat, write, see, run, buy.",             ans:"ate, wrote, saw, ran, bought"},
+      {type:"short",  marks:2, q:"Write 2 sentences about what you did last weekend.",              ans:"open"},
+      {type:"explain",marks:4, q:"Write a paragraph (80–100 words) about one memorable day in your past. Use past simple throughout.", ans:"open"},
+    ],
+    2: [ // Week 2: Present Perfect
+      {type:"mcq",    marks:2, q:"'I ___ never eaten sushi.' Correct:",                             opts:["have","has","had","am"],                                               ans:0},
+      {type:"mcq",    marks:2, q:"'She ___ just arrived.' Correct:",                                opts:["have","had","has","is"],                                               ans:2},
+      {type:"mcq",    marks:2, q:"'I lived in Kisumu for 5 years.' — This uses:",                  opts:["Present perfect","Past simple","Future simple","Present simple"],      ans:1},
+      {type:"mcq",    marks:2, q:"'I ___ lived here since 2018.' Correct:",                        opts:["am","has","have","had"],                                               ans:2},
+      {type:"mcq",    marks:2, q:"'___ you ever been to Uganda?'",                                  opts:["Did","Have","Has","Are"],                                              ans:1},
+      {type:"short",  marks:2, q:"Write: 'She / go / to Uganda / twice.' Use present perfect.",    ans:"She has been to Uganda twice."},
+      {type:"short",  marks:2, q:"Complete: 'I haven't finished ___ . Have you eaten ___?'",       ans:"yet / yet"},
+      {type:"short",  marks:2, q:"What's the difference between FOR and SINCE? Give an example each.", ans:"open"},
+      {type:"explain",marks:4, q:"Write 5 sentences about YOUR life experiences using have/has + past participle. Include ever, never, already, yet.", ans:"open"},
+    ],
+    3: [ // Week 3: Future Forms
+      {type:"mcq",    marks:2, q:"Spontaneous decision — correct form:",                            opts:["I'm going to answer it","I'll answer it","I answer it","I was answering it"], ans:1},
+      {type:"mcq",    marks:2, q:"'She already has her visa.' — use:",                             opts:["will study","is going to study","studies","studied"],                  ans:1},
+      {type:"mcq",    marks:2, q:"Prediction with evidence (dark clouds):",                        opts:["It will rain","It's going to rain","It rains","It rained"],             ans:1},
+      {type:"mcq",    marks:2, q:"'She ___ come — she hasn't decided.' — use:",                    opts:["will","might","must","shall"],                                          ans:1},
+      {type:"mcq",    marks:2, q:"Fixed future arrangement (appointment booked):",                 opts:["will meet","going to meet","am meeting","shall meet"],                  ans:2},
+      {type:"short",  marks:2, q:"'The phone rings. You say:' — write using WILL.",                ans:"I'll get it!"},
+      {type:"short",  marks:2, q:"Write: you plan to apply for a job next week. Use GOING TO.",   ans:"open"},
+      {type:"short",  marks:2, q:"Write a sentence using MIGHT for something uncertain this weekend.", ans:"open"},
+      {type:"explain",marks:4, q:"Write a paragraph about your plans and predictions for the next 5 years. Use will, going to, and might (at least once each).", ans:"open"},
+    ],
+    4: [ // Week 4: Comparatives & Superlatives
+      {type:"mcq",    marks:2, q:"Comparative of 'good':",                                          opts:["more good","gooder","better","best"],                                  ans:2},
+      {type:"mcq",    marks:2, q:"Superlative of 'big':",                                           opts:["the most big","the bigger","the biggest","the bigest"],               ans:2},
+      {type:"mcq",    marks:2, q:"Correct sentence:",                                              opts:["She is more tall than him","She is taller than him","She is tallest than him","She tall more"], ans:1},
+      {type:"mcq",    marks:2, q:"Adverb of manner from 'careful':",                               opts:["carefully","careful","careness","more careful"],                       ans:0},
+      {type:"mcq",    marks:2, q:"'Nairobi is not ___ expensive ___ Dubai.'",                      opts:["as/as","than/than","more/as","as/than"],                               ans:0},
+      {type:"short",  marks:2, q:"Write comparative and superlative of: bad, far, interesting.",   ans:"worse/worst, further/furthest, more interesting/most interesting"},
+      {type:"short",  marks:2, q:"Write: 'A matatu is cheaper than a taxi.' Use NOT AS...AS.",     ans:"A taxi is not as cheap as a matatu."},
+      {type:"short",  marks:2, q:"Write 2 sentences comparing Nairobi and your hometown.",         ans:"open"},
+      {type:"explain",marks:4, q:"Compare two cities, jobs, or people you know well. Write 80–100 words using comparatives, superlatives, and as...as.", ans:"open"},
+    ],
+    5: [ // Week 5: Modal Verbs & Opinions
+      {type:"mcq",    marks:2, q:"'You ___ see a doctor — it's serious.' (advice):",               opts:["must","should","mustn't","don't have to"],                             ans:1},
+      {type:"mcq",    marks:2, q:"'Students ___ cheat in exams.' (prohibition):",                 opts:["mustn't","don't have to","shouldn't must","might not"],                ans:0},
+      {type:"mcq",    marks:2, q:"Formal opinion opener:",                                         opts:["I feel like...","I think...","In my opinion,...","You know what..."],  ans:2},
+      {type:"mcq",    marks:2, q:"Polite disagreement:",                                           opts:["You are wrong!","I see your point, but...","No way!","Whatever!"],    ans:1},
+      {type:"mcq",    marks:2, q:"MUST vs HAVE TO — MUST expresses:",                             opts:["external rule","personal strong obligation","suggestion","permission"], ans:1},
+      {type:"short",  marks:2, q:"Give advice using SHOULD to someone who wants to learn English faster.", ans:"open"},
+      {type:"short",  marks:2, q:"Write: 'You ___ drive without a licence.' (use mustn't).",      ans:"You mustn't drive without a licence."},
+      {type:"short",  marks:2, q:"Write your opinion on this: 'Social media is good for students.'", ans:"open"},
+      {type:"explain",marks:4, q:"Agree or disagree: 'University education should be free in Kenya.' Write 80 words. Use opinion phrases and modal verbs.", ans:"open"},
+    ],
+    // Weeks 6-14 for Level 2 follow same structure — abbreviated here, full in system
+    6: [{type:"mcq",marks:2,q:"Passive voice: 'The manager signed the contract.' → ",opts:["The contract signed by manager","The contract was signed by the manager","The contract is signed","Manager was signing contract"],ans:1},{type:"mcq",marks:2,q:"Formal email opening (name known):",opts:["Hey Tom,","Dear Mr Kamau,","Hi there,","Yo!"],ans:1},{type:"mcq",marks:2,q:"Passive: 'They make Tusker beer in Kenya.' →",opts:["Tusker is making in Kenya","Tusker beer is made in Kenya","Tusker beer was made","Beer made Kenya"],ans:1},{type:"mcq",marks:2,q:"Formal email closing (name known):",opts:["Yours faithfully","See ya","Yours sincerely","Best wishes mate"],ans:2},{type:"mcq",marks:2,q:"Reported speech: 'I am tired,' she said. →",opts:["She said she is tired","She said she was tired","She says she tired","She told she was tired"],ans:1},{type:"short",marks:2,q:"Rewrite in passive: 'The government built a new hospital.'",ans:"A new hospital was built by the government."},{type:"short",marks:2,q:"Write a formal email subject line for a job application.",ans:"open"},{type:"short",marks:2,q:"Report: '\"I will help you,\" he promised.' →",ans:"He promised that he would help me."},{type:"explain",marks:4,q:"Write a formal email (80 words) applying for a position of your choice. Use formal language throughout.",ans:"open"}],
+    7: [{type:"mcq",marks:2,q:"Topic sentence position in a paragraph:",opts:["last","middle","first","anywhere"],ans:2},{type:"mcq",marks:2,q:"'Although it was raining, they continued.' ALTHOUGH connects:",opts:["two similar ideas","contrasting ideas","cause and effect","time sequence"],ans:1},{type:"mcq",marks:2,q:"Relative pronoun for places:",opts:["who","which","that","where"],ans:3},{type:"mcq",marks:2,q:"'She studied hard. ___, she passed.' Best connective:",opts:["However","Therefore","Although","Despite"],ans:1},{type:"mcq",marks:2,q:"DESPITE is followed by:",opts:["a verb","a noun/ing form","a full clause","a conjunction"],ans:1},{type:"short",marks:2,q:"Join: 'I have a friend. She speaks five languages.' Use WHO.",ans:"I have a friend who speaks five languages."},{type:"short",marks:2,q:"Write a topic sentence for a paragraph about climate change in Africa.",ans:"open"},{type:"short",marks:2,q:"Write a sentence using FURTHERMORE.",ans:"open"},{type:"explain",marks:4,q:"Write a full PEEL paragraph (90–120 words) on: 'Technology has improved education in Africa.'",ans:"open"}],
+    8: [{type:"mcq",marks:2,q:"Signposting language for moving to next point:",opts:["In conclusion","Moving on to...","For example","As I see it"],ans:1},{type:"mcq",marks:2,q:"In a presentation, what comes FIRST?",opts:["Main point","Conclusion","Introduction","Summary"],ans:2},{type:"mcq",marks:2,q:"If you forget a word in a presentation, you should:",opts:["Stop speaking","Apologise and sit down","Describe it: 'It's the thing that...'","Speak in Swahili"],ans:2},{type:"mcq",marks:2,q:"'th' in 'think' — tongue position:",opts:["Between teeth","Behind teeth","On lips","At throat"],ans:0},{type:"mcq",marks:2,q:"'Rarely' means:",opts:["always","sometimes","almost never","very often"],ans:2},{type:"voice",marks:5,q:"Record a 2-minute presentation on: 'Why I am learning this language.' Use signposting language and at least 3 main points.",ans:"open"},{type:"short",marks:2,q:"Write 2 signposting phrases you would use to introduce your second main point.",ans:"open"},{type:"explain",marks:3,q:"Write your presentation conclusion (40–60 words) for a talk on education in Kenya.",ans:"open"}],
+    9: [{type:"voice",marks:5,q:"Record: Tell a 90-second story about a memorable past experience. Use past simple and present perfect.",ans:"open"},{type:"voice",marks:5,q:"Record: Compare two cities or countries you know. Use comparatives and superlatives. (60–90 seconds)",ans:"open"},{type:"explain",marks:5,q:"Write a response (100 words) to: 'Should English be the only language of instruction in East African schools?'",ans:"open"},{type:"mcq",marks:2,q:"Present perfect vs past simple: 'I ___ her yesterday.' —",opts:["have seen","saw","have saw","seen"],ans:1},{type:"short",marks:3,q:"Write 3 sentences contrasting Nairobi and a rural town using however, whereas, and in contrast.",ans:"open"}],
+    10: [{type:"explain",marks:6,q:"Write a short essay (150 words) on: 'Technology has changed daily life in East Africa.' Include intro, body, conclusion. Use 3 connectives.",ans:"open"},{type:"mcq",marks:2,q:"'Despite the high cost, she bought it.' DESPITE is followed by:",opts:["a clause","a noun","a verb","a question"],ans:1},{type:"mcq",marks:2,q:"Correct essay structure:",opts:["Body → Introduction → Conclusion","Introduction → Body → Conclusion","Conclusion → Body → Introduction","Introduction → Conclusion → Body"],ans:1},{type:"short",marks:3,q:"Write your thesis statement for an essay on: 'Social media does more harm than good.'",ans:"open"},{type:"voice",marks:5,q:"Record: Give a 90-second argument FOR or AGAINST: 'Smartphones should be banned in classrooms.'",ans:"open"},{type:"short",marks:2,q:"Replace informal: 'a lot of people think that...'",ans:"A significant number of people believe that..."}],
+    11: [{type:"mcq",marks:2,q:"'The Africa Rising narrative emerged in the early 2000s.' This sentence is:",opts:["an opinion","a question","a fact statement","a conclusion"],ans:2},{type:"mcq",marks:2,q:"Critical reading means:",opts:["reading very fast","judging if evidence is strong and arguments are valid","reading only main points","summarising texts"],ans:1},{type:"short",marks:3,q:"Read: 'Mobile technology has transformed life for millions of Africans.' — Is this a fact, opinion, or both? Justify.",ans:"open"},{type:"short",marks:3,q:"Write 2 questions you would ask when critically reading an article.",ans:"open"},{type:"explain",marks:5,q:"Write a 100-word critical response: Do you think Africa is 'rising'? Give 2 pieces of evidence.",ans:"open"},{type:"voice",marks:5,q:"Record: Summarise an article or news story you read recently. Give your opinion on it. (90 seconds)",ans:"open"}],
+    12: [{type:"mcq",marks:2,q:"Active: 'They will announce the results.' Passive:",opts:["Results will announce","The results will be announced","Results are announced","The results were announced"],ans:1},{type:"mcq",marks:2,q:"'Have you ever eaten sushi?' uses:",opts:["Past simple","Present continuous","Present perfect","Future form"],ans:2},{type:"mcq",marks:2,q:"Modal for 50% possibility:",opts:["must","should","might","will"],ans:2},{type:"short",marks:3,q:"Write one example each of: will (promise), going to (plan), might (uncertainty).",ans:"open"},{type:"voice",marks:5,q:"Record a mock job interview answer to: 'Tell me about yourself and your greatest strength.' (90 seconds)",ans:"open"},{type:"explain",marks:5,q:"Write a paragraph arguing FOR or AGAINST: 'Learning English is more important than learning vocational skills.'",ans:"open"},{type:"short",marks:3,q:"Write 3 sentences in passive voice about your school or town.",ans:"open"}],
+    13: [{type:"voice",marks:8,q:"FORMAL PRESENTATION (Level 2): Deliver a 3-minute presentation on a social issue in Kenya. Use signposting, examples, and a clear conclusion.",ans:"open"},{type:"voice",marks:7,q:"DEBATE PRACTICE: Record your opening statement FOR or AGAINST: 'University fees should be free in Kenya.' (2 minutes)",ans:"open"},{type:"explain",marks:8,q:"Write a formal email (100–120 words) to a company enquiring about a job vacancy. Include: purpose, your qualifications, a request for an interview.",ans:"open"},{type:"short",marks:4,q:"Convert to reported speech: '\"I am applying for the management position,\" Tom said.' and '\"We will call you next week,\" the interviewer promised.'",ans:"open"},{type:"short",marks:3,q:"Write 3 formal alternatives: instead of 'ask', 'help', and 'about'.",ans:"enquire / assist / regarding"}],
+    14: [{type:"mcq",marks:2,q:"Superlative of 'far':",opts:["farer","more far","the furthest","the most far"],ans:2},{type:"mcq",marks:2,q:"'I have never ___ Japanese food.' Correct past participle of 'eat':",opts:["ate","eated","eaten","eating"],ans:2},{type:"mcq",marks:2,q:"Students ___ copy in exams. (prohibition)",opts:["mustn't","don't have to","shouldn't","might not"],ans:0},{type:"mcq",marks:2,q:"Passive: 'Someone has stolen the data.' →",opts:["Data has been stolen","Data was stolen","Data stolen has been","Data is stolen"],ans:0},{type:"mcq",marks:2,q:"Topic sentence should:",opts:["summarise the whole essay","state one main idea","provide evidence","begin with 'In conclusion'"],ans:1},{type:"short",marks:3,q:"Write a short PEEL paragraph (60–80 words) on: 'Reading improves English.'",ans:"open"},{type:"short",marks:3,q:"Write 3 sentences with: although, however, therefore.",ans:"open"},{type:"voice",marks:5,q:"Mock Speaking: Discuss this question for 90 seconds: 'Is technology making us less social?'",ans:"open"},{type:"explain",marks:5,q:"Mock Essay: Write an intro + 1 body paragraph (100 words) on: 'Technology has improved life in East Africa more than any other development.'",ans:"open"}],
+  },
+
+  // ────────────────── LEVEL 3 ──────────────────
+  3: {
+    1: [{type:"mcq",marks:2,q:"Type 3 conditional uses:",opts:["If + present, will + base","If + past simple, would + base","If + past perfect, would have + pp","If + present, present"],ans:2},{type:"mcq",marks:2,q:"'If I were you, I would accept.' WERE is used because:",opts:["Past tense","Formal subjunctive for all subjects","Only with plural subjects","Irregular verb"],ans:1},{type:"mcq",marks:2,q:"'I wish I ___ French.' (I don't speak it now)",opts:["spoke","had spoken","speak","would speak"],ans:0},{type:"mcq",marks:2,q:"Inversion trigger:",opts:["Always","Rarely","Sometimes","Usually"],ans:1},{type:"mcq",marks:2,q:"Cleft sentence for emphasis: 'DETERMINATION helped her.'",opts:["It was her who determination helped","It was determination that helped her","What helped was determined her","She was determination who helped"],ans:1},{type:"short",marks:2,q:"Write a Type 2 conditional about being president.",ans:"open"},{type:"short",marks:2,q:"Rewrite with inversion: 'I have never seen such talent.'",ans:"Never have I seen such talent."},{type:"short",marks:2,q:"Express a past regret using IF ONLY.",ans:"open"},{type:"explain",marks:4,q:"Write a paragraph (80 words) using at least: one conditional type 3, one wish + past perfect, and one inversion for emphasis.",ans:"open"}],
+    2: [{type:"mcq",marks:2,q:"'Misrepresent' uses prefix meaning:",opts:["again","wrongly","between","too much"],ans:1},{type:"mcq",marks:2,q:"AWL: 'analyse' means:",opts:["to copy","to examine in detail","to summarise quickly","to translate"],ans:1},{type:"mcq",marks:2,q:"'Critical reading' primarily involves:",opts:["Reading fast","Judging arguments and evidence","Memorising vocabulary","Translating passages"],ans:1},{type:"mcq",marks:2,q:"'Overestimate' means:",opts:["to estimate too little","to estimate correctly","to estimate too much","to not estimate"],ans:2},{type:"mcq",marks:2,q:"'-tion' suffix creates a:",opts:["verb","adjective","noun","adverb"],ans:2},{type:"short",marks:2,q:"Use the word 'demonstrate' in an academic sentence.",ans:"open"},{type:"short",marks:2,q:"What does the prefix 'inter-' mean? Give 2 examples.",ans:"between; international, interpersonal"},{type:"short",marks:2,q:"Write the noun forms of: develop, achieve, possible.",ans:"development, achievement, possibility"},{type:"explain",marks:4,q:"In 80 words, explain what 'framing' means in language. Give an example using two sentences about the same event.",ans:"open"}],
+    3: [{type:"mcq",marks:2,q:"PEEL stands for:",opts:["Point, Evidence, Explanation, Link","Plan, Edit, Evaluate, Launch","Purpose, Example, Explain, Link","Point, Essay, Evidence, Logic"],ans:0},{type:"mcq",marks:2,q:"Academic hedging phrase:",opts:["I think...","It is obvious that...","Research suggests that...","Everyone knows that..."],ans:2},{type:"mcq",marks:2,q:"Replace informal 'but' with academic alternative:",opts:["however","because","therefore","also"],ans:0},{type:"mcq",marks:2,q:"Essay thesis statement should be:",opts:["A question","A fact everyone agrees on","A clear, arguable position","A list of topics"],ans:2},{type:"mcq",marks:2,q:"'Furthermore' adds:",opts:["contrast","additional information","result","condition"],ans:1},{type:"short",marks:2,q:"Write an academic thesis statement for: 'Should Kenya make English its only official language?'",ans:"open"},{type:"short",marks:2,q:"Replace with academic language: 'a lot of people think that corruption is bad.'",ans:"open"},{type:"short",marks:2,q:"Write a hedging sentence using: 'research suggests'.",ans:"open"},{type:"explain",marks:4,q:"Write a complete PEEL paragraph (100–130 words) on: 'Access to the internet is a basic human right in the 21st century.'",ans:"open"}],
+    4: [{type:"mcq",marks:2,q:"'Ad hominem' fallacy attacks:",opts:["evidence","the argument structure","the person, not the argument","data sources"],ans:2},{type:"mcq",marks:2,q:"Toulmin model: WARRANT is:",opts:["the claim","the main evidence","the logical reason connecting evidence to claim","the conclusion"],ans:2},{type:"mcq",marks:2,q:"'Either you agree or you are against us.' This is:",opts:["a valid argument","straw man","false dichotomy","appeal to authority"],ans:2},{type:"mcq",marks:2,q:"Polite disagreement in formal debate:",opts:["You are wrong!","I see your point; however...","No way!","That is ridiculous."],ans:1},{type:"mcq",marks:2,q:"To 'refute' an argument means:",opts:["to agree with it","to prove it wrong","to summarise it","to repeat it"],ans:1},{type:"short",marks:2,q:"Give a claim, warrant, and evidence for: 'English education should be compulsory in all African schools.'",ans:"open"},{type:"short",marks:2,q:"Identify the fallacy: 'She cannot comment on poverty — she grew up wealthy.'",ans:"Ad hominem"},{type:"short",marks:2,q:"Write a polite formal refutation of this claim: 'Social media has no educational value.'",ans:"open"},{type:"explain",marks:4,q:"Write your opening debate statement (90 words) FOR: 'Smartphones do more good than harm for students.'",ans:"open"}],
+    5: [{type:"mcq",marks:2,q:"CRAAP stands for:",opts:["Currency, Relevance, Authority, Accuracy, Purpose","Content, Reading, Author, Article, Publication","Claim, Reason, Authority, Argument, Point","Currency, Research, Access, Author, Purpose"],ans:0},{type:"mcq",marks:2,q:"Plagiarism means:",opts:["citing sources correctly","presenting others' ideas as your own","paraphrasing accurately","writing original content"],ans:1},{type:"mcq",marks:2,q:"In-text citation (author-date): a book by Kariuki (2023) p.12:",opts:["(2023:12 Kariuki)","(Kariuki, 2023, p.12)","[Kariuki-2023]","Kariuki/2023/12"],ans:1},{type:"mcq",marks:2,q:"'The graph illustrates...' is used to:",opts:["express an opinion","describe visual data","give advice","make a prediction"],ans:1},{type:"mcq",marks:2,q:"A 'credible source' is one that is:",opts:["the first on Google","authored by an expert with verifiable credentials","the most popular","from social media"],ans:1},{type:"short",marks:2,q:"Paraphrase this (do NOT copy): 'The rapid urbanisation of East African cities has created unprecedented pressure on public infrastructure.'",ans:"open"},{type:"short",marks:2,q:"Write a reference list entry for a book: Author=Mutua T., Year=2024, Title=Language Policy in Africa, Publisher=Nairobi: Lakeview.",ans:"Mutua, T. (2024). Language Policy in Africa. Nairobi: Lakeview."},{type:"short",marks:2,q:"Write 2 phrases for introducing data from a chart.",ans:"open"},{type:"explain",marks:4,q:"Write a 90-word research paragraph with an in-text citation, evidence, and explanation on: 'Mobile technology has improved healthcare access in rural Kenya.'",ans:"open"}],
+    6: [{type:"mcq",marks:2,q:"Executive summary is written:",opts:["before conducting research","first, but based on the full report","as a draft outline","after the introduction only"],ans:1},{type:"mcq",marks:2,q:"In negotiation, 'deferring a decision' means:",opts:["Agreeing immediately","Asking to consult colleagues first","Rejecting the offer","Making a counter-offer"],ans:1},{type:"mcq",marks:2,q:"Business report FINDINGS section should:",opts:["interpret data","present data objectively without opinion","recommend actions","summarise the report"],ans:1},{type:"mcq",marks:2,q:"'We are prepared to offer...' is used in:",opts:["cover letters","negotiations","executive summaries","academic essays"],ans:1},{type:"mcq",marks:2,q:"Professional email tone should be:",opts:["casual and informal","formal and precise","emotional and personal","vague and general"],ans:1},{type:"short",marks:2,q:"Write an executive summary opening sentence for a report on English training needs at a Nairobi company.",ans:"open"},{type:"short",marks:2,q:"Write a negotiation phrase to counter an offer of KES 300,000 when you need KES 400,000.",ans:"open"},{type:"short",marks:2,q:"List the 9 sections of a full business report.",ans:"open"},{type:"explain",marks:4,q:"Write an executive summary (120–150 words) for: A study found 65% of 120 staff need English training; costs $500,000 for year 1; projected ROI within 24 months.",ans:"open"}],
+    7: [{type:"mcq",marks:2,q:"A metaphor:",opts:["uses 'like' or 'as'","is a direct comparison without 'like'","gives human qualities to objects","repeats initial consonants"],ans:1},{type:"mcq",marks:2,q:"Anaphora is:",opts:["repetition of a word at the start of successive clauses","a comparison using like","irony","a rhetorical question"],ans:0},{type:"mcq",marks:2,q:"Rhetorical question:",opts:["expects a specific answer","is asked for effect, not a real answer","is used only in newspapers","replaces the topic sentence"],ans:1},{type:"mcq",marks:2,q:"Editorial tone compared to academic essay:",opts:["more objective","more personal and direct","less opinionated","avoids evidence"],ans:1},{type:"mcq",marks:2,q:"'The wind whispered secrets.' This is:",opts:["simile","alliteration","personification","irony"],ans:2},{type:"short",marks:2,q:"Identify a metaphor in this: 'Life is a journey with no map.'",ans:"Life is a journey (life compared directly to a journey)"},{type:"short",marks:2,q:"Write a rhetorical question suitable for an editorial about education.",ans:"open"},{type:"short",marks:2,q:"Write a 3-sentence editorial hook for: 'English education is transforming East African careers.'",ans:"open"},{type:"explain",marks:4,q:"Write a persuasive editorial paragraph (80–100 words) on: 'Every East African professional must learn to speak English with confidence.' Use at least 2 rhetorical devices.",ans:"open"}],
+    8: [{type:"mcq",marks:2,q:"IELTS Writing Task 1 requires:",opts:["a 250-word argument essay","a 150-word description of visual data","a 200-word story","a 100-word summary of a reading passage"],ans:1},{type:"mcq",marks:2,q:"IELTS Band 7 requires:",opts:["perfect grammar","wide range of structures with minor errors","only simple sentences","avoidance of complex vocabulary"],ans:1},{type:"mcq",marks:2,q:"IELTS Speaking Part 3 tests:",opts:["reading comprehension","abstract discussion on themes","vocabulary memorisation","translation"],ans:1},{type:"mcq",marks:2,q:"S.E.E. method stands for:",opts:["State, Explain, Example","Study, Edit, Evaluate","Sentence, Essay, Evidence","Summary, Expansion, Ending"],ans:0},{type:"mcq",marks:2,q:"'Figures declined sharply between 2020 and 2022.' This describes:",opts:["a stable trend","an upward trend","a downward trend","a fluctuating trend"],ans:2},{type:"short",marks:2,q:"Write an IELTS Task 1 overview sentence for: 'A chart showing rising smartphone use in Africa from 2010–2025.'",ans:"open"},{type:"short",marks:2,q:"Write a Band 7+ IELTS Speaking Part 3 answer (4–5 sentences) to: 'Has the internet had a positive effect on communication?'",ans:"open"},{type:"voice",marks:5,q:"IELTS Speaking Part 2: Describe a person who has inspired you. Use the S.E.E. method. Speak for 2 minutes.",ans:"open"},{type:"explain",marks:3,q:"Write an IELTS Task 2 introduction + thesis (50–60 words) for: 'Governments should invest more in education than defence.'",ans:"open"}],
+    9: [{type:"voice",marks:8,q:"RESEARCH PRESENTATION: Deliver your 5-minute research presentation. State your research question, 3 main findings with evidence, and your recommendation.",ans:"open"},{type:"voice",marks:7,q:"ORAL EXAMINATION SIMULATION: Answer spontaneously: 'Summarise your essay in 3 sentences. What is the strongest counter-argument to your thesis?'",ans:"open"},{type:"explain",marks:8,q:"Submit your research essay introduction + first body paragraph (150–180 words) with in-text citation and clear thesis statement.",ans:"open"},{type:"short",marks:4,q:"What makes a research question STRONG? Write a strong and a weak research question on education in Kenya.",ans:"open"},{type:"short",marks:3,q:"Write 3 academic sentences using: notwithstanding, consequently, it could be argued that.",ans:"open"}],
+  },
+};
+
+// Weeks 7–14 for Level 3 reuse the framework above (truncated for storage efficiency)
+// The system dynamically generates review weeks from earlier CAT content
 const CAT_QUESTIONS = {
   english: {
     1: [

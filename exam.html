@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8"/>
 <link rel="icon" type="image/png" href="sla-logo.png"/>
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Study Language Academy — Level Exam</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
+<title>SEA — Level Exam</title>
 <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,700&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet"/>
 <style>
 :root{--green:#2a5c3f;--green2:#1e4530;--green-lt:#d6ead9;--sage:#7aaa80;--gold:#c98a1a;--gold-bg:#fdf3dc;--cream:#f5f0e8;--cream2:#ede7d9;--ink:#1b2a1e;--muted:#7a8f7e;--white:#fff;--blue:#1a5276;--purple:#5b3fa0;--red:#c0392b;--red-lt:#fde8e8;--r:12px;--r-sm:7px;}
@@ -98,22 +98,33 @@ body{font-family:'Nunito',sans-serif;background:var(--cream);color:var(--ink);mi
 .confirm-btns{display:flex;gap:.5rem;justify-content:center;}
 
 @media(max-width:700px){
-  .exam-bar{padding:0 1rem;height:52px;}
+  .exam-bar{padding:0 1rem;height:54px;}
   .eb-logo span{display:none;}
-  .screen{padding:1.2rem .9rem;}
+  .screen{padding:1.1rem .85rem;}
   .info-grid{grid-template-columns:1fr 1fr 1fr;}
   .q-card{padding:1.2rem 1rem;}
-  .q-nav{flex-wrap:wrap;gap:.5rem;}
-  .q-dots{max-width:100%;justify-content:center;}
+  .q-text{font-size:.95rem;}
+  .option{padding:.85rem .9rem;font-size:.87rem;}
+  /* bigger tap targets on mobile */
+  .q-nav{flex-wrap:wrap;gap:.55rem;}
+  .btn-prev,.btn-next,.btn-submit-main{padding:12px 20px;min-height:46px;font-size:.85rem;}
+  .q-dots{max-width:100%;justify-content:flex-start;}
+  .q-dot{width:24px;height:24px;font-size:.6rem;}
   .r-stats{grid-template-columns:1fr 1fr 1fr;}
   .r-circle{width:100px;height:100px;}
   .r-pct{font-size:1.6rem;}
+  .rec-btns{gap:.4rem;}
+  .btn-rec{padding:11px 16px;min-height:44px;}
+  .intro-card{padding:1.4rem 1rem;}
+  .btn-start{width:100%;padding:14px;font-size:.95rem;}
 }
 @media(max-width:400px){
-  .info-grid{grid-template-columns:1fr;}
-  .r-stats{grid-template-columns:1fr;}
+  .info-grid{grid-template-columns:1fr 1fr;}
+  .r-stats{grid-template-columns:1fr 1fr;}
   .r-actions{flex-direction:column;}
   .r-actions button{width:100%;}
+  .confirm-btns{flex-direction:column;}
+  .confirm-btns button{width:100%;}
 }
 </style>
 </head>
@@ -204,60 +215,118 @@ body{font-family:'Nunito',sans-serif;background:var(--cream);color:var(--ink);mi
 </div>
 
 
-  <!-- Firebase v9 Compat SDKs -->
-  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
-  <!-- EmailJS for email notifications -->
-  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
-  <!-- SEA Shared Data Layer -->
   <script src="sea-shared.js"></script>
-  <!-- SEA Firebase Integration -->
   <script src="sea-firebase.js"></script>
+  <script src="sea-curriculum.js"></script>
+  <script>
+  (function(){
+    if(!navigator.onLine) return;
+    ['https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js',
+     'https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js',
+     'https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js',
+     'https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js'
+    ].forEach(src=>{const s=document.createElement('script');s.src=src;s.async=true;document.head.appendChild(s);});
+  })();
+  </script>
 <script>
 let _SEA_INIT_DONE=false;
-async function ensureInit(){if(!_SEA_INIT_DONE){await SEA_FIREBASE_INIT();_SEA_INIT_DONE=true;}}
+async function ensureInit(){
+  if(_SEA_INIT_DONE) return;
+  try{
+    await Promise.race([
+      (typeof SEA_FIREBASE_INIT==='function' ? SEA_FIREBASE_INIT() : Promise.resolve()),
+      new Promise(r=>setTimeout(r,2000))
+    ]);
+  }catch(e){ console.warn('[SLA] Offline — using localStorage'); }
+  _SEA_INIT_DONE=true;
+}
 
-let examLevel=1,questions=[],answers={},speakingAnswers={},currentQ=0,timerInterval=null,timeLeft=7200,examStarted=false,currentStudent=null;
+let examLevel=1,questions=[],answers={},speakingAnswers={},shortAnswers={},currentQ=0,timerInterval=null,timeLeft=7200,examStarted=false,currentStudent=null;
+let examMode='level'; // 'level' or 'weekly'
+let examLang='english',examWeek=1;
 const LVL_COLORS={1:'#2a5c3f',2:'#1a5276',3:'#5b3fa0'};
 let mediaRecorder=null,audioChunks=[],currentRecording=null;
+
+// 60-day voice recording auto-cleanup
+(function cleanOldRecordings(){
+  try{
+    const SIXTY_DAYS=60*24*60*60*1000;const now=Date.now();
+    Object.keys(localStorage).forEach(k=>{
+      if(k.startsWith('sea3_voice_')){
+        try{const m=JSON.parse(localStorage.getItem(k));if(m?.ts&&(now-m.ts)>SIXTY_DAYS)localStorage.removeItem(k);}catch(_){}
+      }
+    });
+  }catch(_){}
+})();
 
 async function init(){
   await ensureInit();
   const uid=DB.currentUser();if(!uid){window.location.href='index.html';return;}
   currentStudent=DB.getStudent(uid);if(!currentStudent){window.location.href='index.html';return;}
+  examMode=localStorage.getItem('sea_exam_mode')||'level';
+  examLang=localStorage.getItem('sea_exam_lang')||currentStudent.language||'english';
   examLevel=parseInt(localStorage.getItem('sea_exam_level')||currentStudent.currentLevel);
+  examWeek=parseInt(localStorage.getItem('sea_exam_week')||1);
+
+  if(examMode==='weekly'){
+    // ── WEEKLY TEST MODE ──
+    const langLabel=examLang==='swahili'?'Kiswahili':'English';
+    document.getElementById('barTitle').textContent='Week '+examWeek+' Test';
+    document.getElementById('barLvl').textContent='Level '+examLevel+' '+langLabel+' · Week '+examWeek;
+    document.getElementById('intro-title').textContent='Week '+examWeek+' Test — '+langLabel+' Level '+examLevel;
+    document.getElementById('intro-desc').textContent='This test covers Week '+examWeek+' topics. 10 questions. No time limit. You can retake as many times as you like. Good luck!';
+    // Get weekly test questions
+    const testQs = typeof SEA_WEEKLY_TESTS!=='undefined' ? SEA_WEEKLY_TESTS[examLang]?.[examLevel]?.[examWeek] : null;
+    if(!testQs||!testQs.length){
+      alert('Weekly test for Week '+examWeek+' is not yet available. Check back soon!');
+      window.location.href='student.html';return;
+    }
+    questions=[...testQs];
+    // Shuffle
+    for(let i=questions.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[questions[i],questions[j]]=[questions[j],questions[i]];}
+    document.getElementById('intro-qs').textContent=questions.length;
+    timeLeft=10*60; // 10 minutes for weekly test
+    // Remove the "one attempt" gate for weekly tests
+    document.getElementById('confirmOverlay')?.querySelector('p')?.remove?.();
+    return;
+  }
+
+  // ── LEVEL EXAM MODE ──
   const lv=SEA.levels[examLevel-1];
   const fs=studentFeeStatus(currentStudent,examLevel);
   if(!fs.hasAccess){alert('Please activate Level '+examLevel+' before taking the exam.');window.location.href='student.html';return;}
   if(currentStudent.progress[examLevel]?.attempts>=1&&currentStudent.progress[examLevel]?.examScore!==null){
     alert('You have already taken the Level '+examLevel+' exam. One attempt is allowed per level.');window.location.href='student.html';return;
   }
-  document.getElementById('barTitle').textContent='Level '+examLevel+' Final Exam';
-  document.getElementById('barLvl').textContent=lv.name+' · '+lv.cefr+' · '+(currentStudent.targetLanguageLabel||'English');
-  document.getElementById('intro-title').textContent='Level '+examLevel+' — '+lv.name+' Final Exam';
-  document.getElementById('intro-desc').textContent='This exam covers all '+lv.units+' units of Level '+examLevel+' ('+lv.cefr+'). Score 70%+ to pass. 120 minutes. You may retake once if needed.';
-  // Get questions — use student's language first, fall back to EXAM_QUESTIONS
-  const studentLang=(currentStudent.targetLanguage||'english').toLowerCase();
-  let qs=null;
-  // Try EXAM_QUESTIONS first (most complete), then fall back to CAT_QUESTIONS
-  if(typeof EXAM_QUESTIONS!=='undefined'&&EXAM_QUESTIONS[examLevel]&&EXAM_QUESTIONS[examLevel].length>0){
-    qs=EXAM_QUESTIONS[examLevel];
-  } else if(typeof CAT_QUESTIONS!=='undefined'&&CAT_QUESTIONS[studentLang]&&CAT_QUESTIONS[studentLang][examLevel]){
-    qs=CAT_QUESTIONS[studentLang][examLevel];
+  document.getElementById('barTitle').textContent='Level '+examLevel+' Exam';
+  document.getElementById('barLvl').textContent=lv.name+' · '+lv.cefr;
+  document.getElementById('intro-title').textContent='Level '+examLevel+' — '+lv.name+' Exam';
+  document.getElementById('intro-desc').textContent='This exam covers all 15 weeks of Level '+examLevel+' (CEFR '+lv.cefr+'). Includes MCQ, Short Answer, Extended Writing, and Voice Recording. One attempt only. 2 hours.';
+  // Check for level exam bank in SEA_LEVEL_EXAMS first
+  if(typeof SEA_LEVEL_EXAMS!=='undefined'){
+    const examBank=SEA_LEVEL_EXAMS[examLang]?.[examLevel];
+    if(examBank){
+      const allQs=[
+        ...(examBank.mcq||[]),
+        ...(examBank.shortAnswer||[]),
+        ...(examBank.extendedWriting||[]),
+        ...(examBank.voice||[]),
+      ];
+      if(allQs.length>0){
+        questions=[...allQs];
+        document.getElementById('intro-qs').textContent=questions.length;
+        return;
+      }
+    }
   }
-  if(!qs||!qs.length){
-    alert('No exam questions found for this level. Please contact your instructor.');
-    window.location.href='student.html';return;
-  }
-  // Check for custom exam set by instructor
+  // Fall back to QUIZ_BANKS
+  let qs=QUIZ_BANKS[examLevel];
   const customExams=DB.getCustomExams();
   if(currentStudent.assignedClass){
     const custom=customExams.find(e=>e.level===examLevel&&e.classId===currentStudent.assignedClass&&e.isActive);
     if(custom&&custom.questions&&custom.questions.length>0)qs=custom.questions;
   }
   questions=[...qs];
-  // Shuffle MC questions but keep speaking at end
   const mcQs=questions.filter(q=>q.type==='mc'||!q.type);
   const spQs=questions.filter(q=>q.type==='speaking'||q.type==='reading_aloud');
   for(let i=mcQs.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[mcQs[i],mcQs[j]]=[mcQs[j],mcQs[i]];}
@@ -283,7 +352,7 @@ function startTimer(){
 function renderQ(){
   const q=questions[currentQ];const total=questions.length;const color=LVL_COLORS[examLevel];
   document.getElementById('qNum').textContent='Question '+(currentQ+1)+' of '+total;
-  document.getElementById('qUnit').textContent='Unit '+q.unit;
+  document.getElementById('qUnit').textContent=q.unit?'Unit '+q.unit:(q.week?'Week '+q.week:'');
   document.getElementById('qUnit').style.cssText='background:'+color+'22;color:'+color+';';
   document.getElementById('qText').textContent=q.q;
   document.getElementById('progFill').style.width=Math.round((Object.keys(answers).length/total)*100)+'%';
@@ -293,28 +362,71 @@ function renderQ(){
   const btnNext=document.getElementById('btnNext');
   btnPrev.style.visibility=currentQ===0?'hidden':'visible';
   if(isLast){btnNext.textContent='Submit Exam';btnNext.style.background='var(--gold)';btnNext.onclick=confirmSubmit;}
-  else{btnNext.textContent='Next';btnNext.style.background='var(--green)';btnNext.onclick=nextQ;}
+  else{btnNext.textContent='Next →';btnNext.style.background='var(--green)';btnNext.onclick=nextQ;}
 
   const body=document.getElementById('qBody');
-  if(q.type==='speaking'||q.type==='reading_aloud'){
+  const qtype=q.type||'mcq';
+  const marks=q.marks||2;
+
+  // ── MCQ (multiple choice) ──
+  if(qtype==='mcq'){
+    const letters=['A','B','C','D'];
+    body.innerHTML=`<div style="font-size:.72rem;color:var(--muted);margin-bottom:.5rem;">[${marks} mark${marks>1?'s':''}] Choose the best answer.</div>
+    <div class="options">${(q.opts||[]).map((opt,i)=>{const sel=answers[currentQ]===i;return`<div class="option${sel?' selected':''}" onclick="selectAns(${i})"><div class="opt-letter">${letters[i]}</div><span>${opt}</span></div>`;}).join('')}</div>`;
+  }
+  // ── SHORT ANSWER ──
+  else if(qtype==='short'){
+    const existing=shortAnswers[currentQ]||'';
+    body.innerHTML=`<div style="font-size:.72rem;color:var(--muted);margin-bottom:.5rem;">[${marks} mark${marks>1?'s':''}] Write your answer below.</div>
+    <textarea id="shortAns${currentQ}" placeholder="Type your answer here…"
+      style="width:100%;min-height:80px;padding:10px 12px;border:1.5px solid var(--cream2);border-radius:var(--r-sm);font-family:'Nunito',sans-serif;font-size:.88rem;resize:vertical;outline:none;"
+      oninput="saveShortAns(${currentQ},this.value)">${existing}</textarea>
+    ${q.ans!=='open'?`<div style="font-size:.7rem;color:var(--muted);margin-top:.3rem;">Your instructor will mark this answer.</div>`:''}`;
+    if(existing) answers[currentQ]='short_answered';
+  }
+  // ── EXPLAIN / EXTENDED WRITING ──
+  else if(qtype==='explain'){
+    const existing=shortAnswers[currentQ]||'';
+    body.innerHTML=`<div style="font-size:.72rem;color:var(--muted);margin-bottom:.5rem;">[${marks} marks] Write your extended response. Aim for complete sentences and clear explanations.</div>
+    <textarea id="shortAns${currentQ}" placeholder="Write your response here… aim for clear, well-structured sentences."
+      style="width:100%;min-height:140px;padding:10px 12px;border:1.5px solid var(--cream2);border-radius:var(--r-sm);font-family:'Nunito',sans-serif;font-size:.88rem;resize:vertical;outline:none;line-height:1.7;"
+      oninput="saveShortAns(${currentQ},this.value)">${existing}</textarea>
+    <div style="font-size:.7rem;color:var(--muted);margin-top:.3rem;">This will be marked by your instructor. Write in complete sentences.</div>`;
+    if(existing) answers[currentQ]='explain_answered';
+  }
+  // ── VOICE RECORDING ──
+  else if(qtype==='voice'||qtype==='speaking'||qtype==='reading_aloud'){
     const hasSpeakingAns=speakingAnswers[currentQ];
     body.innerHTML=`<div class="speaking-card">
-      <h4>${q.type==='reading_aloud'?'Reading Aloud Task':'Speaking Task'}</h4>
-      <p>${q.instruction||'Record your response below.'}</p>
-      <div class="rec-btns">
-        <button class="btn-rec start-rec" id="btnStartRec" onclick="startRecording(${currentQ})">Start Recording</button>
-        <button class="btn-rec stop-rec" id="btnStopRec" onclick="stopRecording(${currentQ})" style="display:none;">Stop Recording</button>
-        ${hasSpeakingAns?`<button class="btn-rec play-rec" onclick="playRecording(${currentQ})">Play Recording</button>`:''}
+      <div style="display:flex;align-items:center;gap:.5rem;margin-bottom:.6rem;">
+        <span style="font-size:.72rem;background:#e4d9f5;color:var(--purple);padding:2px 8px;border-radius:3px;font-weight:700;">[${marks} marks] Voice Recording Required</span>
       </div>
-      <div class="rec-status" id="recStatus${currentQ}">${hasSpeakingAns?'Recording saved. You can re-record if needed.':'Not yet recorded.'}</div>
-      <div class="audio-note">Your recording will be submitted to your instructor for grading. Speak clearly.</div>
+      <p style="font-size:.85rem;line-height:1.6;margin-bottom:.8rem;">${q.q}</p>
+      <div style="background:var(--gold-bg);border:1px solid #f5d88e;border-radius:var(--r-sm);padding:.5rem .8rem;font-size:.75rem;color:#8a5c10;margin-bottom:.8rem;">
+        🎤 Click <strong>Start Recording</strong>, speak clearly, then click <strong>Stop</strong>. Your recording is saved and sent to your instructor for grading.
+        ${marks>=5?'<br/>📌 Speak for at least <strong>45–90 seconds</strong> for full marks.':''}
+      </div>
+      <div class="rec-btns">
+        <button class="btn-rec start-rec" id="btnStartRec" onclick="startRecording(${currentQ})" ${hasSpeakingAns?'style="opacity:.7;"':''}>🎙 ${hasSpeakingAns?'Re-record':'Start Recording'}</button>
+        <button class="btn-rec stop-rec" id="btnStopRec" onclick="stopRecording(${currentQ})" style="display:none;">⏹ Stop Recording</button>
+        ${hasSpeakingAns?`<button class="btn-rec play-rec" onclick="playRecording(${currentQ})">▶ Play Back</button>`:''}
+      </div>
+      <div class="rec-status" id="recStatus${currentQ}" ${hasSpeakingAns?'style="color:var(--green);"':''}>
+        ${hasSpeakingAns?'✅ Recording saved. Re-record if needed.':'⭕ Not yet recorded.'}
+      </div>
+      <div class="audio-note" style="margin-top:.6rem;font-size:.7rem;color:var(--muted);">
+        Recordings are compressed automatically. Files older than 60 days are deleted from the server to save space.
+      </div>
+      ${hasSpeakingAns?'<div style="font-size:.7rem;color:var(--green);margin-top:.3rem;font-weight:700;">Voice answer submitted ✓</div>':''}
     </div>`;
     if(!answers.hasOwnProperty(currentQ)&&hasSpeakingAns){answers[currentQ]='speaking_submitted';}
-  } else {
-    const letters=['A','B','C','D'];
-    body.innerHTML=`<div class="options">${q.opts.map((opt,i)=>{const sel=answers[currentQ]===i;return`<div class="option${sel?' selected':''}" onclick="selectAns(${i})"><div class="opt-letter">${letters[i]}</div><span>${opt}</span></div>`;}).join('')}</div>`;
   }
   renderDots();
+}
+function saveShortAns(idx,val){
+  shortAnswers[idx]=val;
+  if(val.trim()) answers[idx]='short_answered';
+  else delete answers[idx];
 }
 
 function selectAns(idx){answers[currentQ]=idx;renderQ();}
@@ -373,29 +485,62 @@ function confirmSubmit(){
 
 function submitExam(){
   clearInterval(timerInterval);document.getElementById('confirmOverlay').classList.remove('open');
-  const mcQs=questions.filter((q,i)=>!q.type||q.type==='mc');
-  const spQs=questions.filter(q=>q.type==='speaking'||q.type==='reading_aloud');
+  const mcQs=questions.filter((q,i)=>!q.type||q.type==='mc'||q.type==='mcq');
+  const spQs=questions.filter(q=>q.type==='speaking'||q.type==='reading_aloud'||q.type==='voice');
+  const shortQs=questions.filter(q=>q.type==='short'||q.type==='explain');
   let correct=0;
   mcQs.forEach((q,i)=>{const origIdx=questions.indexOf(q);if(answers[origIdx]===q.ans)correct++;});
   const total=mcQs.length;const score=pct(correct,total);const g=grade(score);const passed=score>=CONFIG.passMarkAllLevels;
-  const lv=SEA.levels[examLevel-1];
+  const color=passed?'#2a5c3f':'#c0392b';
 
-  // Save to student
+  if(examMode==='weekly'){
+    // ── Save weekly test result ──
+    const wkKey='wk_progress_'+currentStudent.id+'_'+examLang+'_'+examLevel;
+    const wkProg=DB.load(wkKey,{});
+    wkProg[examWeek]={testPassed:passed,score,date:Date.now(),attempts:(wkProg[examWeek]?.attempts||0)+1};
+    DB.save(wkKey.replace('sea3_',''),wkProg);
+    // Show result
+    const rc=document.getElementById('rCircle');rc.style.borderColor=color;rc.style.color=color;
+    document.getElementById('rPct').textContent=score+'%';
+    document.getElementById('rGrade').textContent=passed?'✅ Passed':'❌ Try Again';
+    document.getElementById('rGrade').style.color=color;
+    document.getElementById('rs-c').textContent=correct;
+    document.getElementById('rs-w').textContent=total-correct;
+    document.getElementById('rs-sp').textContent='0/0';
+    document.getElementById('rSub').textContent=passed?
+      'Great work! You passed Week '+examWeek+' with '+score+'%. Keep going!':
+      'You scored '+score+'%, below the pass mark of 70%. Review the Week '+examWeek+' topics and retake the test.';
+    document.getElementById('r-cert-msg').innerHTML=`<div style="background:${passed?'var(--green-lt)':'var(--red-lt)'};border-radius:var(--r-sm);padding:.75rem 1rem;font-size:.8rem;font-weight:700;color:${passed?'var(--green)':'var(--red)'};">${passed?'Well done! Move on to Week '+(examWeek+1)+' in your dashboard.':'Review Week '+examWeek+' materials and try again — there\'s no limit on weekly test retakes.'}</div>`;
+    document.getElementById('r-speaking-msg').innerHTML='';
+    // Clear weekly test mode flags
+    localStorage.removeItem('sea_exam_mode');
+    localStorage.removeItem('sea_exam_lang');
+    localStorage.removeItem('sea_exam_week');
+    showS('result');
+    return;
+  }
+
+  // ── LEVEL EXAM: Save full result ──
+  const lv=SEA.levels[examLevel-1];
   currentStudent.progress[examLevel].examScore=correct;
   currentStudent.progress[examLevel].examDate=Date.now();
   currentStudent.progress[examLevel].attempts=(currentStudent.progress[examLevel].attempts||0)+1;
-  // Save speaking answers for instructor review
+  // Save short answers
+  if(shortQs.length>0){
+    currentStudent.progress[examLevel].shortAnswers=shortQs.map(q=>{
+      const origIdx=questions.indexOf(q);
+      return{question:q.q,type:q.type,answer:shortAnswers[origIdx]||'',graded:false,score:null};
+    });
+  }
   if(spQs.length>0&&Object.keys(speakingAnswers).length>0){
-    currentStudent.progress[examLevel].speakingAnswers=spQs.map((q,i)=>{
+    currentStudent.progress[examLevel].speakingAnswers=spQs.map(q=>{
       const origIdx=questions.indexOf(q);
       return{question:q.q,instruction:q.instruction,type:q.type,unit:q.unit,audioData:speakingAnswers[origIdx]||null,graded:false,score:null};
     });
   }
   DB.saveStudent(currentStudent);
-  const resId='final_'+Date.now();DB.addResult({id:resId,studentId:currentStudent.id,studentName:currentStudent.name,admissionNumber:currentStudent.admissionNumber||'',level:examLevel,type:'final',language:currentStudent.targetLanguage||'english',score:correct,total,pct:score,passed,grade:g,speakingCount:spQs.length,speakingSubmitted:Object.keys(speakingAnswers).length,date:Date.now()});if(typeof _fsSet!=='undefined')_fsSet('results3',resId,{id:resId,studentId:currentStudent.id,level:examLevel,type:'final',score:correct,total,pct:score,passed,grade:g,date:Date.now()});
-  logActivity(currentStudent.id,currentStudent.name,'student','Exam submitted: Level '+examLevel,'Score: '+score+'% ('+g+')');
-
-  const color=passed?'#2a5c3f':'#c0392b';
+  DB.addResult({studentId:currentStudent.id,studentName:currentStudent.name,admissionNumber:currentStudent.admissionNumber||'',level:examLevel,score:correct,total,pct:score,passed,grade:g,speakingCount:spQs.length,speakingSubmitted:Object.keys(speakingAnswers).length,shortAnswersCount:shortQs.length,date:Date.now()});
+  logActivity(currentStudent.id,currentStudent.name,'student','Level exam submitted: Level '+examLevel,'Score: '+score+'% ('+g+')');
   const rc=document.getElementById('rCircle');rc.style.borderColor=color;rc.style.color=color;
   document.getElementById('rPct').textContent=score+'%';
   document.getElementById('rGrade').textContent=g;document.getElementById('rGrade').style.color=color;
@@ -407,8 +552,13 @@ function submitExam(){
     document.getElementById('rSub').textContent='You scored '+score+'%, below the pass mark of 70%. You have used your one attempt. Contact your instructor for guidance.';
     document.getElementById('r-cert-msg').innerHTML=`<div style="background:var(--red-lt);border-radius:var(--r-sm);padding:.75rem 1rem;color:var(--red);font-size:.8rem;font-weight:700;">Contact the Academy: ${SEA_CONTACT.email} · ${SEA_CONTACT.phone}</div>`;
   }
+  if(shortQs.length>0){
+    document.getElementById('r-speaking-msg').innerHTML=(document.getElementById('r-speaking-msg').innerHTML||'')+
+      `<div class="speaking-pending-notice">Your ${shortQs.length} short answer / extended writing response(s) have been submitted to your instructor for manual marking. Your written score will be updated after grading.</div>`;
+  }
   if(spQs.length>0){
-    document.getElementById('r-speaking-msg').innerHTML=`<div class="speaking-pending-notice">Your ${Object.keys(speakingAnswers).length} speaking/reading recording(s) have been submitted to your instructor for grading within 48 hours. Your final score may be updated after grading.</div>`;
+    document.getElementById('r-speaking-msg').innerHTML=(document.getElementById('r-speaking-msg').innerHTML||'')+
+      `<div class="speaking-pending-notice">Your ${Object.keys(speakingAnswers).length} speaking/voice recording(s) have been submitted to your instructor for grading within 48 hours.</div>`;
   }
   showS('result');
 }

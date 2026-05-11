@@ -3,985 +3,906 @@
 <head>
 <meta charset="UTF-8"/>
 <link rel="icon" type="image/png" href="sla-logo.png"/>
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<meta name="description" content="Study Language Academy — Master English, Swahili, French, Arabic, German, Spanish, Portuguese, Koine Greek or Hebrew. CEFR-certified. Nairobi, Kenya."/>
-<title>Study Language Academy — Master a Language. Open Every Door.</title>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,800;1,700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
+<title>Study Language Academy — Online Portal</title>
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;0,700&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet"/>
 <style>
 :root{
-  --green:#1e5c38;--green2:#163f27;--green3:#0f2b1a;--green-lt:#d4ead9;--green-mid:#2d7a4e;
-  --gold:#c4871a;--gold2:#e8a020;--gold-bg:#fdf6e3;--gold-lt:#fef9ed;
-  --cream:#f7f2ea;--cream2:#ede5d8;--cream3:#e2d8c8;
-  --ink:#141f18;--ink2:#2a3d2e;--muted:#6b7f6e;--muted2:#9aad9d;
-  --white:#ffffff;--blue:#1a4a7a;--red:#b83232;
-  --r:14px;--r-sm:8px;--r-lg:20px;
-  --shadow-sm:0 2px 8px rgba(0,0,0,.06);
-  --shadow:0 8px 32px rgba(0,0,0,.1);
-  --shadow-lg:0 20px 60px rgba(0,0,0,.15);
+  --green:#2a5c3f;--green2:#1e4530;--green-lt:#d6ead9;--sage:#7aaa80;
+  --gold:#c98a1a;--gold-bg:#fdf3dc;--cream:#f5f0e8;--cream2:#ede7d9;
+  --ink:#1b2a1e;--muted:#7a8f7e;--white:#fff;--blue:#1a5276;
+  --red:#c0392b;--red-lt:#fde8e8;--purple:#5b3fa0;
+  --r:12px;--r-sm:7px;
 }
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
-html{scroll-behavior:smooth;-webkit-font-smoothing:antialiased;}
-body{font-family:'Inter',sans-serif;background:var(--cream);color:var(--ink);overflow-x:hidden;}
+html{scroll-behavior:smooth;}
+body{font-family:'Nunito',sans-serif;background:var(--cream);color:var(--ink);}
 
-/* ── NAVBAR ── */
-nav{
-  position:fixed;top:0;left:0;right:0;z-index:200;
-  height:68px;padding:0 1.5rem;
-  display:flex;align-items:center;justify-content:space-between;
-  background:rgba(255,255,255,.92);
-  backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);
-  border-bottom:1px solid rgba(0,0,0,.06);
-  transition:all .3s;
-}
-nav.scrolled{box-shadow:var(--shadow);}
-.nav-logo{display:flex;align-items:center;gap:10px;text-decoration:none;flex-shrink:0;}
+/* ── NAV ── */
+nav{position:sticky;top:0;z-index:100;background:var(--white);border-bottom:1px solid var(--cream2);padding:0 1.5rem;height:62px;display:flex;align-items:center;justify-content:space-between;}
+.nav-logo{display:flex;align-items:center;gap:10px;text-decoration:none;}
 .nav-logo img{height:40px;width:40px;object-fit:contain;}
-.nav-logo-text strong{font-family:'Playfair Display',serif;font-size:.92rem;font-weight:700;color:var(--green);display:block;line-height:1.2;}
-.nav-logo-text span{font-size:.58rem;color:var(--muted);letter-spacing:.04em;text-transform:uppercase;}
-.nav-links{display:flex;gap:1.8rem;list-style:none;align-items:center;}
-.nav-links a{text-decoration:none;color:var(--ink2);font-size:.82rem;font-weight:600;transition:color .2s;letter-spacing:.01em;}
+.nav-logo-text strong{font-family:'Lora',serif;font-size:.95rem;font-weight:700;color:var(--green);display:block;}
+.nav-logo-text span{font-size:.62rem;color:var(--muted);}
+.nav-links{display:flex;gap:1.8rem;list-style:none;}
+.nav-links a{text-decoration:none;color:#3a4d3e;font-size:.85rem;font-weight:600;transition:color .2s;}
 .nav-links a:hover{color:var(--green);}
 .nav-right{display:flex;gap:.5rem;align-items:center;}
-.btn-nav-staff{padding:7px 16px;border:1.5px solid var(--gold);border-radius:6px;background:none;color:var(--gold);font-family:'Inter',sans-serif;font-weight:700;font-size:.78rem;cursor:pointer;transition:all .2s;letter-spacing:.01em;}
-.btn-nav-staff:hover{background:var(--gold);color:#fff;}
-.btn-nav-login{padding:7px 16px;border:1.5px solid var(--green);border-radius:6px;background:none;color:var(--green);font-family:'Inter',sans-serif;font-weight:700;font-size:.78rem;cursor:pointer;transition:all .2s;}
-.btn-nav-login:hover{background:var(--green);color:#fff;}
-.mob-nav-btn{display:none;flex-direction:column;gap:4px;cursor:pointer;padding:4px;border:none;background:none;}
-.mob-nav-btn span{width:22px;height:2px;background:var(--ink);border-radius:2px;transition:all .3s;}
+.btn-o{padding:8px 16px;border:1.5px solid var(--green);border-radius:4px;background:none;color:var(--green);font-family:'Nunito',sans-serif;font-weight:700;font-size:.8rem;cursor:pointer;transition:all .2s;white-space:nowrap;}
+.btn-o:hover{background:var(--green);color:#fff;}
+.btn-s{padding:8px 18px;border:none;border-radius:4px;background:var(--green);color:#fff;font-family:'Nunito',sans-serif;font-weight:700;font-size:.8rem;cursor:pointer;transition:background .2s;white-space:nowrap;}
+.btn-s:hover{background:var(--green2);}
+.btn-staff{padding:8px 14px;border:1.5px solid var(--gold);border-radius:4px;background:none;color:var(--gold);font-family:'Nunito',sans-serif;font-weight:700;font-size:.8rem;cursor:pointer;transition:all .2s;white-space:nowrap;}
+.btn-staff:hover{background:var(--gold);color:#fff;}
+/* hamburger */
+.hamburger{display:none;background:none;border:none;cursor:pointer;padding:8px;border-radius:6px;min-width:40px;min-height:40px;align-items:center;justify-content:center;flex-direction:column;gap:4px;}
+.hamburger span{display:block;width:22px;height:2.5px;background:var(--ink);border-radius:2px;transition:all .28s;}
+.hamburger.open span:nth-child(1){transform:rotate(45deg) translate(4px,4px);}
+.hamburger.open span:nth-child(2){opacity:0;transform:scaleX(0);}
+.hamburger.open span:nth-child(3){transform:rotate(-45deg) translate(4px,-4px);}
+
+/* ── MOBILE DRAWER ── */
+.mob-nav-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:98;}
+.mob-nav-overlay.open{display:block;}
+.mob-nav-drawer{position:fixed;top:62px;left:0;right:0;background:var(--white);z-index:99;transform:translateY(-110%);transition:transform .28s ease;border-bottom:2px solid var(--cream2);padding:1.1rem 1.3rem 1.5rem;box-shadow:0 14px 40px rgba(0,0,0,.14);}
+.mob-nav-drawer.open{transform:translateY(0);}
+.mob-nav-links{list-style:none;margin-bottom:1.1rem;}
+.mob-nav-links li{border-bottom:1px solid var(--cream2);}
+.mob-nav-links a{display:block;padding:14px 4px;font-size:.95rem;font-weight:600;color:#3a4d3e;text-decoration:none;}
+.mob-nav-actions{display:flex;flex-direction:column;gap:.55rem;}
+.mob-nav-actions button{width:100%;padding:14px;border-radius:6px;font-family:'Nunito',sans-serif;font-weight:700;font-size:.92rem;cursor:pointer;}
 
 /* ── HERO ── */
-.hero{
-  min-height:100vh;position:relative;overflow:hidden;
-  display:flex;align-items:center;padding-top:68px;
-}
-.hero-bg{
-  position:absolute;inset:0;
-  background-image:url('hero-banner.png');
-  background-size:cover;background-position:center 20%;
-  transform:scale(1.02);
-  transition:transform 8s ease;
-}
-.hero-bg::after{
-  content:'';position:absolute;inset:0;
-  background:linear-gradient(105deg,rgba(10,30,18,.92) 0%,rgba(15,43,26,.82) 40%,rgba(20,50,30,.45) 70%,rgba(10,30,18,.2) 100%);
-}
-.hero-inner{position:relative;z-index:2;max-width:1140px;margin:0 auto;padding:4rem 2rem 5rem;width:100%;}
-.hero-badge{
-  display:inline-flex;align-items:center;gap:.5rem;
-  background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);
-  border-radius:30px;padding:5px 14px;
-  font-size:.7rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;
-  color:rgba(255,255,255,.9);margin-bottom:1.4rem;
-  backdrop-filter:blur(8px);
-}
-.hero-badge::before{content:'';width:6px;height:6px;border-radius:50%;background:#4ade80;animation:pulse 2s infinite;}
-@keyframes pulse{0%,100%{opacity:1;transform:scale(1);}50%{opacity:.5;transform:scale(1.3);}}
-.hero h1{
-  font-family:'Playfair Display',serif;
-  font-size:clamp(2.4rem,5.5vw,4.2rem);
-  font-weight:800;line-height:1.1;
-  color:#fff;margin-bottom:1.2rem;
-  max-width:660px;
-}
-.hero h1 em{font-style:italic;color:var(--gold2);display:block;}
-.hero-sub{
-  font-size:clamp(.88rem,1.8vw,1rem);
-  color:rgba(255,255,255,.72);
-  max-width:520px;line-height:1.78;
-  margin-bottom:2.4rem;
-}
-.hero-actions{display:flex;gap:.9rem;flex-wrap:wrap;margin-bottom:3.5rem;}
-.btn-primary{
-  padding:14px 30px;border:none;border-radius:8px;
-  background:var(--gold);color:#fff;
-  font-family:'Inter',sans-serif;font-weight:700;font-size:.9rem;
-  cursor:pointer;transition:all .25s;letter-spacing:.02em;
-  box-shadow:0 4px 20px rgba(196,135,26,.45);
-}
-.btn-primary:hover{background:var(--gold2);transform:translateY(-2px);box-shadow:0 8px 28px rgba(196,135,26,.5);}
-.btn-outline-white{
-  padding:13px 26px;border:1.5px solid rgba(255,255,255,.55);border-radius:8px;
-  background:rgba(255,255,255,.08);color:#fff;
-  font-family:'Inter',sans-serif;font-weight:600;font-size:.88rem;
-  cursor:pointer;transition:all .25s;text-decoration:none;display:inline-block;
-  backdrop-filter:blur(8px);
-}
-.btn-outline-white:hover{background:rgba(255,255,255,.18);border-color:rgba(255,255,255,.8);}
-.hero-stats{display:flex;gap:2.5rem;flex-wrap:wrap;}
-.hst{border-left:2px solid rgba(255,255,255,.15);padding-left:1.2rem;}
-.hst-num{font-family:'Playfair Display',serif;font-size:1.8rem;font-weight:700;color:var(--gold2);line-height:1;}
-.hst-lbl{font-size:.68rem;color:rgba(255,255,255,.5);margin-top:.2rem;text-transform:uppercase;letter-spacing:.05em;}
-/* Hero scroll indicator */
-.hero-scroll{
-  position:absolute;bottom:2rem;left:50%;transform:translateX(-50%);
-  display:flex;flex-direction:column;align-items:center;gap:.4rem;
-  color:rgba(255,255,255,.4);font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;
-}
-.hero-scroll-dot{width:1px;height:40px;background:linear-gradient(to bottom,rgba(255,255,255,.4),transparent);animation:scrollAnim 2s ease-in-out infinite;}
-@keyframes scrollAnim{0%,100%{opacity:.4;transform:scaleY(.7);}50%{opacity:.9;transform:scaleY(1);}}
+.hero{background:linear-gradient(135deg,var(--green2) 0%,var(--green) 60%);color:#fff;padding:4.5rem 2rem 3.5rem;}
+.hero-inner{max-width:1080px;margin:0 auto;display:grid;grid-template-columns:1.1fr 1fr;gap:3rem;align-items:center;}
+.hero-label{display:inline-block;background:rgba(255,255,255,.13);border:1px solid rgba(255,255,255,.22);border-radius:3px;padding:4px 12px;font-size:.72rem;font-weight:700;letter-spacing:.05em;margin-bottom:.9rem;text-transform:uppercase;}
+.hero h1{font-family:'Lora',serif;font-size:clamp(1.9rem,3.2vw,2.9rem);font-weight:700;line-height:1.22;margin-bottom:1.1rem;}
+.hero h1 em{font-style:italic;color:#f5d88e;}
+.hero p{font-size:.94rem;color:rgba(255,255,255,.78);max-width:430px;margin-bottom:1.8rem;line-height:1.7;}
+.hero-btns{display:flex;gap:.8rem;flex-wrap:wrap;}
+.btn-gold{padding:13px 26px;border:none;border-radius:4px;background:var(--gold);color:#fff;font-family:'Nunito',sans-serif;font-weight:800;font-size:.95rem;cursor:pointer;transition:background .2s;}
+.btn-gold:hover{background:#b07a14;}
+.btn-ow{padding:12px 22px;border:1.5px solid rgba(255,255,255,.65);border-radius:4px;background:none;color:#fff;font-family:'Nunito',sans-serif;font-weight:700;font-size:.9rem;cursor:pointer;transition:all .2s;display:inline-block;text-decoration:none;}
+.btn-ow:hover{background:rgba(255,255,255,.1);}
+.hero-stats{display:flex;gap:2rem;margin-top:2.2rem;flex-wrap:wrap;}
+.hstat h3{font-size:1.5rem;font-weight:800;font-family:'Lora',serif;color:#f5d88e;}
+.hstat p{font-size:.68rem;color:rgba(255,255,255,.58);margin-top:.1rem;}
+.fee-card{background:#fff;border-radius:var(--r);padding:1.4rem;box-shadow:0 20px 55px rgba(0,0,0,.28);color:var(--ink);}
+.fc-hd{display:flex;align-items:center;gap:9px;margin-bottom:.9rem;padding-bottom:.8rem;border-bottom:1px solid var(--cream2);}
+.fc-hd img{height:34px;}
+.fc-hd strong{font-family:'Lora',serif;font-size:.9rem;font-weight:700;color:var(--green);}
+.fee-row{display:flex;justify-content:space-between;align-items:center;padding:.5rem .7rem;border-radius:var(--r-sm);margin-bottom:.35rem;}
+.fr-l1{background:#f0faf2;border:1px solid #b8dfc1;}.fr-l2{background:#eaf3fb;border:1px solid #b0ccdf;}.fr-l3{background:#f3eefe;border:1px solid #c9b8e8;}
+.fr-lbl{font-size:.78rem;font-weight:700;}.fr-val{font-size:.72rem;color:var(--muted);}
+.fr-pill{font-size:.68rem;font-weight:800;padding:2px 7px;border-radius:4px;background:var(--gold-bg);color:#8a5c10;}
+.fc-note{font-size:.68rem;color:var(--muted);text-align:center;margin-top:.7rem;padding-top:.7rem;border-top:1px solid var(--cream2);}
 
-/* ── SECTION BASE ── */
-section{padding:5rem 1.5rem;}
-.sec-wrap{max-width:1140px;margin:0 auto;}
-.sec-eyebrow{font-size:.68rem;font-weight:800;text-transform:uppercase;letter-spacing:.12em;color:var(--gold);margin-bottom:.5rem;}
-.sec-title{font-family:'Playfair Display',serif;font-size:clamp(1.6rem,2.8vw,2.4rem);font-weight:700;color:var(--ink);margin-bottom:.6rem;}
-.sec-sub{color:var(--muted);font-size:.9rem;max-width:540px;line-height:1.7;margin-bottom:2.5rem;}
+/* ── SECTIONS ── */
+section{padding:4rem 2rem;}
+.sec-inner{max-width:1080px;margin:0 auto;}
+.sec-label{font-size:.68rem;font-weight:800;text-transform:uppercase;letter-spacing:.1em;color:var(--gold);margin-bottom:.35rem;}
+.sec-title{font-family:'Lora',serif;font-size:clamp(1.4rem,2.3vw,1.9rem);font-weight:700;margin-bottom:.45rem;}
+.sec-sub{color:var(--muted);max-width:480px;margin-bottom:2.2rem;font-size:.87rem;}
+.bg-white{background:var(--white);}.bg-cream{background:var(--cream);}
 
-/* ── LANGUAGES GRID ── */
-.lang-section{background:var(--white);}
-.lang-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.2rem;}
-.lang-card{
-  border-radius:var(--r-lg);overflow:hidden;
-  border:1px solid var(--cream2);
-  cursor:pointer;transition:all .28s cubic-bezier(.4,0,.2,1);
-  background:var(--white);
-}
-.lang-card:hover{transform:translateY(-6px);box-shadow:var(--shadow-lg);border-color:transparent;}
-.lang-card-hd{
-  padding:1.6rem 1.4rem 1.2rem;
-  position:relative;overflow:hidden;
-}
-.lang-card-hd::before{
-  content:'';position:absolute;right:-20px;top:-20px;
-  width:100px;height:100px;border-radius:50%;
-  background:rgba(255,255,255,.08);
-}
-.lang-flag{font-size:2rem;display:block;margin-bottom:.6rem;}
-.lang-card-hd h3{font-family:'Playfair Display',serif;font-size:1.1rem;color:#fff;margin-bottom:.15rem;}
-.lang-native{font-size:.75rem;color:rgba(255,255,255,.6);font-style:italic;}
-.lang-card-bd{padding:1rem 1.4rem 1.3rem;}
-.lang-card-feat{list-style:none;display:flex;flex-direction:column;gap:.3rem;margin-bottom:1rem;}
-.lang-card-feat li{font-size:.75rem;color:var(--muted);display:flex;align-items:center;gap:.4rem;}
-.lang-card-feat li::before{content:'→';color:var(--green);font-weight:700;font-size:.7rem;}
-.lang-card-footer{display:flex;justify-content:space-between;align-items:center;padding-top:.7rem;border-top:1px solid var(--cream2);}
-.lang-price{font-size:.85rem;font-weight:800;color:var(--ink);}
-.lang-price small{font-size:.65rem;color:var(--muted);font-weight:400;}
-.btn-lang{padding:6px 16px;border-radius:6px;border:none;color:#fff;font-family:'Inter',sans-serif;font-weight:700;font-size:.72rem;cursor:pointer;transition:opacity .2s;}
-.btn-lang:hover{opacity:.85;}
+/* ── LEVELS ── */
+.levels-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.3rem;}
+.lc{border-radius:var(--r);overflow:hidden;border:1px solid var(--cream2);cursor:pointer;transition:transform .22s,box-shadow .22s;}
+.lc:hover{transform:translateY(-4px);box-shadow:0 14px 40px rgba(42,92,63,.11);}
+.lc-hd{padding:1.6rem 1.3rem 1.2rem;color:#fff;position:relative;overflow:hidden;}
+.lc-hd::before{content:'';position:absolute;right:-25px;top:-25px;width:100px;height:100px;background:rgba(255,255,255,.06);border-radius:50%;}
+.lc-cefr{display:inline-block;background:rgba(255,255,255,.18);border-radius:3px;padding:2px 10px;font-size:.67rem;font-weight:800;margin-bottom:.65rem;letter-spacing:.04em;}
+.lc-hd h3{font-family:'Lora',serif;font-size:1.1rem;font-weight:700;margin-bottom:.2rem;}
+.lc-hd p{font-size:.75rem;opacity:.75;}
+.lc-bd{padding:1.1rem 1.3rem;background:var(--white);}
+.lc-features{list-style:none;margin-bottom:.9rem;}
+.lc-features li{font-size:.77rem;color:#3a4d3e;padding:.28rem 0;border-bottom:1px solid var(--cream2);display:flex;align-items:center;gap:5px;}
+.lc-features li::before{content:'—';color:var(--sage);font-weight:700;font-size:.7rem;}
+.lc-footer{display:flex;justify-content:space-between;align-items:center;border-top:1px solid var(--cream2);padding-top:.75rem;}
+.lc-price .total{font-size:.95rem;font-weight:800;}
+.lc-price .enrol{font-size:.7rem;color:var(--gold);font-weight:700;}
+.btn-enrol{padding:9px 16px;border-radius:3px;border:none;color:#fff;font-family:'Nunito',sans-serif;font-weight:700;font-size:.78rem;cursor:pointer;}
 
-/* ── HOW IT WORKS ── */
-.how-section{background:var(--cream);}
-.steps-row{display:grid;grid-template-columns:repeat(4,1fr);gap:1.5rem;position:relative;}
-.steps-row::before{content:'';position:absolute;top:28px;left:10%;right:10%;height:2px;background:linear-gradient(to right,var(--green-lt),var(--green-mid),var(--green-lt));z-index:0;}
-.step-card{text-align:center;position:relative;z-index:1;}
-.step-num{
-  width:56px;height:56px;border-radius:50%;
-  background:var(--green);color:#fff;
-  font-family:'Playfair Display',serif;font-size:1.2rem;font-weight:700;
-  display:flex;align-items:center;justify-content:center;
-  margin:0 auto 1rem;
-  box-shadow:0 4px 16px rgba(30,92,56,.3);
-  border:3px solid var(--cream);
-}
-.step-card h4{font-size:.88rem;font-weight:700;margin-bottom:.4rem;}
-.step-card p{font-size:.76rem;color:var(--muted);line-height:1.6;}
+/* ── STEPS ── */
+.steps-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1.2rem;}
+.step{background:var(--white);border-radius:var(--r);padding:1.5rem 1.1rem;text-align:center;border:1px solid var(--cream2);}
+.step-num{width:44px;height:44px;border-radius:50%;background:var(--green);color:#fff;font-size:1rem;font-weight:800;display:flex;align-items:center;justify-content:center;margin:0 auto .8rem;font-family:'Lora',serif;}
+.step h4{font-size:.87rem;font-weight:700;margin-bottom:.35rem;}
+.step p{font-size:.76rem;color:var(--muted);line-height:1.6;}
 
-/* ── GRADING ── */
-.grade-section{background:var(--green3);color:#fff;}
-.grade-section .sec-title{color:#fff;}
-.grade-section .sec-eyebrow{color:var(--gold2);}
-.grade-section .sec-sub{color:rgba(255,255,255,.6);}
-.grade-row{display:grid;grid-template-columns:repeat(3,1fr);gap:1.2rem;}
-.grade-card{
-  border-radius:var(--r-lg);padding:2rem 1.5rem;text-align:center;
-  background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);
-  transition:all .25s;
-}
-.grade-card:hover{background:rgba(255,255,255,.1);transform:translateY(-4px);}
-.grade-pct{font-family:'Playfair Display',serif;font-size:3rem;font-weight:700;line-height:1;margin-bottom:.4rem;}
-.grade-title{font-size:.88rem;font-weight:700;margin-bottom:.4rem;}
-.grade-desc{font-size:.76rem;color:rgba(255,255,255,.55);line-height:1.6;}
-
-/* ── FEES ── */
-.fees-section{background:var(--white);}
-.fees-table-wrap{overflow-x:auto;border-radius:var(--r-lg);box-shadow:var(--shadow);}
-.fees-table{width:100%;border-collapse:collapse;}
-.fees-table thead th{background:var(--green);color:#fff;padding:.9rem 1.2rem;text-align:left;font-size:.78rem;font-weight:700;}
-.fees-table thead th:first-child{border-radius:var(--r-lg) 0 0 0;}
-.fees-table thead th:last-child{border-radius:0 var(--r-lg) 0 0;}
-.fees-table tbody td{padding:.85rem 1.2rem;font-size:.82rem;border-bottom:1px solid var(--cream2);}
-.fees-table tbody tr:hover td{background:var(--cream);}
-.fees-table tbody tr:last-child td{border-bottom:none;}
-
-/* ── TESTIMONIALS ── */
-.testimonials-section{background:var(--cream);}
-.testimonials-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.2rem;}
-.testimonial-card{
-  background:var(--white);border-radius:var(--r-lg);padding:1.8rem 1.5rem;
-  border:1px solid var(--cream2);box-shadow:var(--shadow-sm);
-  transition:box-shadow .25s;
-}
-.testimonial-card:hover{box-shadow:var(--shadow);}
-.testimonial-stars{color:var(--gold);font-size:.88rem;margin-bottom:.8rem;}
-.testimonial-text{font-size:.84rem;line-height:1.7;color:var(--ink2);margin-bottom:1rem;font-style:italic;}
-.testimonial-author{display:flex;align-items:center;gap:.7rem;}
-.testimonial-avatar{width:38px;height:38px;border-radius:50%;background:var(--green);display:flex;align-items:center;justify-content:center;font-size:.85rem;color:#fff;font-weight:700;}
-.testimonial-name{font-size:.8rem;font-weight:700;}
-.testimonial-lang{font-size:.68rem;color:var(--muted);}
-
-/* ── RECRUITMENT OFFICERS ── */
-.rec-section{background:linear-gradient(135deg,var(--green3),var(--green2));}
-.rec-section .sec-title{color:#fff;}
-.rec-section .sec-eyebrow{color:var(--gold2);}
-.rec-section .sec-sub{color:rgba(255,255,255,.65);}
-.rec-content{display:grid;grid-template-columns:1fr auto;gap:3rem;align-items:center;}
+/* ── FEE TABLE ── */
+.pass-table{width:100%;border-collapse:collapse;border-radius:var(--r);overflow:hidden;box-shadow:0 3px 16px rgba(0,0,0,.06);}
+.pass-table th{background:var(--green);color:#fff;padding:.8rem 1rem;text-align:left;font-size:.78rem;font-weight:700;}
+.pass-table td{padding:.75rem 1rem;font-size:.78rem;border-bottom:1px solid var(--cream2);}
+.pass-table tr:nth-child(even) td{background:var(--cream);}
+.pill{display:inline-block;padding:2px 9px;border-radius:3px;font-size:.68rem;font-weight:800;}
 
 /* ── CTA ── */
-.cta-section{
-  background:linear-gradient(135deg,var(--gold2),var(--gold));
-  text-align:center;padding:5rem 1.5rem;
-}
-.cta-section h2{font-family:'Playfair Display',serif;font-size:clamp(1.8rem,3.5vw,2.8rem);color:#fff;margin-bottom:.7rem;}
-.cta-section p{color:rgba(255,255,255,.82);font-size:.92rem;margin-bottom:2rem;}
+.cta-section{padding:3.5rem 2rem;text-align:center;background:var(--green);}
+.cta-section h2{font-family:'Lora',serif;font-size:clamp(1.6rem,2.8vw,2.2rem);color:#fff;margin-bottom:.6rem;}
+.cta-section p{color:rgba(255,255,255,.78);font-size:.9rem;margin-bottom:1.6rem;}
 .cta-btns{display:flex;gap:.8rem;justify-content:center;flex-wrap:wrap;}
-.btn-cta-white{padding:13px 30px;background:#fff;border:none;border-radius:8px;color:var(--gold);font-family:'Inter',sans-serif;font-weight:800;font-size:.9rem;cursor:pointer;box-shadow:0 4px 20px rgba(0,0,0,.15);transition:all .2s;}
-.btn-cta-white:hover{transform:translateY(-2px);box-shadow:0 8px 28px rgba(0,0,0,.2);}
-.btn-cta-outline{padding:12px 26px;background:none;border:2px solid rgba(255,255,255,.7);border-radius:8px;color:#fff;font-family:'Inter',sans-serif;font-weight:700;font-size:.88rem;cursor:pointer;transition:all .2s;}
-.btn-cta-outline:hover{background:rgba(255,255,255,.15);}
 
 /* ── FOOTER ── */
-footer{background:var(--ink);color:rgba(255,255,255,.5);padding:3.5rem 1.5rem 1.5rem;}
-.footer-inner{max-width:1140px;margin:0 auto;}
-.footer-grid{display:grid;grid-template-columns:1.8fr 1fr 1fr 1fr;gap:2.5rem;margin-bottom:2.5rem;}
-.footer-brand img{height:38px;filter:brightness(0) invert(1);opacity:.7;margin-bottom:.7rem;}
-.footer-brand strong{font-family:'Playfair Display',serif;font-size:.95rem;color:#fff;display:block;margin-bottom:.3rem;}
-.footer-brand p{font-size:.75rem;color:rgba(255,255,255,.32);line-height:1.7;max-width:240px;}
-.footer-col h5{font-size:.68rem;font-weight:800;text-transform:uppercase;letter-spacing:.1em;color:rgba(255,255,255,.65);margin-bottom:.8rem;}
-.footer-col ul{list-style:none;display:flex;flex-direction:column;gap:.35rem;}
-.footer-col a{color:rgba(255,255,255,.38);font-size:.78rem;text-decoration:none;transition:color .2s;cursor:pointer;}
-.footer-col a:hover{color:#fff;}
-.footer-bottom{border-top:1px solid rgba(255,255,255,.07);padding-top:1.2rem;display:flex;justify-content:space-between;flex-wrap:wrap;gap:.5rem;font-size:.7rem;color:rgba(255,255,255,.2);}
-.rec-footer{background:rgba(255,255,255,.04);border-top:1px solid rgba(255,255,255,.06);padding:1rem 1.5rem;text-align:center;font-size:.78rem;color:rgba(255,255,255,.35);}
-.rec-footer a{color:var(--gold2);cursor:pointer;font-weight:600;}
+footer{background:var(--ink);color:rgba(255,255,255,.55);padding:2.5rem 2rem 1.5rem;}
+.footer-inner{max-width:1080px;margin:0 auto;}
+.fg-footer{display:grid;grid-template-columns:1.8fr 1fr 1fr;gap:2.5rem;margin-bottom:2rem;}
+.flr{display:flex;align-items:center;gap:8px;margin-bottom:.65rem;}
+.flr img{height:36px;filter:brightness(0) invert(1);opacity:.82;}
+.flr span{font-family:'Lora',serif;font-size:.95rem;font-weight:700;color:#fff;}
+.fdesc{font-size:.75rem;color:rgba(255,255,255,.38);line-height:1.7;max-width:260px;}
+.fc h5{font-size:.72rem;font-weight:800;text-transform:uppercase;letter-spacing:.07em;color:rgba(255,255,255,.75);margin-bottom:.75rem;}
+.fc ul{list-style:none;display:flex;flex-direction:column;gap:.32rem;}
+.fc ul a{color:rgba(255,255,255,.42);font-size:.77rem;text-decoration:none;transition:color .2s;}
+.fc ul a:hover{color:#fff;}
+.fb{border-top:1px solid rgba(255,255,255,.08);padding-top:1.1rem;display:flex;justify-content:space-between;font-size:.7rem;color:rgba(255,255,255,.22);flex-wrap:wrap;gap:.5rem;}
 
-/* ── MODALS ── */
-.overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:300;align-items:center;justify-content:center;padding:1rem;backdrop-filter:blur(4px);}
+/* ── MODAL / OVERLAY ── */
+.overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.52);z-index:200;align-items:center;justify-content:center;padding:12px;}
 .overlay.open{display:flex;}
-.modal{
-  background:#fff;border-radius:var(--r-lg);padding:2rem;
-  max-width:460px;width:100%;max-height:92vh;overflow-y:auto;
-  box-shadow:var(--shadow-lg);animation:modalIn .25s cubic-bezier(.4,0,.2,1);
+.modal{background:#fff;border-radius:var(--r);padding:1.6rem;width:100%;max-width:440px;max-height:94vh;overflow-y:auto;-webkit-overflow-scrolling:touch;}
+.modal-hd{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:1rem;}
+.modal-hd h3{font-family:'Lora',serif;font-size:1.1rem;}
+.modal-close{background:none;border:none;font-size:1.5rem;cursor:pointer;color:var(--muted);padding:2px 6px;line-height:1;min-width:36px;min-height:36px;display:flex;align-items:center;justify-content:center;}
+
+/* ── FORM FIELDS ── */
+.fg-{margin-bottom:.8rem;}
+.fg- label{display:block;font-size:.78rem;font-weight:700;margin-bottom:.3rem;color:#3a4d3e;}
+.fg- input,.fg- select,.fg- textarea{width:100%;padding:11px 13px;border:1.5px solid var(--cream2);border-radius:var(--r-sm);font-family:'Nunito',sans-serif;font-size:.9rem;outline:none;transition:border .2s;-webkit-appearance:none;appearance:none;background:#fff;}
+.fg- select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath fill='%237a8f7e' d='M6 8L0 0h12z'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 13px center;padding-right:36px;}
+.fg- textarea{resize:vertical;min-height:78px;}
+.fg- input:focus,.fg- select:focus,.fg- textarea:focus{border-color:var(--sage);}
+.btn-full{width:100%;padding:13px;border:none;border-radius:var(--r-sm);background:var(--green);color:#fff;font-family:'Nunito',sans-serif;font-weight:700;font-size:.92rem;cursor:pointer;margin-top:.3rem;min-height:48px;transition:background .2s;}
+.btn-full:hover{background:var(--green2);}
+.btn-full:disabled{opacity:.6;cursor:not-allowed;}
+.ff{text-align:center;font-size:.8rem;color:var(--muted);margin-top:.75rem;}
+.ff a{color:var(--green);font-weight:700;cursor:pointer;text-decoration:underline;}
+.err{background:var(--red-lt);color:var(--red);border-radius:var(--r-sm);padding:.6rem .9rem;font-size:.78rem;margin-bottom:.7rem;display:none;}
+.info-sm{background:var(--gold-bg);border:1px solid #f5d88e;border-radius:var(--r-sm);padding:.6rem .9rem;font-size:.77rem;color:#8a5c10;margin-bottom:.85rem;}
+
+/* ── TABS ── */
+.tabs{display:flex;gap:.3rem;margin-bottom:1rem;}
+.tab{flex:1;padding:10px 5px;border-radius:var(--r-sm);border:1.5px solid var(--cream2);background:none;font-family:'Nunito',sans-serif;font-size:.78rem;font-weight:700;color:var(--muted);cursor:pointer;transition:all .2s;min-height:44px;}
+.tab.active{background:var(--green);border-color:var(--green);color:#fff;}
+
+/* ── ROLE TABS ── */
+.role-tabs{display:flex;gap:.35rem;margin-bottom:1.1rem;}
+.role-tab{flex:1;padding:10px 4px;border-radius:var(--r-sm);border:1.5px solid var(--cream2);background:none;font-family:'Nunito',sans-serif;font-size:.75rem;font-weight:700;color:var(--muted);cursor:pointer;transition:all .2s;text-align:center;min-height:44px;line-height:1.3;}
+.role-tab.active{border-color:transparent;color:#fff;}
+.role-tab.rt-student.active{background:var(--green);}
+.role-tab.rt-staff.active{background:var(--blue);}
+.role-tab.rt-recruiter.active{background:var(--purple);}
+
+/* ── PHOTO ── */
+.opt-photo{display:flex;align-items:center;gap:.8rem;margin-bottom:.8rem;}
+.photo-preview{width:54px;height:54px;border-radius:50%;background:var(--cream2);border:2px solid var(--cream2);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:1.3rem;color:var(--muted);overflow:hidden;}
+.photo-preview img{width:100%;height:100%;object-fit:cover;border-radius:50%;}
+.file-hint{font-size:.7rem;color:var(--muted);margin-top:3px;}
+
+/* ── SUCCESS ── */
+.reg-success{text-align:center;padding:1.2rem .3rem 1rem;}
+.reg-success .s-icon{font-size:2.8rem;margin-bottom:.6rem;}
+.reg-success h3{font-family:'Lora',serif;font-size:1.1rem;color:var(--green);margin-bottom:.5rem;}
+.reg-success p{font-size:.82rem;color:var(--muted);line-height:1.7;margin-bottom:1.1rem;}
+.adm-badge{display:inline-block;background:var(--green-lt);border:1px solid var(--sage);border-radius:var(--r-sm);padding:.45rem 1.1rem;font-weight:800;font-size:.95rem;color:var(--green);margin-bottom:.9rem;letter-spacing:.04em;}
+
+/* ── MOBILE BOTTOM BAR ── */
+.mob-bottom-bar{
+  display:none;
+  position:fixed;bottom:0;left:0;right:0;
+  background:var(--white);
+  border-top:1.5px solid var(--cream2);
+  padding:.5rem .75rem;
+  padding-bottom:calc(.5rem + env(safe-area-inset-bottom,0px));
+  z-index:97;
+  gap:.4rem;
+  box-shadow:0 -4px 20px rgba(0,0,0,.07);
 }
-@keyframes modalIn{from{opacity:0;transform:translateY(20px) scale(.97);}to{opacity:1;transform:none;}}
-.modal-hd{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:1.4rem;}
-.modal-hd h3{font-family:'Playfair Display',serif;font-size:1.2rem;font-weight:700;color:var(--ink);}
-.modal-close{background:none;border:none;font-size:1.3rem;cursor:pointer;color:var(--muted);width:30px;height:30px;display:flex;align-items:center;justify-content:center;border-radius:50%;transition:background .2s;}
-.modal-close:hover{background:var(--cream2);}
-.fg-{margin-bottom:.85rem;}
-.fg- label{display:block;font-size:.72rem;font-weight:700;margin-bottom:.3rem;color:var(--ink2);text-transform:uppercase;letter-spacing:.04em;}
-.fg- input,.fg- select,.fg- textarea{
-  width:100%;padding:10px 13px;
-  border:1.5px solid var(--cream2);border-radius:var(--r-sm);
-  font-family:'Inter',sans-serif;font-size:.85rem;
-  outline:none;transition:border .2s;background:#fff;color:var(--ink);
-}
-.fg- input:focus,.fg- select:focus{border-color:var(--green);}
-.btn-full{
-  width:100%;padding:12px;border:none;border-radius:var(--r-sm);
-  background:var(--green);color:#fff;
-  font-family:'Inter',sans-serif;font-weight:700;font-size:.9rem;
-  cursor:pointer;margin-top:.3rem;transition:all .2s;
-  letter-spacing:.02em;
-}
-.btn-full:hover{background:var(--green2);transform:translateY(-1px);}
-.ff{text-align:center;font-size:.78rem;color:var(--muted);margin-top:.75rem;}
-.ff a{color:var(--green);font-weight:700;cursor:pointer;}
-.err{background:#fde8e8;color:var(--red);border-radius:var(--r-sm);padding:.55rem .9rem;font-size:.78rem;margin-bottom:.75rem;display:none;border-left:3px solid var(--red);}
-.info-sm{background:var(--gold-lt);border:1px solid #f5d88e;border-radius:var(--r-sm);padding:.6rem .9rem;font-size:.76rem;color:#7a5500;margin-bottom:.85rem;border-left:3px solid var(--gold);}
-/* Language picker in modal */
-.lang-picker{display:grid;grid-template-columns:repeat(3,1fr);gap:.45rem;margin-bottom:.85rem;}
-.lang-pick-btn{
-  padding:.6rem .3rem;border:2px solid var(--cream2);border-radius:var(--r-sm);
-  background:#fff;font-family:'Inter',sans-serif;font-size:.7rem;font-weight:700;
-  cursor:pointer;text-align:center;transition:all .2s;color:var(--ink);
-}
-.lang-pick-btn:hover{border-color:var(--green);}
-.lang-pick-btn.selected{border-color:var(--green);background:var(--green-lt);color:var(--green);}
-.lang-pick-btn .lf{font-size:1.3rem;display:block;margin-bottom:2px;}
+.mob-bottom-bar button{flex:1;padding:11px 5px;border-radius:6px;font-family:'Nunito',sans-serif;font-weight:700;font-size:.76rem;cursor:pointer;min-height:46px;border:none;}
+.mbb-apply{background:var(--green);color:#fff;}
+.mbb-login{background:none;border:1.5px solid var(--green)!important;color:var(--green);}
+.mbb-staff{background:none;border:1.5px solid var(--gold)!important;color:var(--gold);}
 
 /* ── RESPONSIVE ── */
-@media(max-width:1024px){
-  .lang-grid{grid-template-columns:repeat(2,1fr);}
-  .footer-grid{grid-template-columns:1fr 1fr;}
-  .steps-row{grid-template-columns:repeat(2,1fr);}
-  .steps-row::before{display:none;}
-  .testimonials-grid{grid-template-columns:1fr 1fr;}
-  .rec-content{grid-template-columns:1fr;}
-}
-@media(max-width:768px){
-  nav{padding:0 1rem;height:60px;}
+@media(max-width:900px){
+  .hero-inner{grid-template-columns:1fr;}
+  .fee-card{display:none;}
+  .hero{padding:3rem 1.2rem 2.5rem;}
+  .hero h1{font-size:1.85rem;}
+  .hero-stats{gap:1.4rem;}
+  .levels-grid{grid-template-columns:1fr;}
+  .steps-grid{grid-template-columns:1fr 1fr;}
+  nav{padding:0 1rem;}
   .nav-links{display:none;}
-  .nav-right{display:none;}
-  .mob-nav-btn{display:flex;}
-  /* Mobile nav drawer */
-  .mobile-drawer{
-    display:none;position:fixed;top:60px;left:0;right:0;
-    background:rgba(255,255,255,.97);backdrop-filter:blur(16px);
-    z-index:199;padding:1.5rem;border-bottom:1px solid var(--cream2);
-    flex-direction:column;gap:1rem;box-shadow:var(--shadow);
-  }
-  .mobile-drawer.open{display:flex;}
-  .mobile-drawer a{font-size:.9rem;font-weight:600;color:var(--ink);text-decoration:none;padding:.5rem 0;border-bottom:1px solid var(--cream2);}
-  .mobile-drawer .mob-btns{display:flex;gap:.5rem;margin-top:.5rem;}
-  .mobile-drawer .mob-btns button{flex:1;padding:10px;font-size:.82rem;}
-  section{padding:3.5rem 1.2rem;}
-  .lang-grid{grid-template-columns:1fr;}
-  .grade-row{grid-template-columns:1fr;}
-  .fees-table thead th,.fees-table tbody td{padding:.7rem .8rem;}
-  .testimonials-grid{grid-template-columns:1fr;}
-  .footer-grid{grid-template-columns:1fr;}
-  .hero-stats{gap:1.5rem;}
-  .hst{border-left:none;border-top:1px solid rgba(255,255,255,.1);padding-left:0;padding-top:.8rem;}
+  .nav-right .btn-staff,.nav-right .btn-o,.nav-right .btn-s{display:none;}
+  .hamburger{display:flex;}
+  section{padding:2.5rem 1.2rem;}
+  .pass-table td,.pass-table th{padding:.6rem .7rem;}
+  body{padding-bottom:72px;}
+  .mob-bottom-bar{display:flex;}
+  .fg-footer{grid-template-columns:1fr;}
+  .cta-btns{flex-direction:column;align-items:center;}
+  .cta-btns button{width:100%;max-width:320px;}
 }
-@media(max-width:480px){
-  .hero h1{font-size:2rem;}
-  .lang-picker{grid-template-columns:repeat(3,1fr);}
-  .modal{padding:1.4rem;}
+@media(max-width:500px){
+  .steps-grid{grid-template-columns:1fr;}
+  .hero-btns{flex-direction:column;}
+  .hero-btns .btn-gold,.hero-btns .btn-ow{width:100%;text-align:center;display:block;}
+  .hero-stats{gap:1rem;}
+  .modal{padding:1.1rem;}
+  .role-tabs{gap:.2rem;}
+  .role-tab{font-size:.68rem;padding:9px 3px;}
 }
+@media(min-width:901px){.mob-bottom-bar{display:none!important;}.hamburger{display:none!important;}}
 </style>
 </head>
 <body>
 
-<!-- ── NAV ── -->
-<nav id="mainNav">
-  <a href="#" class="nav-logo">
-    <img src="sla-logo.png" alt="SLA" onerror="this.style.display='none'"/>
+<!-- NAV -->
+<nav>
+  <a href="index.html" class="nav-logo">
+    <img src="sla-logo.png" alt="SEA Logo" onerror="this.style.display='none'"/>
     <div class="nav-logo-text"><strong>Study Language Academy</strong><span>Nairobi, Kenya</span></div>
   </a>
   <ul class="nav-links">
-    <li><a href="#languages">Languages</a></li>
-    <li><a href="#how-it-works">How It Works</a></li>
+    <li><a href="#levels">Levels</a></li>
+    <li><a href="#how">How It Works</a></li>
     <li><a href="#fees">Fees</a></li>
     <li><a href="#contact">Contact</a></li>
   </ul>
   <div class="nav-right">
-    <button class="btn-nav-staff" onclick="openModal('staff')">Staff Login</button>
-    <button class="btn-nav-login" onclick="openModal('login')">Student Login</button>
+    <button class="btn-staff" onclick="openModal('staff')">Staff Login</button>
+    <button class="btn-o" onclick="openModal('login')">Student Login</button>
+    <button class="btn-s" onclick="openModal('signup')">Apply Now</button>
   </div>
-  <button class="mob-nav-btn" id="mobNavBtn" onclick="toggleMobileNav()" aria-label="Menu">
+  <button class="hamburger" id="hamburgerBtn" onclick="toggleMobNav()" aria-label="Menu">
     <span></span><span></span><span></span>
   </button>
 </nav>
 
-<!-- Mobile Drawer -->
-<div class="mobile-drawer" id="mobileDrawer">
-  <a href="#languages" onclick="toggleMobileNav()">Languages</a>
-  <a href="#how-it-works" onclick="toggleMobileNav()">How It Works</a>
-  <a href="#fees" onclick="toggleMobileNav()">Fees</a>
-  <a href="#contact" onclick="toggleMobileNav()">Contact</a>
-  <div class="mob-btns">
-    <button class="btn-nav-staff" onclick="toggleMobileNav();openModal('staff')">Staff Login</button>
-    <button class="btn-nav-login" onclick="toggleMobileNav();openModal('login')">Student Login</button>
+<!-- MOBILE DRAWER -->
+<div class="mob-nav-overlay" id="mobNavOverlay" onclick="closeMobNav()"></div>
+<div class="mob-nav-drawer" id="mobNavDrawer">
+  <ul class="mob-nav-links">
+    <li><a href="#levels" onclick="closeMobNav()">Levels &amp; Programme</a></li>
+    <li><a href="#how" onclick="closeMobNav()">How It Works</a></li>
+    <li><a href="#fees" onclick="closeMobNav()">Fee Structure</a></li>
+    <li><a href="#contact" onclick="closeMobNav()">Contact Us</a></li>
+  </ul>
+  <div class="mob-nav-actions">
+    <button class="btn-gold" onclick="closeMobNav();openModal('signup')">Apply for Admission</button>
+    <button class="btn-o" onclick="closeMobNav();openModal('login')">Student Login</button>
+    <button class="btn-staff" onclick="closeMobNav();openModal('staff')">Staff / Recruiter</button>
   </div>
 </div>
 
-<!-- ── HERO ── -->
+<!-- HERO -->
 <section class="hero">
-  <div class="hero-bg" id="heroBg"></div>
   <div class="hero-inner">
-    <div class="hero-badge">🟢 Admission Open Now</div>
-    <h1>Master a Language.<br/><em>Open every door.</em></h1>
-    <p class="hero-sub">Join a global community of learners. Study English, Swahili, French, Arabic, German, Spanish, Portuguese, Koine Greek or Hebrew — at your own pace, with expert instructors.</p>
-    <div class="hero-actions">
-      <button class="btn-primary" onclick="openModal('signup')">Begin Your Journey →</button>
-      <a href="#languages" class="btn-outline-white">Explore Languages</a>
+    <div>
+      <div class="hero-label">Nairobi, Kenya &nbsp;·&nbsp; CEFR A1 to C1</div>
+      <h1>Master English<br/><em>or Kiswahili.</em></h1>
+      <p>Two certified language programmes — English and Kiswahili — with three levels each. Study at your own pace with weekly video lessons, interactive tests, live classes, and official CEFR certification.</p>
+      <div class="hero-btns">
+        <button class="btn-gold" onclick="openModal('signup')">Apply for Admission</button>
+        <a href="#levels" class="btn-ow">View Levels</a>
+      </div>
+      <div class="hero-stats">
+        <div class="hstat"><h3>3</h3><p>Certified Levels<br/>A1 to C1</p></div>
+        <div class="hstat"><h3>70%</h3><p>Pass mark<br/>all levels</p></div>
+        <div class="hstat"><h3>$99</h3><p>Total fee<br/>from $99/level</p></div>
+      </div>
     </div>
-    <div class="hero-stats">
-      <div class="hst"><div class="hst-num">9</div><div class="hst-lbl">Languages Taught</div></div>
-      <div class="hst"><div class="hst-num">3</div><div class="hst-lbl">Certified Levels</div></div>
-      <div class="hst"><div class="hst-num">70%</div><div class="hst-lbl">Pass Mark</div></div>
-      <div class="hst"><div class="hst-num">$99</div><div class="hst-lbl">From / Level</div></div>
-    </div>
-  </div>
-  <div class="hero-scroll"><div class="hero-scroll-dot"></div>Scroll</div>
-</section>
-
-<!-- ── 9 LANGUAGES ── -->
-<section class="lang-section" id="languages">
-  <div class="sec-wrap">
-    <div class="sec-eyebrow">Our Languages</div>
-    <h2 class="sec-title">Choose your language journey</h2>
-    <p class="sec-sub">Click any language to begin. You can change your language later with staff approval. Each programme has 3 CEFR-aligned levels.</p>
-    <div class="lang-grid">
-
-      <div class="lang-card" onclick="pickLang('english')">
-        <div class="lang-card-hd" style="background:linear-gradient(135deg,#1e5c38,#2d8a56);">
-          <span class="lang-flag">🇬🇧</span>
-          <h3>English</h3><div class="lang-native">The World's #1 Second Language</div>
-        </div>
-        <div class="lang-card-bd">
-          <ul class="lang-card-feat"><li>Business & Professional English</li><li>IELTS / TOEFL Preparation</li><li>Academic Writing & Reading</li></ul>
-          <div class="lang-card-footer"><div class="lang-price">From $99 <small>/ level</small></div><button class="btn-lang" style="background:#1e5c38;">Enrol Now</button></div>
-        </div>
-      </div>
-
-      <div class="lang-card" onclick="pickLang('swahili')">
-        <div class="lang-card-hd" style="background:linear-gradient(135deg,#1a5c2a,#2ea84a);">
-          <span class="lang-flag">🌍</span>
-          <h3>Kiswahili</h3><div class="lang-native">Lugha ya Afrika Mashariki</div>
-        </div>
-        <div class="lang-card-bd">
-          <ul class="lang-card-feat"><li>Greetings & Daily Expressions</li><li>Business Swahili</li><li>East African Culture & Context</li></ul>
-          <div class="lang-card-footer"><div class="lang-price">From $99 <small>/ level</small></div><button class="btn-lang" style="background:#1a5c2a;">Enrol Now</button></div>
-        </div>
-      </div>
-
-      <div class="lang-card" onclick="pickLang('french')">
-        <div class="lang-card-hd" style="background:linear-gradient(135deg,#1a3a7a,#2e60b8);">
-          <span class="lang-flag">🇫🇷</span>
-          <h3>Français</h3><div class="lang-native">Parlé dans 80+ pays</div>
-        </div>
-        <div class="lang-card-bd">
-          <ul class="lang-card-feat"><li>Pronunciation & Phonetics</li><li>Conversational French</li><li>DELF Exam Preparation</li></ul>
-          <div class="lang-card-footer"><div class="lang-price">From $99 <small>/ level</small></div><button class="btn-lang" style="background:#1a3a7a;">Enrol Now</button></div>
-        </div>
-      </div>
-
-      <div class="lang-card" onclick="pickLang('arabic')">
-        <div class="lang-card-hd" style="background:linear-gradient(135deg,#7a3a1a,#b85a28);">
-          <span class="lang-flag">🌙</span>
-          <h3>العربية</h3><div class="lang-native">400M+ Native Speakers</div>
-        </div>
-        <div class="lang-card-bd">
-          <ul class="lang-card-feat"><li>Arabic Script & Alphabet</li><li>Modern Standard Arabic</li><li>Quranic Arabic (Optional)</li></ul>
-          <div class="lang-card-footer"><div class="lang-price">From $99 <small>/ level</small></div><button class="btn-lang" style="background:#7a3a1a;">Enrol Now</button></div>
-        </div>
-      </div>
-
-      <div class="lang-card" onclick="pickLang('german')">
-        <div class="lang-card-hd" style="background:linear-gradient(135deg,#2c2c2c,#555);">
-          <span class="lang-flag">🇩🇪</span>
-          <h3>Deutsch</h3><div class="lang-native">Europe's Most Spoken Native Language</div>
-        </div>
-        <div class="lang-card-bd">
-          <ul class="lang-card-feat"><li>German Cases & Grammar</li><li>Work & Professional German</li><li>Goethe Certificate Prep</li></ul>
-          <div class="lang-card-footer"><div class="lang-price">From $99 <small>/ level</small></div><button class="btn-lang" style="background:#2c2c2c;">Enrol Now</button></div>
-        </div>
-      </div>
-
-      <div class="lang-card" onclick="pickLang('spanish')">
-        <div class="lang-card-hd" style="background:linear-gradient(135deg,#7a1a1a,#b83232);">
-          <span class="lang-flag">🇪🇸</span>
-          <h3>Español</h3><div class="lang-native">2nd Most Spoken in the World</div>
-        </div>
-        <div class="lang-card-bd">
-          <ul class="lang-card-feat"><li>Latin American & Iberian Spanish</li><li>Travel & Business Spanish</li><li>DELE Exam Preparation</li></ul>
-          <div class="lang-card-footer"><div class="lang-price">From $99 <small>/ level</small></div><button class="btn-lang" style="background:#7a1a1a;">Enrol Now</button></div>
-        </div>
-      </div>
-
-      <div class="lang-card" onclick="pickLang('portuguese')">
-        <div class="lang-card-hd" style="background:linear-gradient(135deg,#1a5c4a,#1ea882);">
-          <span class="lang-flag">🇧🇷</span>
-          <h3>Português</h3><div class="lang-native">Language of Brazil & Portugal</div>
-        </div>
-        <div class="lang-card-bd">
-          <ul class="lang-card-feat"><li>Brazilian vs European Portuguese</li><li>Core Grammar & Vocabulary</li><li>Business Portuguese</li></ul>
-          <div class="lang-card-footer"><div class="lang-price">From $99 <small>/ level</small></div><button class="btn-lang" style="background:#1a5c4a;">Enrol Now</button></div>
-        </div>
-      </div>
-
-      <div class="lang-card" onclick="pickLang('greek')">
-        <div class="lang-card-hd" style="background:linear-gradient(135deg,#4a3a7a,#7b58d0);">
-          <span class="lang-flag">🏛️</span>
-          <h3>Koine Greek</h3><div class="lang-native">Language of the New Testament</div>
-        </div>
-        <div class="lang-card-bd">
-          <ul class="lang-card-feat"><li>Greek Alphabet & Pronunciation</li><li>New Testament Greek</li><li>Classical Texts & Philosophy</li></ul>
-          <div class="lang-card-footer"><div class="lang-price">From $99 <small>/ level</small></div><button class="btn-lang" style="background:#4a3a7a;">Enrol Now</button></div>
-        </div>
-      </div>
-
-      <div class="lang-card" onclick="pickLang('hebrew')">
-        <div class="lang-card-hd" style="background:linear-gradient(135deg,#1a3a5c,#2a60a0);">
-          <span class="lang-flag">✡️</span>
-          <h3>עִבְרִית — Hebrew</h3><div class="lang-native">Language of the Old Testament</div>
-        </div>
-        <div class="lang-card-bd">
-          <ul class="lang-card-feat"><li>Hebrew Alphabet & Niqqud</li><li>Biblical Hebrew Grammar</li><li>Old Testament Texts</li></ul>
-          <div class="lang-card-footer"><div class="lang-price">From $99 <small>/ level</small></div><button class="btn-lang" style="background:#1a3a5c;">Enrol Now</button></div>
-        </div>
-      </div>
-
-    </div>
-  </div>
-</section>
-
-<!-- ── HOW IT WORKS ── -->
-<section class="how-section" id="how-it-works">
-  <div class="sec-wrap">
-    <div class="sec-eyebrow">The Journey</div>
-    <h2 class="sec-title">From application to certification</h2>
-    <p class="sec-sub">A simple, guided path to fluency in your chosen language.</p>
-    <div class="steps-row">
-      <div class="step-card">
-        <div class="step-num">1</div>
-        <h4>Choose Your Language</h4>
-        <p>Pick from 9 languages. Click to apply — it takes under 2 minutes.</p>
-      </div>
-      <div class="step-card">
-        <div class="step-num">2</div>
-        <h4>Get Admitted</h4>
-        <p>Your application is reviewed. Receive your admission number and payment details.</p>
-      </div>
-      <div class="step-card">
-        <div class="step-num">3</div>
-        <h4>Study & Practise</h4>
-        <p>Access rich lesson notes, live classes, AI coach sessions and weekly tests.</p>
-      </div>
-      <div class="step-card">
-        <div class="step-num">4</div>
-        <h4>Certify & Advance</h4>
-        <p>Pass at 70%+ and receive your CEFR-aligned certificate. Move to the next level.</p>
+    <div>
+      <div class="fee-card">
+        <div class="fc-hd"><img src="sla-logo.png" alt="SEA" onerror="this.style.display='none'"/><strong>Study Language Academy</strong></div>
+        <div class="fee-row fr-l1"><div><div class="fr-lbl">Level 1 — Beginner</div><div class="fr-val">CEFR A1–A2 · 6 units</div></div><div style="text-align:right;"><div style="font-weight:800;font-size:.88rem;">$99</div><div class="fr-pill">4 months · 70% pass</div></div></div>
+        <div class="fee-row fr-l2"><div><div class="fr-lbl">Level 2 — Intermediate</div><div class="fr-val">CEFR B1 · 8 units</div></div><div style="text-align:right;"><div style="font-weight:800;font-size:.88rem;">$120</div><div class="fr-pill">4 months · 70% pass</div></div></div>
+        <div class="fee-row fr-l3"><div><div class="fr-lbl">Level 3 — Advanced</div><div class="fr-val">CEFR B2–C1 · 9 units</div></div><div style="text-align:right;"><div style="font-weight:800;font-size:.88rem;">$120</div><div class="fr-pill">4 months · 70% pass</div></div></div>
+        <div class="fc-note">Fees paid in instalments over 4 months. Score 70%+ to certify.</div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- ── GRADING MODEL ── -->
-<section class="grade-section" id="grading">
-  <div class="sec-wrap">
-    <div class="sec-eyebrow">Assessment Model</div>
-    <h2 class="sec-title">How you are graded</h2>
-    <p class="sec-sub">Consistent effort through the term is always rewarded. Three components build your final grade.</p>
-    <div class="grade-row">
-      <div class="grade-card">
-        <div class="grade-pct" style="color:#4ade80;">40%</div>
-        <div class="grade-title">Weekly Continuous Assessment</div>
-        <div class="grade-desc">Short weekly CAT tests on each unit. Covers vocabulary, grammar and comprehension. Taken every week in your student portal.</div>
-      </div>
-      <div class="grade-card">
-        <div class="grade-pct" style="color:var(--gold2);">50%</div>
-        <div class="grade-title">End of Level Final Exam</div>
-        <div class="grade-desc">Comprehensive exam at the end of each level. Must score 70%+ to progress and receive your CEFR-aligned certificate.</div>
-      </div>
-      <div class="grade-card">
-        <div class="grade-pct" style="color:#93c5fd;">10%</div>
-        <div class="grade-title">Class Contribution</div>
-        <div class="grade-desc">Awarded for daily engagement — logging in, completing lessons, using the AI coach and participating in live classes.</div>
-      </div>
-    </div>
-    <div style="margin-top:1.5rem;background:rgba(255,255,255,.06);border-radius:var(--r);padding:1rem 1.3rem;border:1px solid rgba(255,255,255,.1);font-size:.8rem;color:rgba(255,255,255,.55);line-height:1.7;">
-      <strong style="color:rgba(255,255,255,.8);">Minimum pass mark: 70%</strong> across all components. Students who score below 70% may retake the final exam once before repeating the level.
-    </div>
-  </div>
-</section>
-
-<!-- ── FEES ── -->
-<section class="fees-section" id="fees">
-  <div class="sec-wrap">
-    <div class="sec-eyebrow">Fee Structure</div>
-    <h2 class="sec-title">Transparent, affordable pricing</h2>
-    <p class="sec-sub">All 9 language programmes share the same fee structure. Pay in 3 easy instalments.</p>
-    <div class="fees-table-wrap">
-      <table class="fees-table">
-        <thead><tr><th>Level</th><th>CEFR</th><th>Total Fee</th><th>Enrolment (50%)</th><th>Month 2 (25%)</th><th>Month 4 (25%)</th><th>Pass Mark</th></tr></thead>
-        <tbody>
-          <tr><td><strong>Level 1 — Foundation</strong></td><td>A1–A2</td><td><strong>$99</strong></td><td>$49.50</td><td>$24.75</td><td>$24.75</td><td>70%</td></tr>
-          <tr><td><strong>Level 2 — Intermediate</strong></td><td>B1</td><td><strong>$120</strong></td><td>$60.00</td><td>$30.00</td><td>$30.00</td><td>70%</td></tr>
-          <tr><td><strong>Level 3 — Advanced</strong></td><td>B2–C1</td><td><strong>$120</strong></td><td>$60.00</td><td>$30.00</td><td>$30.00</td><td>70%</td></tr>
-        </tbody>
-      </table>
-    </div>
-    <p style="font-size:.76rem;color:var(--muted);margin-top:1rem;">Certificate fee ($15) billed separately upon level completion. Recruitment Officer commission: 10% of first instalment.</p>
-  </div>
-</section>
-
-<!-- ── TESTIMONIALS ── -->
-<section class="testimonials-section">
-  <div class="sec-wrap">
-    <div class="sec-eyebrow">Student Stories</div>
-    <h2 class="sec-title">What our students say</h2>
-    <p class="sec-sub">Real experiences from our learners across East Africa and beyond.</p>
-    <div class="testimonials-grid">
-      <div class="testimonial-card">
-        <div class="testimonial-stars">★★★★★</div>
-        <p class="testimonial-text">"Study Language Academy changed my career. Within 6 months of Level 1 English, I got a job at an international NGO. The lessons are clear and the live classes are amazing."</p>
-        <div class="testimonial-author"><div class="testimonial-avatar">AM</div><div><div class="testimonial-name">Amina M.</div><div class="testimonial-lang">English · Level 2 · Nairobi</div></div></div>
-      </div>
-      <div class="testimonial-card">
-        <div class="testimonial-stars">★★★★★</div>
-        <p class="testimonial-text">"Kujifunza Kiswahili hapa ilikuwa rahisi sana. Mwalimu alisaidia sana na maswali yangu. Nimepata shahada yangu ya Level 1. Nashukuru sana!"</p>
-        <div class="testimonial-author"><div class="testimonial-avatar">JK</div><div><div class="testimonial-name">Jean K.</div><div class="testimonial-lang">Kiswahili · Level 1 · DRC</div></div></div>
-      </div>
-      <div class="testimonial-card">
-        <div class="testimonial-stars">★★★★★</div>
-        <p class="testimonial-text">"The Koine Greek programme is exceptional. Being able to read the New Testament in its original language has transformed my ministry. Highly recommended for pastors."</p>
-        <div class="testimonial-author"><div class="testimonial-avatar">PO</div><div><div class="testimonial-name">Pastor O.</div><div class="testimonial-lang">Koine Greek · Level 1 · Uganda</div></div></div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ── RECRUITMENT OFFICERS ── -->
-<section class="rec-section" id="contact">
-  <div class="sec-wrap">
-    <div class="rec-content">
-      <div>
-        <div class="sec-eyebrow">Official Partnership</div>
-        <h2 class="sec-title">Become a Recruitment Officer</h2>
-        <p class="sec-sub">Study Language Academy partners with qualified individuals to help connect students to our language programmes. As a Recruitment Officer, you support student enrolment and earn a commission for each successful referral.</p>
-        <div style="display:flex;gap:.8rem;flex-wrap:wrap;">
-          <button class="btn-primary" onclick="openModal('recruiter-apply')">Apply as Recruitment Officer</button>
-          <button class="btn-outline-white" onclick="openModal('recruiter-login')">Officer Login</button>
+<!-- LEVELS -->
+<section class="bg-white" id="levels">
+  <div class="sec-inner">
+    <div class="sec-label">Programme Structure</div>
+    <h2 class="sec-title">Three levels to English proficiency</h2>
+    <p class="sec-sub">Each level builds on the last with dedicated units, learning materials, live classes, and a final examination.</p>
+    <div class="levels-grid">
+      <div class="lc">
+        <div class="lc-hd" style="background:linear-gradient(135deg,#2a5c3f,#4a8c5c);">
+          <div class="lc-cefr">CEFR A1–A2</div>
+          <h3>Level 1 — Beginner</h3><p>From zero to confident everyday communication</p>
+        </div>
+        <div class="lc-bd">
+          <ul class="lc-features"><li>Greetings &amp; Introductions</li><li>Numbers, Time &amp; Dates</li><li>Family &amp; Home Vocabulary</li><li>Daily Routines (Present Simple)</li><li>Food, Shopping &amp; Markets</li><li>Health, Places &amp; Directions</li></ul>
+          <div class="lc-footer"><div class="lc-price"><div class="total">$99 total</div><div class="enrol">Start: $24.75 enrolment</div></div><button class="btn-enrol" style="background:#2a5c3f;" onclick="openModal('signup')">Apply</button></div>
         </div>
       </div>
-      <div style="background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);border-radius:var(--r-lg);padding:2rem;min-width:260px;">
-        <div style="font-size:.68rem;font-weight:800;text-transform:uppercase;letter-spacing:.1em;color:var(--gold2);margin-bottom:1rem;">Contact Us</div>
-        <div style="font-size:.82rem;color:rgba(255,255,255,.7);display:flex;flex-direction:column;gap:.6rem;">
-          <div>📧 smartdestinydealers@gmail.com</div>
-          <div>📞 +254 735 567 826</div>
-          <div>📍 Nairobi, Kenya</div>
-          <div style="margin-top:.4rem;padding-top:.6rem;border-top:1px solid rgba(255,255,255,.1);font-size:.72rem;color:rgba(255,255,255,.4);">Mon–Fri · 8:00 AM – 6:00 PM EAT</div>
+      <div class="lc">
+        <div class="lc-hd" style="background:linear-gradient(135deg,#1a5276,#2980b9);">
+          <div class="lc-cefr">CEFR B1</div>
+          <h3>Level 2 — Intermediate</h3><p>Past, future, opinions &amp; professional English</p>
+        </div>
+        <div class="lc-bd">
+          <ul class="lc-features"><li>Past Simple &amp; Present Perfect</li><li>Future Forms: will / going to</li><li>Comparatives &amp; Superlatives</li><li>Modal Verbs &amp; Opinions</li><li>Passive Voice &amp; Formal Emails</li><li>Speaking Assessment Included</li></ul>
+          <div class="lc-footer"><div class="lc-price"><div class="total">$120 total</div><div class="enrol">Start: $30 enrolment</div></div><button class="btn-enrol" style="background:#1a5276;" onclick="openModal('signup')">Apply</button></div>
+        </div>
+      </div>
+      <div class="lc">
+        <div class="lc-hd" style="background:linear-gradient(135deg,#5b3fa0,#8e44ad);">
+          <div class="lc-cefr">CEFR B2–C1</div>
+          <h3>Level 3 — Advanced</h3><p>Academic, professional &amp; IELTS-ready English</p>
+        </div>
+        <div class="lc-bd">
+          <ul class="lc-features"><li>All Conditionals &amp; Inversion</li><li>Critical Reading &amp; AWL</li><li>Academic Essay Writing (PEEL)</li><li>Debates &amp; Logical Arguments</li><li>Business Reports &amp; Negotiations</li><li>IELTS / TOEFL Preparation</li></ul>
+          <div class="lc-footer"><div class="lc-price"><div class="total">$120 total</div><div class="enrol">Start: $30 enrolment</div></div><button class="btn-enrol" style="background:#5b3fa0;" onclick="openModal('signup')">Apply</button></div>
         </div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- ── CTA ── -->
-<section class="cta-section">
-  <div class="sec-wrap">
-    <h2>Ready to begin your language journey?</h2>
-    <p>Apply in 2 minutes. 9 languages. Monthly payment plan available.</p>
-    <div class="cta-btns">
-      <button class="btn-cta-white" onclick="openModal('signup')">Begin Your Journey</button>
-      <button class="btn-cta-outline" onclick="openModal('login')">Student Login</button>
-      <button class="btn-cta-outline" onclick="openModal('staff')">Staff Portal</button>
+<!-- HOW IT WORKS -->
+<section class="bg-cream" id="how">
+  <div class="sec-inner">
+    <div class="sec-label">Admission Process</div>
+    <h2 class="sec-title">How it works</h2>
+    <p class="sec-sub">From application to certification in four clear steps.</p>
+    <div class="steps-grid">
+      <div class="step"><div class="step-num">1</div><h4>Apply online</h4><p>Submit your free application. You will receive an admission number and be assigned to an instructor and class.</p></div>
+      <div class="step"><div class="step-num">2</div><h4>Pay first instalment</h4><p>Pay your first instalment to unlock your learning materials and class access. Contact the Academy for your payment schedule.</p></div>
+      <div class="step"><div class="step-num">3</div><h4>Study with your instructor</h4><p>Attend live classes, read lesson notes, complete units, and prepare for the final examination over 4 months.</p></div>
+      <div class="step"><div class="step-num">4</div><h4>Pass exam &amp; certify</h4><p>Score 70%+ on the final exam, clear your balance, and receive your official certificate.</p></div>
     </div>
   </div>
 </section>
 
-<!-- ── FOOTER ── -->
-<footer>
+<!-- FEES -->
+<section class="bg-white" id="fees">
+  <div class="sec-inner">
+    <div class="sec-label">Fee Structure</div>
+    <h2 class="sec-title">Transparent, affordable fees</h2>
+    <p class="sec-sub">Pay in monthly instalments. Access is suspended if monthly payment is not made on time.</p>
+    <div style="overflow-x:auto;">
+    <table class="pass-table">
+      <thead><tr><th>Level</th><th>CEFR</th><th>Total Fee</th><th>Duration</th><th>Pass Mark</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Level 1 — Beginner</strong></td><td><span class="pill" style="background:#d6ead9;color:#2a5c3f;">A1–A2</span></td><td><strong>$99</strong></td><td>4 months</td><td><span class="pill" style="background:#d6ead9;color:#2a5c3f;">70%</span></td></tr>
+        <tr><td><strong>Level 2 — Intermediate</strong></td><td><span class="pill" style="background:#d6e8fa;color:#1a5276;">B1</span></td><td><strong>$120</strong></td><td>4 months</td><td><span class="pill" style="background:#d6e8fa;color:#1a5276;">70%</span></td></tr>
+        <tr><td><strong>Level 3 — Advanced</strong></td><td><span class="pill" style="background:#e4d9f5;color:#5b3fa0;">B2–C1</span></td><td><strong>$120</strong></td><td>4 months</td><td><span class="pill" style="background:#e4d9f5;color:#5b3fa0;">70%</span></td></tr>
+      </tbody>
+    </table>
+    <p style="font-size:.76rem;color:var(--muted);margin-top:.65rem;text-align:center;">Payment is made in instalments over the 4-month term. Contact us for your personalised payment schedule.</p>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<div class="cta-section">
+  <h2>Begin your English journey today</h2>
+  <p>Apply online now. Admission is open. Monthly payment plan available.</p>
+  <div class="cta-btns">
+    <button onclick="openModal('signup')" style="padding:12px 28px;background:#fff;border:none;border-radius:4px;color:var(--ink);font-family:'Nunito',sans-serif;font-weight:800;font-size:.92rem;cursor:pointer;">Apply for Admission</button>
+    <button onclick="openModal('login')" style="padding:12px 26px;background:none;border:1.5px solid rgba(255,255,255,.72);border-radius:4px;color:#fff;font-family:'Nunito',sans-serif;font-weight:700;font-size:.88rem;cursor:pointer;">Student Login</button>
+    <button onclick="openModal('staff')" style="padding:12px 26px;background:none;border:1.5px solid rgba(255,255,255,.35);border-radius:4px;color:rgba(255,255,255,.7);font-family:'Nunito',sans-serif;font-weight:700;font-size:.88rem;cursor:pointer;">Staff / Recruiter</button>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer id="contact">
   <div class="footer-inner">
-    <div class="footer-grid">
-      <div class="footer-brand">
-        <img src="sla-logo.png" alt="SLA" onerror="this.style.display='none'"/>
-        <strong>Study Language Academy</strong>
-        <p>Multilingual Language Programme. Nairobi, Kenya. 9 Languages · Levels A1 to C1 · CEFR Certified.</p>
+    <div class="fg-footer">
+      <div>
+        <div class="flr"><img src="sla-logo.png" alt="SEA" onerror="this.style.display='none'"/><span>Study Language Academy</span></div>
+        <p class="fdesc">Comprehensive English Language Programme. Nairobi, Kenya. Levels A1 to C1. Certified and quality-assured.</p>
       </div>
-      <div class="footer-col">
-        <h5>Languages</h5>
+      <div class="fc">
+        <h5>Programme</h5>
         <ul>
-          <li><a href="#languages">English · Kiswahili</a></li>
-          <li><a href="#languages">Français · Arabic</a></li>
-          <li><a href="#languages">German · Spanish</a></li>
-          <li><a href="#languages">Portuguese · Greek · Hebrew</a></li>
+          <li><a href="#levels">Level 1 — Beginner</a></li>
+          <li><a href="#levels">Level 2 — Intermediate</a></li>
+          <li><a href="#levels">Level 3 — Advanced</a></li>
+          <li><a href="#fees">Fee Structure</a></li>
         </ul>
       </div>
-      <div class="footer-col">
-        <h5>Academy</h5>
+      <div class="fc">
+        <h5>Contact Us</h5>
         <ul>
-          <li><a href="#how-it-works">How It Works</a></li>
-          <li><a href="#grading">Assessment Model</a></li>
-          <li><a href="#fees">Fees</a></li>
-          <li><a onclick="openModal('signup')">Apply Now</a></li>
-        </ul>
-      </div>
-      <div class="footer-col">
-        <h5>Portal</h5>
-        <ul>
-          <li><a onclick="openModal('login')">Student Login</a></li>
-          <li><a onclick="openModal('staff')">Staff Portal</a></li>
-          <li><a onclick="openModal('recruiter-login')">Officer Login</a></li>
-          <li><a onclick="openModal('recruiter-apply')">Become an Officer</a></li>
+          <li><a href="mailto:smartdestinydealers@gmail.com">smartdestinydealers@gmail.com</a></li>
+          <li><a href="tel:+254735567826">+254 735 567 826</a></li>
+          <li><a href="#">Nairobi, Kenya</a></li>
+          <li><a href="staff.html">Staff Portal</a></li>
         </ul>
       </div>
     </div>
-    <div class="footer-bottom">
-      <span>© 2026 Study Language Academy. All rights reserved.</span>
-      <span>Nairobi, Kenya · smartdestinydealers@gmail.com</span>
+    <div class="fb">
+      <span>© 2025 Study Language Academy. All rights reserved.</span>
+      <span>Email: smartdestinydealers@gmail.com &nbsp;·&nbsp; Tel: +254 735 567 826</span>
     </div>
   </div>
 </footer>
-<div class="rec-footer">
-  📋 Are you a Recruitment Officer? <a onclick="openModal('recruiter-login')">Login to your Dashboard →</a> &nbsp;|&nbsp; Interested in partnering? <a onclick="openModal('recruiter-apply')">Apply here</a>
+
+<!-- MOBILE BOTTOM BAR -->
+<div class="mob-bottom-bar">
+  <button class="mbb-apply" onclick="openModal('signup')">✏️ Apply</button>
+  <button class="mbb-login" onclick="openModal('login')">🎓 Login</button>
+  <button class="mbb-staff" onclick="openModal('staff')">👔 Staff</button>
 </div>
 
-<!-- ── MODALS ── -->
-<div class="overlay" id="mainOverlay">
-  <div class="modal" id="mainModal">
+<!-- ═══════════════════════════════════════
+     MAIN AUTH MODAL — All Registrations
+     ═══════════════════════════════════════ -->
+<div class="overlay" id="authOverlay" onclick="if(event.target===this)closeAuthOverlay()">
+  <div class="modal" id="authModal">
+    <div class="modal-hd">
+      <h3 id="authTitle">Apply for Admission</h3>
+      <button class="modal-close" onclick="closeAuthOverlay()">×</button>
+    </div>
+    <div class="err" id="authErr"></div>
 
-    <!-- STUDENT LOGIN -->
-    <div id="loginForm">
-      <div class="modal-hd"><h3>Student Login</h3><button class="modal-close" onclick="closeModal()">✕</button></div>
-      <div class="err" id="loginErr"></div>
-      <div class="fg-"><label>Email Address</label><input type="email" id="loginEmail" placeholder="your@email.com" autocomplete="off"/></div>
-      <div class="fg-"><label>Password</label><input type="password" id="loginPass" placeholder="Your password" autocomplete="off"/></div>
-      <button class="btn-full" onclick="doLogin()">Log In to Student Portal</button>
-      <div class="ff">New student? <a onclick="switchTab('signup')">Apply here</a></div>
+    <!-- Login / Register tabs (student login flow) -->
+    <div class="tabs" id="authTabs" style="display:none;">
+      <button class="tab active" id="tabL" onclick="switchTab('login')">Login</button>
+      <button class="tab" id="tabS" onclick="switchTab('signup')">New Application</button>
     </div>
 
-    <!-- SIGNUP -->
-    <div id="signupForm" style="display:none;">
-      <div class="modal-hd"><h3>Begin Your Journey</h3><button class="modal-close" onclick="closeModal()">✕</button></div>
-      <div class="info-sm">Free to apply. Pay only after admission is confirmed.</div>
-      <div class="err" id="authErr"></div>
-      <div class="fg-">
-        <label>Language You Want to Learn *</label>
-        <div class="lang-picker" id="langPicker">
-          <button class="lang-pick-btn" data-lang="english" onclick="selectLang(this)"><span class="lf">🇬🇧</span>English</button>
-          <button class="lang-pick-btn" data-lang="swahili" onclick="selectLang(this)"><span class="lf">🌍</span>Swahili</button>
-          <button class="lang-pick-btn" data-lang="french" onclick="selectLang(this)"><span class="lf">🇫🇷</span>French</button>
-          <button class="lang-pick-btn" data-lang="arabic" onclick="selectLang(this)"><span class="lf">🌙</span>Arabic</button>
-          <button class="lang-pick-btn" data-lang="german" onclick="selectLang(this)"><span class="lf">🇩🇪</span>German</button>
-          <button class="lang-pick-btn" data-lang="spanish" onclick="selectLang(this)"><span class="lf">🇪🇸</span>Spanish</button>
-          <button class="lang-pick-btn" data-lang="portuguese" onclick="selectLang(this)"><span class="lf">🇧🇷</span>Português</button>
-          <button class="lang-pick-btn" data-lang="greek" onclick="selectLang(this)"><span class="lf">🏛️</span>Greek</button>
-          <button class="lang-pick-btn" data-lang="hebrew" onclick="selectLang(this)"><span class="lf">✡️</span>Hebrew</button>
+    <!-- STUDENT LOGIN FORM -->
+    <div id="loginForm" style="display:none;">
+      <div class="fg-"><label>Email Address</label><input type="email" id="loginEmail" placeholder="your@email.com" autocomplete="email" onkeydown="if(event.key==='Enter')doLogin()"/></div>
+      <div class="fg-" style="position:relative;">
+        <label>Password</label>
+        <input type="password" id="loginPass" placeholder="Your password" autocomplete="current-password" onkeydown="if(event.key==='Enter')doLogin()" style="padding-right:44px;"/>
+        <button type="button" onclick="togglePw('loginPass',this)" style="position:absolute;right:10px;bottom:10px;background:none;border:none;cursor:pointer;font-size:.85rem;color:var(--muted);padding:2px 4px;">👁</button>
+      </div>
+      <button class="btn-full" onclick="doLogin()" id="btnStudentLogin">Log In to Student Portal</button>
+      <div class="ff">New student? <a onclick="switchTab('signup')">Apply here</a> &nbsp;·&nbsp; <a onclick="showForgotHelp()">Forgot password?</a></div>
+    </div>
+
+    <!-- REGISTRATION PANEL (Student / Staff / Recruiter) -->
+    <div id="signupPanel">
+      <!-- Role selector -->
+      <div class="role-tabs" id="roleTabsRow">
+        <button class="role-tab rt-student active" id="rt-student" onclick="switchRole('student')">🎓 Student</button>
+        <button class="role-tab rt-staff" id="rt-staff" onclick="switchRole('staff')">👔 Staff</button>
+        <button class="role-tab rt-recruiter" id="rt-recruiter" onclick="switchRole('recruiter')">🤝 Recruiter</button>
+      </div>
+
+      <!-- ── STUDENT SIGNUP ── -->
+      <div id="studentSignupForm">
+        <div class="info-sm">✅ Application is <strong>free</strong>. After admission is confirmed, pay <strong>50% enrolment fee</strong> to unlock your learning materials and start classes.</div>
+        <div class="fg-"><label>Full Name *</label><input type="text" id="regName" placeholder="Full name as on ID" autocomplete="name"/></div>
+        <div class="fg-"><label>Email Address *</label><input type="email" id="regEmail" placeholder="your@email.com" autocomplete="email"/></div>
+        <div class="fg-"><label>Phone Number *</label><input type="tel" id="regPhone" placeholder="+254700000000" autocomplete="tel"/></div>
+        <div class="fg-"><label>Password *</label><input type="password" id="regPass" placeholder="Min. 6 characters" autocomplete="new-password"/></div>
+        <div class="fg-"><label>Language to Study *</label>
+          <select id="regLanguage">
+            <option value="english">🇬🇧 English</option>
+            <option value="swahili">🌍 Kiswahili</option>
+          </select>
+        </div>
+        <div class="fg-"><label>Applying for Level *</label>
+          <select id="regLevel">
+            <option value="1">Level 1 — Foundation (A1–A2)</option>
+            <option value="2">Level 2 — Intermediate (B1)</option>
+            <option value="3">Level 3 — Advanced (B2–C1)</option>
+          </select>
+        </div>
+        <div class="fg-"><label>Profile Photo <span style="color:var(--muted);font-weight:400;">(optional)</span></label>
+          <div class="opt-photo">
+            <div class="photo-preview" id="photoPreview">📷</div>
+            <div style="flex:1;">
+              <input type="file" id="regPhoto" accept="image/*" onchange="previewPhoto(this)" style="font-size:.8rem;width:100%;"/>
+              <div class="file-hint">JPG or PNG · max 2 MB</div>
+            </div>
+          </div>
+        </div>
+        <div class="fg-"><label>Recruiter Code <span style="color:var(--muted);font-weight:400;">(optional — if referred)</span></label><input type="text" id="regRecruiter" placeholder="e.g. REC001" style="text-transform:uppercase;"/></div>
+        <button class="btn-full" id="btnStudentSubmit" onclick="doStudentSignup()">Submit Application</button>
+        <div class="ff">Already admitted? <a onclick="switchTab('login')">Log in here</a></div>
+      </div>
+
+      <!-- ── STAFF SIGNUP ── -->
+      <div id="staffSignupForm" style="display:none;">
+        <div class="info-sm">Staff accounts require admin approval before activation. You will be contacted within 1–2 business days.</div>
+        <div class="fg-"><label>Full Name *</label><input type="text" id="sfRegName" placeholder="Full name" autocomplete="name"/></div>
+        <div class="fg-"><label>Email Address *</label><input type="email" id="sfRegEmail" placeholder="your@email.com" autocomplete="email"/></div>
+        <div class="fg-"><label>Phone Number *</label><input type="tel" id="sfRegPhone" placeholder="+254700000000" autocomplete="tel"/></div>
+        <div class="fg-"><label>Desired Password *</label><input type="password" id="sfRegPass" placeholder="Min. 6 characters" autocomplete="new-password"/></div>
+        <div class="fg-"><label>Applying for Role *</label>
+          <select id="sfRegRole">
+            <option value="instructor">Instructor</option>
+            <option value="admissions">Admissions &amp; Communications</option>
+            <option value="finance">Finance Officer</option>
+            <option value="academic_dean">Academic Dean</option>
+          </select>
+        </div>
+        <div class="fg-"><label>Qualifications / Brief Bio *</label><textarea id="sfRegBio" placeholder="Describe your relevant experience and qualifications..."></textarea></div>
+        <button class="btn-full" id="btnStaffSubmit" onclick="doStaffSignup()" style="background:var(--blue);">Submit Staff Application</button>
+        <div class="ff">Already have an account? <a onclick="openStaffLogin()">Staff login</a></div>
+      </div>
+
+      <!-- ── RECRUITER SIGNUP ── -->
+      <div id="recruiterSignupForm" style="display:none;">
+        <div class="info-sm">Earn <strong>10% commission</strong> on every student you refer who completes enrolment. Applications reviewed within 24 hours.</div>
+        <div class="fg-"><label>Full Name *</label><input type="text" id="rcRegName" placeholder="Your full name" autocomplete="name"/></div>
+        <div class="fg-"><label>Email Address *</label><input type="email" id="rcRegEmail" placeholder="your@email.com" autocomplete="email"/></div>
+        <div class="fg-"><label>Phone Number *</label><input type="tel" id="rcRegPhone" placeholder="+254700000000" autocomplete="tel"/></div>
+        <div class="fg-"><label>National ID / Passport No. *</label><input type="text" id="rcRegId" placeholder="ID or passport number"/></div>
+        <div class="fg-"><label>How will you recruit students? <span style="color:var(--muted);font-weight:400;">(optional)</span></label><textarea id="rcRegBio" placeholder="e.g. community networks, social media, school visits..."></textarea></div>
+        <button class="btn-full" id="btnRecruiterSubmit" onclick="doRecruiterSignup()" style="background:var(--purple);">Submit Recruiter Application</button>
+      </div>
+
+      <!-- ── SUCCESS SCREEN ── -->
+      <div id="regSuccessPanel" style="display:none;">
+        <div class="reg-success">
+          <div class="s-icon" id="regSuccessIcon">✅</div>
+          <h3 id="regSuccessTitle">Application Submitted!</h3>
+          <div class="adm-badge" id="regSuccessBadge" style="display:none;"></div>
+          <p id="regSuccessMsg"></p>
+          <button class="btn-full" id="regSuccessBtn" onclick="closeAuthOverlay()">Close</button>
         </div>
       </div>
-      <div class="fg-"><label>Study In *</label><select id="regLearningLang"><option value="">— Teaching language —</option><option value="english">English</option><option value="swahili">Kiswahili</option><option value="french">Français</option></select></div>
-      <div class="fg-"><label>Full Name *</label><input type="text" id="regName" placeholder="Full name as on ID" autocomplete="off"/></div>
-      <div class="fg-"><label>Email Address *</label><input type="email" id="regEmail" placeholder="your@email.com" autocomplete="off"/></div>
-      <div class="fg-"><label>Phone Number *</label><input type="tel" id="regPhone" placeholder="+254700000000" autocomplete="off"/></div>
-      <div class="fg-"><label>Password *</label><input type="password" id="regPass" placeholder="Min. 6 characters" autocomplete="off"/></div>
-      <div class="fg-"><label>Starting Level *</label><select id="regLevel"><option value="1">Level 1 — Foundation (A1–A2) · $99</option><option value="2">Level 2 — Intermediate (B1) · $120</option><option value="3">Level 3 — Advanced (B2–C1) · $120</option></select></div>
-      <div class="fg-"><label>Recruitment Officer Code <span style="color:var(--muted);font-weight:400;">(optional)</span></label><input type="text" id="regRecruiter" placeholder="e.g. REC001" style="text-transform:uppercase;" autocomplete="off"/></div>
-      <button class="btn-full" onclick="doSignup()">Submit Application</button>
-      <div class="ff">Already admitted? <a onclick="switchTab('login')">Log in here</a></div>
     </div>
-
-    <!-- STAFF LOGIN -->
-    <div id="staffForm" style="display:none;">
-      <div class="modal-hd"><h3>Staff Portal Login</h3><button class="modal-close" onclick="closeModal()">✕</button></div>
-      <div class="err" id="staffErr"></div>
-      <div class="err" id="staffErr2" style="background:#fff3e6;color:#7a3a00;border-color:#f5c87a;">Restricted access. Authorised staff only.</div>
-      <div class="fg-"><label>Staff Email</label><input type="email" id="staffEmail" placeholder="staff@studylanguage.ke" autocomplete="off" readonly onfocus="this.removeAttribute('readonly')"/></div>
-      <div class="fg-"><label>Password</label><input type="password" id="staffPass" placeholder="Staff password" autocomplete="off"/></div>
-      <button class="btn-full" onclick="doStaffLogin()">Log In to Staff Portal</button>
-    </div>
-
-    <!-- RECRUITER LOGIN -->
-    <div id="recruiterLoginForm" style="display:none;">
-      <div class="modal-hd"><h3>Recruitment Officer Login</h3><button class="modal-close" onclick="closeModal()">✕</button></div>
-      <div class="err" id="recLoginErr"></div>
-      <div class="fg-"><label>Email</label><input type="email" id="recLoginEmail" placeholder="your@email.com" autocomplete="off" readonly onfocus="this.removeAttribute('readonly')"/></div>
-      <div class="fg-"><label>Password</label><input type="password" id="recLoginPass" placeholder="Your password" autocomplete="off"/></div>
-      <button class="btn-full" onclick="doRecruiterLogin()">Login to Officer Dashboard</button>
-      <div class="ff">Not yet an officer? <a onclick="switchTab('recruiter-apply')">Apply here</a></div>
-    </div>
-
-    <!-- RECRUITER APPLY -->
-    <div id="recruiterApplyForm" style="display:none;">
-      <div class="modal-hd"><h3>Recruitment Officer Application</h3><button class="modal-close" onclick="closeModal()">✕</button></div>
-      <div class="info-sm">Applications are reviewed by the Admissions team. Approved officers receive an official appointment letter.</div>
-      <div class="err" id="recApplyErr"></div>
-      <div class="fg-"><label>Full Name *</label><input type="text" id="recApplyName" placeholder="Your full name" autocomplete="off"/></div>
-      <div class="fg-"><label>Email Address *</label><input type="email" id="recApplyEmail" placeholder="your@email.com" autocomplete="off"/></div>
-      <div class="fg-"><label>Phone Number *</label><input type="tel" id="recApplyPhone" placeholder="+254700000000" autocomplete="off"/></div>
-      <div class="fg-"><label>Location *</label><input type="text" id="recApplyLocation" placeholder="e.g. Nairobi, Kenya" autocomplete="off"/></div>
-      <div class="fg-"><label>Background *</label><select id="recApplyMethod"><option value="">— Select —</option><option value="education">Education / Teaching</option><option value="community">Community Leader / Pastor / Counsellor</option><option value="business">Business / Entrepreneur</option><option value="student">University / College Student</option><option value="other">Other</option></select></div>
-      <div class="fg-"><label>Password *</label><input type="password" id="recApplyPass" placeholder="Min. 6 characters" autocomplete="off"/></div>
-      <button class="btn-full" onclick="doRecruiterApply()">Submit Application</button>
-      <div class="ff">Already an officer? <a onclick="switchTab('recruiter-login')">Login here</a></div>
-    </div>
-
   </div>
 </div>
 
-<!-- ── SCRIPTS ── -->
-<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+<!-- STAFF / RECRUITER PORTAL MODAL -->
+<div class="overlay" id="staffOverlay" onclick="if(event.target===this)this.classList.remove('open')">
+  <div class="modal">
+    <div class="modal-hd">
+      <h3>Staff &amp; Recruiter Portal</h3>
+      <button class="modal-close" onclick="document.getElementById('staffOverlay').classList.remove('open')">×</button>
+    </div>
+    <div class="err" id="staffErr"></div>
+    <div class="tabs" style="display:flex;">
+      <button class="tab active" id="sTabLogin" onclick="switchStaffTab('login')">Staff Login</button>
+      <button class="tab" id="sTabRec" onclick="switchStaffTab('recruiter')">Recruiter Login</button>
+      <button class="tab" id="sTabNew" onclick="switchStaffTab('new')">Register</button>
+    </div>
+
+    <!-- Staff login -->
+    <div id="staffLoginForm">
+      <div style="background:var(--red-lt);border:1px solid #f5c6c6;border-radius:var(--r-sm);padding:.55rem .85rem;font-size:.75rem;color:var(--red);margin-bottom:.75rem;">Restricted access. Authorised staff only.</div>
+      <div class="fg-"><label>Staff Email</label><input type="email" id="staffEmail" placeholder="staff@studyenglish.ac.ke" autocomplete="email"/></div>
+      <div class="fg-" style="position:relative;">
+        <label>Password</label>
+        <input type="password" id="staffPass" autocomplete="current-password" onkeydown="if(event.key==='Enter')doStaffLogin()" style="padding-right:44px;"/>
+        <button type="button" onclick="togglePw('staffPass',this)" style="position:absolute;right:10px;bottom:10px;background:none;border:none;cursor:pointer;font-size:.85rem;color:var(--muted);padding:2px 4px;">👁</button>
+      </div>
+      <button class="btn-full" onclick="doStaffLogin()" style="background:#c0392b;">Log In to Staff Portal</button>
+    </div>
+
+    <!-- Recruiter login -->
+    <div id="recruiterLoginForm" style="display:none;">
+      <div class="info-sm">Log in to view your referral stats and commission earnings.</div>
+      <div class="fg-"><label>Email Address</label><input type="email" id="recLoginEmail" placeholder="your@email.com" autocomplete="email"/></div>
+      <div class="fg-"><label>Password</label><input type="password" id="recLoginPass" autocomplete="current-password" onkeydown="if(event.key==='Enter')doRecruiterLogin()"/></div>
+      <button class="btn-full" onclick="doRecruiterLogin()" style="background:var(--purple);">Log In as Recruiter</button>
+    </div>
+
+    <!-- Register redirect -->
+    <div id="staffNewPanel" style="display:none;">
+      <div style="text-align:center;padding:.4rem 0 1rem;">
+        <p style="font-size:.85rem;color:var(--muted);margin-bottom:1.1rem;line-height:1.7;">Submit an application to join as a staff member or become a student recruiter. Admin will review and activate your account.</p>
+        <button class="btn-full" style="background:var(--blue);margin-bottom:.6rem;" onclick="document.getElementById('staffOverlay').classList.remove('open');openModal('signup');setTimeout(()=>switchRole('staff'),80);">Apply as Staff Member</button>
+        <button class="btn-full" style="background:var(--purple);" onclick="document.getElementById('staffOverlay').classList.remove('open');openModal('signup');setTimeout(()=>switchRole('recruiter'),80);">Apply as Recruiter</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SCRIPTS -->
 <script src="sea-shared.js"></script>
 <script src="sea-firebase.js"></script>
+<script src="sea-curriculum.js"></script>
 <script>
-// ── NAV SCROLL EFFECT ─────────────────────────────────────────
-window.addEventListener('scroll',()=>{
-  document.getElementById('mainNav').classList.toggle('scrolled',window.scrollY>20);
-});
-
-// ── MOBILE NAV ────────────────────────────────────────────────
-function toggleMobileNav(){
-  const d=document.getElementById('mobileDrawer');
-  const b=document.getElementById('mobNavBtn');
-  d.classList.toggle('open');
-  b.classList.toggle('open');
-}
-document.addEventListener('click',e=>{
-  const d=document.getElementById('mobileDrawer');
-  const b=document.getElementById('mobNavBtn');
-  if(!d.contains(e.target)&&!b.contains(e.target)) d.classList.remove('open');
-});
-
-// ── HERO PARALLAX ─────────────────────────────────────────────
-const heroBg=document.getElementById('heroBg');
-window.addEventListener('scroll',()=>{
-  if(heroBg) heroBg.style.transform='scale(1.02) translateY('+window.scrollY*.25+'px)';
-},{passive:true});
-
-// ── EMAILJS ───────────────────────────────────────────────────
-const EJS={publicKey:'YOUR_EMAILJS_PUBLIC_KEY',serviceId:'YOUR_EMAILJS_SERVICE_ID',studentWelcomeTemplate:'YOUR_STUDENT_WELCOME_TEMPLATE',recruiterApplyTemplate:'YOUR_RECRUITER_APPLY_TEMPLATE',adminAlertTemplate:'YOUR_ADMIN_ALERT_TEMPLATE'};
-async function sendEmail(templateId,params){try{if(EJS.publicKey.startsWith('YOUR_'))return;emailjs.init(EJS.publicKey);await emailjs.send(EJS.serviceId,templateId,params);}catch(e){console.warn('[Email]',e);}}
-async function sendStudentWelcome(s,lang){await sendEmail(EJS.studentWelcomeTemplate,{to_name:s.name,to_email:s.email,admission_number:s.admissionNumber,language:lang,level:'Level '+s.enrolledLevel,login_url:window.location.origin+'/student.html',academy_email:'smartdestinydealers@gmail.com',academy_phone:'+254735567826'});}
-async function sendAdminAlert(subj,body){await sendEmail(EJS.adminAlertTemplate,{to_email:'smartdestinydealers@gmail.com',subject:subj,body});}
-async function sendRecruiterConfirmation(rec){await sendEmail(EJS.recruiterApplyTemplate,{to_name:rec.name,to_email:rec.email,recruiter_code:rec.code,login_url:window.location.origin+'/recruiter.html',academy_email:'smartdestinydealers@gmail.com'});}
-
-// ── LANGUAGE SELECTION ────────────────────────────────────────
-let _selectedLang='';
-function selectLang(btn){
-  document.querySelectorAll('.lang-pick-btn').forEach(b=>b.classList.remove('selected'));
-  btn.classList.add('selected');
-  _selectedLang=btn.dataset.lang;
-}
-function pickLang(langId){
-  openModal('signup');
-  setTimeout(()=>{
-    const btn=document.querySelector(`.lang-pick-btn[data-lang="${langId}"]`);
-    if(btn) selectLang(btn);
-  },100);
-}
-
-// ── MODAL CONTROL ─────────────────────────────────────────────
-const FORMS=['loginForm','signupForm','staffForm','recruiterLoginForm','recruiterApplyForm'];
-function openModal(tab){document.getElementById('mainOverlay').classList.add('open');switchTab(tab);}
-function closeModal(){document.getElementById('mainOverlay').classList.remove('open');}
-function switchTab(tab){
-  FORMS.forEach(f=>document.getElementById(f).style.display='none');
-  const map={login:'loginForm',signup:'signupForm',staff:'staffForm','recruiter-login':'recruiterLoginForm','recruiter-apply':'recruiterApplyForm'};
-  const t=map[tab];if(t)document.getElementById(t).style.display='block';
-  document.querySelectorAll('.err').forEach(e=>e.style.display='none');
-}
-document.getElementById('mainOverlay').addEventListener('click',e=>{if(e.target===document.getElementById('mainOverlay'))closeModal();});
-document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModal();});
-function showErr(id,msg){const el=document.getElementById(id);if(el){el.textContent=msg;el.style.display='block';}}
-
-// ── INIT ──────────────────────────────────────────────────────
-let _initDone=false;
+// Load Firebase/EmailJS from CDN only when online — never block page
+(function(){
+  if(!navigator.onLine) return;
+  ['https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js',
+   'https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js',
+   'https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js',
+   'https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js'
+  ].forEach(src=>{const s=document.createElement('script');s.src=src;s.async=true;document.head.appendChild(s);});
+})();
+</script>
+<script>
+let _SEA_INIT_DONE=false;
 async function ensureInit(){
-  if(_initDone)return;
-  try{if(typeof SEA_FIREBASE_INIT==='function')await SEA_FIREBASE_INIT();}catch(e){console.warn('[SLA] Offline mode');}
-  if(DB.getStaff().length===0){DB.saveStaffMember({id:'staff_001',name:'Administrator',email:'musautom54@gmail.com',phone:'+254735567826',pass:'sea2026admin',role:'chief_admin',isActive:true,isSuspended:false,assignedStudents:[],assignedClasses:[],joinDate:Date.now(),lastLogin:null});}
-  _initDone=true;
+  if(_SEA_INIT_DONE) return;
+  try{
+    // 2-second timeout — if Firebase CDN hasn't loaded yet, skip it and use localStorage
+    await Promise.race([
+      (typeof SEA_FIREBASE_INIT==='function' ? SEA_FIREBASE_INIT() : Promise.resolve()),
+      new Promise(r=>setTimeout(r,2000))
+    ]);
+  }catch(e){ console.warn('[SLA] Init fallback to localStorage:',e.message); }
+  _SEA_INIT_DONE=true;
 }
 
-// ── STUDENT LOGIN ─────────────────────────────────────────────
-async function doLogin(){
-  await ensureInit();
-  const email=document.getElementById('loginEmail').value.trim().toLowerCase();
-  const pass=document.getElementById('loginPass').value;
-  if(!email||!pass){showErr('loginErr','Please enter your email and password.');return;}
-  const btn=document.querySelector('#loginForm .btn-full');
-  if(btn){btn.textContent='Logging in...';btn.disabled=true;}
+// ── Force-write both admin accounts every page load ─────────────
+// This guarantees credentials are always correct regardless of
+// what any previous version may have stored.
+(function seedAdminsNow(){
   try{
-    let student;
-    if(typeof SEA_STUDENT_LOGIN==='function'){student=await SEA_STUDENT_LOGIN(email,pass);}
-    else{student=DB.getStudents().find(s=>s.email===email&&s.pass===pass);if(!student)throw new Error('Incorrect email or password.');}
-    DB.setCurrentUser(student.id);window.location.href='student.html';
-  }catch(err){
-    showErr('loginErr',err.message||'Incorrect email or password.');
-    if(btn){btn.textContent='Log In to Student Portal';btn.disabled=false;}
+    DB.saveStaffMember({id:'staff_admin_001',name:'Chief Admin',email:'admin@studylanguage.ac.ke',phone:'+254735567826',pass:'sla2025admin',role:'chief_admin',isActive:true,isSuspended:false,assignedStudents:[],assignedClasses:[],joinDate:Date.now(),lastLogin:null});
+    DB.saveStaffMember({id:'staff_owner_001',name:'Administrator',email:'musautom54@gmail.com',phone:'+254735567826',pass:'sea2026admin',role:'chief_admin',isActive:true,isSuspended:false,assignedStudents:[],assignedClasses:[],joinDate:Date.now(),lastLogin:null});
+  }catch(e){ console.warn('[SLA] Seed error:',e.message); }
+})();
+let _photoData=null;
+
+// ── Mobile nav ──
+function toggleMobNav(){
+  const btn=document.getElementById('hamburgerBtn');
+  const drawer=document.getElementById('mobNavDrawer');
+  const ov=document.getElementById('mobNavOverlay');
+  const open=drawer.classList.toggle('open');
+  ov.classList.toggle('open',open);
+  btn.classList.toggle('open',open);
+}
+function closeMobNav(){
+  document.getElementById('hamburgerBtn').classList.remove('open');
+  document.getElementById('mobNavDrawer').classList.remove('open');
+  document.getElementById('mobNavOverlay').classList.remove('open');
+}
+
+// ── Modal helpers ──
+function openModal(t){
+  closeMobNav();
+  if(t==='staff'){
+    document.getElementById('staffOverlay').classList.add('open');
+    document.getElementById('staffErr').style.display='none';
+    switchStaffTab('login');
+    return;
+  }
+  const overlay=document.getElementById('authOverlay');
+  overlay.classList.add('open');
+  document.getElementById('authErr').style.display='none';
+  hideSuccess();
+  if(t==='login'){
+    document.getElementById('authTitle').textContent='Student Login';
+    document.getElementById('authTabs').style.display='flex';
+    switchTab('login');
+  } else {
+    document.getElementById('authTitle').textContent='Apply for Admission';
+    document.getElementById('authTabs').style.display='none';
+    switchTab('signup');
+    switchRole('student');
   }
 }
+function openStaffLogin(){document.getElementById('authOverlay').classList.remove('open');openModal('staff');}
+function closeAuthOverlay(){document.getElementById('authOverlay').classList.remove('open');hideSuccess();}
+function hideSuccess(){document.getElementById('regSuccessPanel').style.display='none';}
 
-// ── STUDENT SIGNUP ────────────────────────────────────────────
-async function doSignup(){
+function switchTab(t){
+  document.getElementById('loginForm').style.display=t==='login'?'block':'none';
+  document.getElementById('signupPanel').style.display=t==='signup'?'block':'none';
+  const tL=document.getElementById('tabL'),tS=document.getElementById('tabS');
+  if(tL)tL.className='tab'+(t==='login'?' active':'');
+  if(tS)tS.className='tab'+(t==='signup'?' active':'');
+  document.getElementById('authErr').style.display='none';
+}
+
+function switchRole(role){
+  ['student','staff','recruiter'].forEach(r=>{
+    document.getElementById(r+'SignupForm').style.display=(r===role)?'block':'none';
+    const btn=document.getElementById('rt-'+r);
+    if(btn)btn.classList.toggle('active',r===role);
+  });
+  hideSuccess();
+  document.getElementById('authErr').style.display='none';
+  document.getElementById('roleTabsRow').style.display='flex';
+  const titles={student:'Apply for Admission',staff:'Staff Registration',recruiter:'Recruiter Registration'};
+  document.getElementById('authTitle').textContent=titles[role];
+}
+
+function switchStaffTab(t){
+  ['staffLoginForm','recruiterLoginForm','staffNewPanel'].forEach(id=>document.getElementById(id).style.display='none');
+  const map={login:'staffLoginForm',recruiter:'recruiterLoginForm',new:'staffNewPanel'};
+  document.getElementById(map[t]).style.display='block';
+  ['sTabLogin','sTabRec','sTabNew'].forEach(id=>document.getElementById(id).classList.remove('active'));
+  const tabMap={login:'sTabLogin',recruiter:'sTabRec',new:'sTabNew'};
+  document.getElementById(tabMap[t]).classList.add('active');
+  document.getElementById('staffErr').style.display='none';
+}
+
+function showErr(id,msg){const e=document.getElementById(id);if(e){e.textContent=msg;e.style.display='block';e.scrollIntoView({block:'nearest',behavior:'smooth'});}}
+
+function previewPhoto(input){
+  const file=input.files[0];if(!file)return;
+  if(file.size>2*1024*1024){showErr('authErr','Photo must be under 2MB.');return;}
+  const reader=new FileReader();
+  reader.onload=e=>{_photoData=e.target.result;document.getElementById('photoPreview').innerHTML='<img src="'+_photoData+'"/>';};
+  reader.readAsDataURL(file);
+}
+
+function showRegSuccess(icon,title,badge,msg,btnText,btnAction){
+  ['studentSignupForm','staffSignupForm','recruiterSignupForm'].forEach(id=>document.getElementById(id).style.display='none');
+  document.getElementById('roleTabsRow').style.display='none';
+  document.getElementById('authTabs').style.display='none';
+  document.getElementById('authErr').style.display='none';
+  document.getElementById('regSuccessIcon').textContent=icon;
+  document.getElementById('regSuccessTitle').textContent=title;
+  const badgeEl=document.getElementById('regSuccessBadge');
+  if(badge){badgeEl.textContent=badge;badgeEl.style.display='inline-block';}
+  else{badgeEl.style.display='none';}
+  document.getElementById('regSuccessMsg').textContent=msg;
+  const btn=document.getElementById('regSuccessBtn');
+  btn.textContent=btnText||'Close';
+  btn.onclick=btnAction||closeAuthOverlay;
+  document.getElementById('regSuccessPanel').style.display='block';
+  document.getElementById('authModal').scrollTop=0;
+}
+
+// ═══ STUDENT SIGNUP ═══
+async function doStudentSignup(){
   await ensureInit();
   const name=document.getElementById('regName').value.trim();
   const email=document.getElementById('regEmail').value.trim().toLowerCase();
   const phone=document.getElementById('regPhone').value.trim();
   const pass=document.getElementById('regPass').value;
-  const learningLang=document.getElementById('regLearningLang').value;
   const level=parseInt(document.getElementById('regLevel').value);
+  const language=document.getElementById('regLanguage')?.value||'english';
   const recCode=document.getElementById('regRecruiter').value.trim().toUpperCase();
-  if(!_selectedLang){showErr('authErr','Please select the language you want to learn.');return;}
-  if(!learningLang){showErr('authErr','Please select the language you will study in.');return;}
-  if(_selectedLang===learningLang){showErr('authErr','Your study language must differ from the language you want to learn.');return;}
   if(!name||!email||!phone||!pass){showErr('authErr','Please fill in all required fields.');return;}
   if(pass.length<6){showErr('authErr','Password must be at least 6 characters.');return;}
-  if(recCode&&!DB.getRecruiterByCode(recCode)){showErr('authErr','Recruitment Officer code not found. Leave blank if not applicable.');return;}
-  const btn=document.querySelector('#signupForm .btn-full');
-  if(btn){btn.textContent='Creating account...';btn.disabled=true;}
+  if(recCode&&!DB.getRecruiterByCode(recCode)){showErr('authErr','Recruiter code not found. Leave blank if not applicable.');return;}
+  const btn=document.getElementById('btnStudentSubmit');
+  btn.textContent='Creating account…';btn.disabled=true;
   try{
     const admNo=generateAdmissionNumber();
-    const langNames={english:'English',swahili:'Kiswahili',french:'Français',arabic:'Arabic',german:'Deutsch',spanish:'Español',portuguese:'Português',greek:'Koine Greek',hebrew:'Biblical Hebrew'};
-    const langLabel=langNames[_selectedLang]||_selectedLang;
-    const s={id:generateId('std'),admissionNumber:admNo,name,email,phone,pass,targetLanguage:_selectedLang,targetLanguageLabel:langLabel,learningLanguage:learningLang,enrolledLevel:level,currentLevel:level,recruiterCode:recCode||null,photo:null,fees:{1:makeFeeRecord(1),2:makeFeeRecord(2),3:makeFeeRecord(3)},progress:{1:{units:[],examScore:null,catScores:[],examDate:null,attempts:0,contribution:0},2:{units:[],examScore:null,catScores:[],examDate:null,attempts:0,contribution:0},3:{units:[],examScore:null,catScores:[],examDate:null,attempts:0,contribution:0}},assignedInstructor:null,assignedClass:null,questions:[],notifications:[{id:'notif_welcome',message:'Welcome to Study Language Academy, '+name+'! Your admission number is '+admNo+'. You are enrolled to study '+langLabel+' at Level '+level+'. Pay $'+enrollFee(level).toFixed(2)+' to unlock your materials. Contact: smartdestinydealers@gmail.com',date:Date.now(),read:false}],joinDate:Date.now(),lastLogin:null,isActive:true};
-    if(typeof SEA_SIGNUP==='function'){await SEA_SIGNUP(email,pass,s);}else{DB.saveStudent(s);}
-    sendStudentWelcome(s,langLabel);
-    DB.addNotification({type:'new_student',title:'New Student Registered',message:name+' applied for '+langLabel+' Level '+level+'. Adm: '+admNo+'. Email: '+email,date:Date.now(),read:false});
-    sendAdminAlert('New Student Registration — '+admNo,'Name: '+name+'\nEmail: '+email+'\nPhone: '+phone+'\nLanguage: '+langLabel+'\nLevel: '+level+'\nRecruiter: '+(recCode||'None'));
-    logActivity('system','System','system','New student registered: '+name,'Adm: '+admNo+' | Lang: '+langLabel+' | Level '+level);
-    DB.setCurrentUser(s.id);window.location.href='student.html';
+    const enrolAmt=enrollFee(level);
+    const langLabel=language==='swahili'?'Kiswahili':'English';
+    const s={
+      id:generateId('std'),admissionNumber:admNo,name,email,phone,pass,
+      language,
+      enrolledLevel:level,currentLevel:level,recruiterCode:recCode||null,photo:_photoData||null,
+      fees:{1:makeFeeRecord(1),2:makeFeeRecord(2),3:makeFeeRecord(3)},
+      progress:{1:{units:[],examScore:null,examDate:null,attempts:0},2:{units:[],examScore:null,examDate:null,attempts:0},3:{units:[],examScore:null,examDate:null,attempts:0}},
+      assignedInstructor:null,assignedClass:null,
+      notifications:[{id:'notif_welcome',message:'Welcome to Study Language Academy! Your admission number is '+admNo+'. You are enrolled in '+langLabel+' Level '+level+'. Pay $'+enrolAmt.toFixed(2)+' (50% enrolment fee) to unlock your materials. Contact: '+SEA_CONTACT.email+' | '+SEA_CONTACT.phone,date:Date.now(),read:false}],
+      joinDate:Date.now(),lastLogin:null,isActive:true,
+    };
+    if(typeof SEA_SIGNUP==='function') await SEA_SIGNUP(email,pass,s);
+    else DB.saveStudent(s);
+    DB.setCurrentUser(s.id);
+    if(typeof logActivity==='function') logActivity('system','System','system','Student registered: '+name,'Adm: '+admNo+' '+langLabel+' Level '+level);
+    // ── Send automated welcome email via EmailJS ──
+    if(typeof sendRegistrationEmail==='function'){
+      sendRegistrationEmail(s).catch(err=>console.warn('[SLA] Email skipped:',err));
+    }
+    showRegSuccess('🎉','Application Successful!',admNo,
+      'Welcome to Study Language Academy! Your admission number is shown above. You are enrolled in '+langLabel+' Level '+level+'. Contact us to pay your first instalment ($'+enrolAmt.toFixed(2)+') and unlock your materials.\nEmail: '+SEA_CONTACT.email+' | Phone: '+SEA_CONTACT.phone,
+      'Go to Student Portal',()=>window.location.href='student.html');
   }catch(err){
     showErr('authErr',err.message||'Registration failed. Please try again.');
-    if(btn){btn.textContent='Submit Application';btn.disabled=false;}
+    btn.textContent='Submit Application';btn.disabled=false;
   }
 }
 
-// ── STAFF LOGIN ───────────────────────────────────────────────
-async function doStaffLogin(){
-  await ensureInit();
-  const email=document.getElementById('staffEmail').value.trim().toLowerCase();
-  const pass=document.getElementById('staffPass').value;
-  document.getElementById('staffErr').style.display='none';document.getElementById('staffErr2').style.display='none';
-  if(!email||!pass){showErr('staffErr','Please enter your email and password.');return;}
-  const btn=document.querySelector('#staffForm .btn-full');
-  if(btn){btn.textContent='Logging in...';btn.disabled=true;}
+// ═══ STAFF SIGNUP (pending) ═══
+function doStaffSignup(){
+  const name=document.getElementById('sfRegName').value.trim();
+  const email=document.getElementById('sfRegEmail').value.trim().toLowerCase();
+  const phone=document.getElementById('sfRegPhone').value.trim();
+  const pass=document.getElementById('sfRegPass').value;
+  const role=document.getElementById('sfRegRole').value;
+  const bio=document.getElementById('sfRegBio').value.trim();
+  if(!name||!email||!phone||!pass){showErr('authErr','Please fill in all required fields.');return;}
+  if(pass.length<6){showErr('authErr','Password must be at least 6 characters.');return;}
+  if(!bio){showErr('authErr','Please provide a brief bio or qualifications.');return;}
+  if(DB.getStaff().find(s=>s.email===email)){showErr('authErr','An account with this email already exists.');return;}
+  if(DB.getPendingApps().find(a=>a.email===email)){showErr('authErr','An application with this email is already pending review.');return;}
+  const btn=document.getElementById('btnStaffSubmit');
+  btn.textContent='Submitting…';btn.disabled=true;
+  const roleLabel=typeof STAFF_ROLES!=='undefined'&&STAFF_ROLES[role]?STAFF_ROLES[role].label:role;
+  DB.addPendingApp({id:generateId('papp'),type:'staff',name,email,phone,pass,role,bio,status:'pending',submittedAt:Date.now(),reviewedBy:null,reviewedAt:null});
+  showRegSuccess('📋','Application Received!',null,
+    'Thank you, '+name+'! Your staff application for the role of "'+roleLabel+'" has been submitted. An admin will review it within 1–2 business days and contact you at '+email+'.',
+    'Close');
+  btn.textContent='Submit Staff Application';btn.disabled=false;
+}
+
+// ═══ RECRUITER SIGNUP (pending) ═══
+function doRecruiterSignup(){
+  const name=document.getElementById('rcRegName').value.trim();
+  const email=document.getElementById('rcRegEmail').value.trim().toLowerCase();
+  const phone=document.getElementById('rcRegPhone').value.trim();
+  const idNo=document.getElementById('rcRegId').value.trim();
+  const bio=document.getElementById('rcRegBio').value.trim();
+  if(!name||!email||!phone||!idNo){showErr('authErr','Please fill in all required fields.');return;}
+  if(DB.getRecruiters().find(r=>r.email===email)){showErr('authErr','A recruiter account with this email already exists.');return;}
+  if(DB.getPendingApps().find(a=>a.email===email&&a.type==='recruiter')){showErr('authErr','An application with this email is already pending.');return;}
+  const btn=document.getElementById('btnRecruiterSubmit');
+  btn.textContent='Submitting…';btn.disabled=true;
+  DB.addPendingApp({id:generateId('papp'),type:'recruiter',name,email,phone,idNo,bio,status:'pending',submittedAt:Date.now(),reviewedBy:null,reviewedAt:null});
+  showRegSuccess('🤝','Recruiter Application Received!',null,
+    'Thank you, '+name+'! Your recruiter application has been submitted. Once approved you will receive a unique recruiter code to share with students. We will contact you at '+email+' within 24 hours.',
+    'Close');
+  btn.textContent='Submit Recruiter Application';btn.disabled=false;
+}
+
+// ── Toggle show/hide password ──
+function togglePw(inputId,btn){const inp=document.getElementById(inputId);if(!inp)return;const show=inp.type==='password';inp.type=show?'text':'password';btn.textContent=show?'🙈':'👁';}
+
+// ── Forgot password helper ──
+function showForgotHelp(){showErr('authErr','Forgot your password? Contact us:\n📧 '+SEA_CONTACT.email+'  📞 '+SEA_CONTACT.phone+'\nProvide your full name and admission number and we will reset it.');}
+
+// ═══ STUDENT LOGIN — direct DB, no Firebase dependency ═══
+async function doLogin(){
+  const email=(document.getElementById('loginEmail').value||'').trim().toLowerCase();
+  const pass=(document.getElementById('loginPass').value||'');
+  document.getElementById('authErr').style.display='none';
+  if(!email){showErr('authErr','Please enter your email address.');return;}
+  if(!pass){showErr('authErr','Please enter your password.');return;}
+  const btn=document.getElementById('btnStudentLogin');
+  if(btn){btn.textContent='Logging in…';btn.disabled=true;}
   try{
-    let staff;
-    if(typeof SEA_STAFF_LOGIN==='function'){staff=await SEA_STAFF_LOGIN(email,pass);}
-    else{staff=DB.getStaff().find(s=>s.email===email&&s.pass===pass);if(!staff){document.getElementById('staffErr').textContent='Incorrect email or password.';document.getElementById('staffErr').style.display='block';document.getElementById('staffErr2').style.display='block';if(btn){btn.textContent='Log In to Staff Portal';btn.disabled=false;}return;}}
-    if(staff.isSuspended){showErr('staffErr','Account suspended. Contact the Chief Admin.');if(btn){btn.textContent='Log In to Staff Portal';btn.disabled=false;}return;}
-    staff.lastLogin=Date.now();DB.saveStaffMember(staff);DB.setCurrentStaff(staff.id);window.location.href='staff.html';
+    const all=DB.getStudents();
+    console.log('[SLA] Login attempt:',email,'| Students in DB:',all.length);
+    const student=all.find(s=>(s.email||'').toLowerCase().trim()===email);
+    if(!student){
+      console.warn('[SLA] Not found. Stored emails:',all.map(s=>s.email));
+      throw new Error('No account found for "'+email+'". Check your email address or click Apply to register.');
+    }
+    if((student.pass||'')!==pass) throw new Error('Incorrect password. Try again or contact us to reset it.');
+    if(!student.isActive) throw new Error('Account suspended. Please contact Study Language Academy.');
+    student.lastLogin=Date.now();DB.saveStudent(student);DB.setCurrentUser(student.id);
+    console.log('[SLA] Student login OK:',student.name);
+    window.location.href='student.html';
   }catch(err){
-    document.getElementById('staffErr').textContent=err.message||'Incorrect email or password.';document.getElementById('staffErr').style.display='block';document.getElementById('staffErr2').style.display='block';
+    showErr('authErr',err.message||'Login failed. Please try again.');
+    if(btn){btn.textContent='Log In to Student Portal';btn.disabled=false;}
+  }
+}
+
+// ═══ STAFF LOGIN — direct DB, no Firebase dependency ═══
+async function doStaffLogin(){
+  const email=(document.getElementById('staffEmail').value||'').trim().toLowerCase();
+  const pass=(document.getElementById('staffPass').value||'');
+  document.getElementById('staffErr').style.display='none';
+  if(!email){showErr('staffErr','Please enter your email address.');return;}
+  if(!pass){showErr('staffErr','Please enter your password.');return;}
+  const btn=document.querySelector('#staffLoginForm .btn-full');
+  if(btn){btn.textContent='Logging in…';btn.disabled=true;}
+  try{
+    const all=DB.getStaff();
+    console.log('[SLA] Staff login attempt:',email,'| Staff in DB:',all.length);
+    const member=all.find(s=>(s.email||'').toLowerCase().trim()===email);
+    if(!member){
+      console.warn('[SLA] Staff not found. Stored:',all.map(s=>s.email+'('+s.role+')'));
+      throw new Error('No staff account found for "'+email+'". Contact the Chief Admin.');
+    }
+    if(member.isSuspended) throw new Error('Account suspended. Contact the Chief Admin.');
+    if(!member.isActive) throw new Error('Account not yet active. Contact the Chief Admin.');
+    if((member.pass||'')!==pass) throw new Error('Incorrect password. Please try again.');
+    member.lastLogin=Date.now();DB.saveStaffMember(member);DB.setCurrentStaff(member.id);
+    console.log('[SLA] Staff login OK:',member.name,'| Role:',member.role);
+    window.location.href='staff.html';
+  }catch(err){
+    showErr('staffErr',err.message||'Login failed. Please try again.');
     if(btn){btn.textContent='Log In to Staff Portal';btn.disabled=false;}
   }
 }
 
-// ── RECRUITER LOGIN ───────────────────────────────────────────
-async function doRecruiterLogin(){
-  await ensureInit();
-  const email=document.getElementById('recLoginEmail').value.trim().toLowerCase();
-  const pass=document.getElementById('recLoginPass').value;
-  if(!email||!pass){showErr('recLoginErr','Please enter your email and password.');return;}
-  const btn=document.querySelector('#recruiterLoginForm .btn-full');
-  if(btn){btn.textContent='Logging in...';btn.disabled=true;}
-  try{
-    const rec=DB.getRecruiters().find(r=>r.email===email&&r.pass===pass);
-    if(!rec)throw new Error('Incorrect email or password.');
-    if(rec.status==='pending')throw new Error('Your application is pending approval. You will be notified by email.');
-    if(rec.status==='rejected')throw new Error('Your application was not approved. Contact us for information.');
-    rec.lastLogin=Date.now();DB.saveRecruiter(rec);DB.setCurrentRecruiter(rec.id);window.location.href='recruiter.html';
-  }catch(err){showErr('recLoginErr',err.message||'Login failed.');if(btn){btn.textContent='Login to Officer Dashboard';btn.disabled=false;}}
+// ═══ RECRUITER LOGIN ═══
+function doRecruiterLogin(){
+  const email=(document.getElementById('recLoginEmail').value||'').trim().toLowerCase();
+  const pass=(document.getElementById('recLoginPass').value||'');
+  document.getElementById('staffErr').style.display='none';
+  if(!email||!pass){showErr('staffErr','Enter your email and password.');return;}
+  const rec=DB.getRecruiters().find(r=>(r.email||'').toLowerCase().trim()===email);
+  if(!rec){showErr('staffErr','No recruiter account found for that email.');return;}
+  if((rec.pass||'')!==pass){showErr('staffErr','Incorrect password. Please try again.');return;}
+  DB.save('sess3_recruiter',rec.id);
+  document.getElementById('staffOverlay').classList.remove('open');
+  const referred=DB.getStudents().filter(s=>s.recruiterCode===rec.code).length;
+  alert('Welcome back, '+rec.name+'!\n\nCode: '+rec.code+'\nStudents Referred: '+referred+'\nEarnings: $'+(rec.earnings?.total||0).toFixed(2)+'\nPending: $'+(rec.earnings?.pending||0).toFixed(2)+'\n\nContact '+SEA_CONTACT.email+' for payout queries.');
 }
-
-// ── RECRUITER APPLY ───────────────────────────────────────────
-async function doRecruiterApply(){
-  await ensureInit();
-  const name=document.getElementById('recApplyName').value.trim();
-  const email=document.getElementById('recApplyEmail').value.trim().toLowerCase();
-  const phone=document.getElementById('recApplyPhone').value.trim();
-  const location=document.getElementById('recApplyLocation').value.trim();
-  const method=document.getElementById('recApplyMethod').value;
-  const pass=document.getElementById('recApplyPass').value;
-  if(!name||!email||!phone||!location||!method||!pass){showErr('recApplyErr','Please fill in all required fields.');return;}
-  if(pass.length<6){showErr('recApplyErr','Password must be at least 6 characters.');return;}
-  if(DB.getRecruiters().find(r=>r.email===email)){showErr('recApplyErr','An account with this email already exists.');return;}
-  const btn=document.querySelector('#recruiterApplyForm .btn-full');
-  if(btn){btn.textContent='Submitting...';btn.disabled=true;}
-  const code='REC'+String(DB.getRecruiters().length+1).padStart(3,'0');
-  const rec={id:generateId('rec'),name,email,phone,location,background:method,pass,code,status:'pending',totalEarned:0,earningsHistory:[],recruitedStudents:[],appointmentLetterUrl:null,joinDate:Date.now(),lastLogin:null};
-  DB.saveRecruiter(rec);
-  DB.addNotification({type:'recruiter_application',title:'New Recruitment Officer Application',message:name+' ('+email+') from '+location+' has applied. Background: '+method+'. Code: '+code,recruiterId:rec.id,date:Date.now(),read:false});
-  sendAdminAlert('New Recruitment Officer Application','Name: '+name+'\nEmail: '+email+'\nPhone: '+phone+'\nLocation: '+location+'\nBackground: '+method+'\nAssigned Code: '+code);
-  sendRecruiterConfirmation(rec);
-  if(btn){btn.textContent='Submit Application';btn.disabled=false;}
-  closeModal();
-  alert('✅ Application submitted, '+name+'!\n\nYour application is under review by the Admissions team.\nYou will be contacted at '+email+' within 48 hours.\n\nYour assigned code (once approved): '+code);
-}
-
-// ── PAGE LOAD ─────────────────────────────────────────────────
-window.addEventListener('DOMContentLoaded',async()=>{
-  await ensureInit();
-  if(DB.currentUser()){const s=DB.getStudent(DB.currentUser());if(s)window.location.href='student.html';}
-  if(DB.currentStaff()){const st=DB.getStaffById(DB.currentStaff());if(st&&!st.isSuspended)window.location.href='staff.html';}
-  if(DB.currentRecruiter()){const r=DB.getRecruiter(DB.currentRecruiter());if(r&&r.status==='approved')window.location.href='recruiter.html';}
-  // Animate hero bg on load
-  const bg=document.getElementById('heroBg');
-  if(bg){setTimeout(()=>bg.style.transform='scale(1) translateY(0)',100);}
-});
 </script>
 </body>
 </html>

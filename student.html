@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8"/>
 <link rel="icon" type="image/png" href="sla-logo.png"/>
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Study Language Academy — Student Portal</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
+<title>SEA — Student Portal</title>
 <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;0,700&family=Nunito:wght@300;400;600;700;800&display=swap" rel="stylesheet"/>
 <style>
 :root{--green:#2a5c3f;--green2:#1e4530;--green-lt:#d6ead9;--sage:#7aaa80;--gold:#c98a1a;--gold-bg:#fdf3dc;--cream:#f5f0e8;--cream2:#ede7d9;--ink:#1b2a1e;--muted:#7a8f7e;--white:#fff;--blue:#1a5276;--blue-lt:#d6e8fa;--purple:#5b3fa0;--purple-lt:#e4d9f5;--red:#c0392b;--red-lt:#fde8e8;--r:12px;--r-sm:7px;--sw:238px;}
@@ -82,26 +82,6 @@ body{font-family:'Nunito',sans-serif;background:var(--cream);color:#1a2a1e;displ
 .notes-body table th{background:var(--green);color:#fff;padding:.4rem .6rem;text-align:left;}
 .notes-body table td{padding:.38rem .6rem;border-bottom:1px solid var(--cream2);}
 .notes-body table tr:nth-child(even) td{background:var(--cream);}
-/* Lesson content rich styles */
-.lesson-css-scope h3{font-family:'Lora',serif;font-size:.95rem;font-weight:700;margin:.9rem 0 .45rem;color:var(--green);}
-.lesson-css-scope p{font-size:.82rem;line-height:1.7;margin-bottom:.5rem;}
-.lesson-css-scope ul{margin:.4rem 0 .6rem 1.2rem;font-size:.82rem;}
-.lesson-table{overflow-x:auto;margin-bottom:.75rem;}
-.lesson-table table{width:100%;border-collapse:collapse;font-size:.78rem;border-radius:6px;overflow:hidden;}
-.lesson-table th{background:var(--green);color:#fff;padding:.45rem .7rem;text-align:left;font-size:.72rem;}
-.lesson-table td{padding:.42rem .7rem;border-bottom:1px solid var(--cream2);}
-.lesson-grammar{overflow-x:auto;margin-bottom:.75rem;}
-.lesson-grammar table{width:100%;border-collapse:collapse;font-size:.78rem;border-radius:6px;overflow:hidden;}
-.lesson-grammar th{background:#1a3a7a;color:#fff;padding:.42rem .65rem;font-size:.72rem;text-align:left;}
-.lesson-grammar td{padding:.38rem .65rem;border-bottom:1px solid #c8daf5;font-size:.78rem;}
-.lesson-grammar p{font-size:.81rem;margin:.35rem 0;}
-.lesson-dialogue{background:#f8fffe;border-radius:var(--r-sm);padding:.7rem;margin-bottom:.75rem;display:flex;flex-direction:column;gap:.38rem;border:1px solid var(--cream2);}
-.dialogue-line{padding:.38rem .7rem;border-radius:8px;font-size:.8rem;max-width:85%;line-height:1.5;}
-.dialogue-line.coach{background:var(--green-lt);align-self:flex-start;color:var(--green2);font-weight:600;}
-.dialogue-line.student{background:var(--gold-bg);align-self:flex-end;color:#6a4800;}
-.lesson-example{background:var(--gold-bg);border-left:3px solid var(--gold);padding:.6rem .85rem;border-radius:0 var(--r-sm) var(--r-sm) 0;margin-bottom:.7rem;font-size:.8rem;line-height:1.65;}
-.lesson-tip{background:#e8f5e9;border-left:3px solid var(--green);padding:.6rem .85rem;border-radius:0 var(--r-sm) var(--r-sm) 0;margin-bottom:.7rem;font-size:.78rem;line-height:1.6;}
-.lesson-exercise{background:#f3eefe;border-left:3px solid #5b3fa0;padding:.7rem .85rem;border-radius:0 var(--r-sm) var(--r-sm) 0;margin-bottom:.7rem;font-size:.8rem;line-height:1.65;}
 .notes-body ul,.notes-body ol{padding-left:1.2rem;margin:.3rem 0;}
 .notes-body li{margin:.2rem 0;}
 .notes-body p{margin:.3rem 0;}
@@ -171,24 +151,33 @@ body{font-family:'Nunito',sans-serif;background:var(--cream);color:#1a2a1e;displ
 /* ── MOBILE RESPONSIVE ── */
 @media(max-width:860px){
   :root{--sw:0px;}
-  .sidebar{width:260px;transform:translateX(-100%);transition:transform .28s ease;}
+  .sidebar{width:272px;transform:translateX(-100%);transition:transform .28s ease;z-index:200;}
   .sidebar.sb-mobile-open{transform:translateX(0)!important;}
   .main{margin-left:0!important;}
   .topbar{padding:0 1rem;}
   .page{padding:1rem;}
   .stat-row{grid-template-columns:1fr 1fr;}
   #dash-panels{grid-template-columns:1fr!important;}
-  .level-tabs{overflow-x:auto;flex-wrap:nowrap;padding-bottom:4px;}
+  .level-tabs{overflow-x:auto;flex-wrap:nowrap;padding-bottom:4px;-webkit-overflow-scrolling:touch;}
   .lt{white-space:nowrap;flex-shrink:0;}
   .notes-body{font-size:.85rem;}
+  .notes-body table{font-size:.76rem;}
   .fee-table{font-size:.78rem;}
-  .overlay .modal{padding:1.1rem;max-width:96vw;}
+  .overlay .modal{padding:1.1rem;max-width:96vw;max-height:92vh;}
   .mob-menu-btn{display:flex!important;}
   .topbar-title{font-size:.9rem;}
+  /* touch-friendly tap targets */
+  .unit-item{padding:.72rem .78rem;}
+  .btn-pay{padding:12px 22px;font-size:.88rem;}
+  .fg input,.fg select{padding:11px 12px;font-size:.88rem;}
+  .btn-full{padding:13px;min-height:48px;}
 }
 @media(max-width:500px){
   .stat-row{grid-template-columns:1fr;}
   .sc-val{font-size:1.2rem;}
+  .cert-actions{flex-direction:column;}
+  .btn-dl,.btn-sh{width:100%;}
+  .topbar .btn-logout{display:none;}
 }
 .mob-menu-btn{display:none;background:none;border:none;cursor:pointer;padding:6px;color:var(--ink);}
 </style>
@@ -203,20 +192,18 @@ body{font-family:'Nunito',sans-serif;background:var(--cream);color:#1a2a1e;displ
   </div>
   <nav class="sb-nav">
     <div class="ns">Learning</div>
-    <a class="ni active" onclick="showPage('overview',this)"><span class="ni-icon">◻</span>Overview</a>
-    <a class="ni" onclick="showPage('mylevels',this)"><span class="ni-icon">◻</span>My Levels &amp; Notes</a>
-    <a class="ni" onclick="showPage('classes',this)"><span class="ni-icon">◻</span>Live Classes</a>
-    <a class="ni" onclick="showPage('fees',this)"><span class="ni-icon">◻</span>Fee Statement</a>
-    <a class="ni" onclick="showPage('exams',this)"><span class="ni-icon">◻</span>Exam Records</a>
-    <a class="ni" onclick="showPage('certs',this)"><span class="ni-icon">◻</span>Certificates<span class="nb" id="certBadge" style="display:none;">0</span></a>
+    <a class="ni active" onclick="showPage('overview',this)"><span class="ni-icon">🏠</span>Overview</a>
+    <a class="ni" onclick="showPage('mylevels',this)"><span class="ni-icon">📖</span>My Lessons &amp; Notes</a>
+    <a class="ni" onclick="showPage('tutorials',this)"><span class="ni-icon">▶️</span>Video Tutorials</a>
+    <a class="ni" onclick="showPage('weeklytests',this)"><span class="ni-icon">📝</span>Weekly Tests<span class="nb" id="wtBadge" style="display:none;">!</span></a>
+    <a class="ni" onclick="showPage('classes',this)"><span class="ni-icon">📡</span>Live Classes</a>
+    <a class="ni" onclick="showPage('fees',this)"><span class="ni-icon">💳</span>Fee Statement</a>
+    <a class="ni" onclick="showPage('exams',this)"><span class="ni-icon">📊</span>Exam Records</a>
+    <a class="ni" onclick="showPage('certs',this)"><span class="ni-icon">🎓</span>Certificates<span class="nb" id="certBadge" style="display:none;">0</span></a>
     <div class="ns">Actions</div>
-    <a class="ni" onclick="goExam()"><span class="ni-icon">◻</span>Take Exam</a>
-    <a class="ni" onclick="showPage('notifs',this)"><span class="ni-icon">◻</span>Notifications<span class="nb" id="notifBadge" style="display:none;">0</span></a>
-    <div class="ns">AI TOOLS</div>
-    <a class="ni" onclick="showPage('aitrainer',this)"><span class="ni-icon">◻</span>My English Coach</a>
-    <div class="ns">SUPPORT</div>
-    <a class="ni" onclick="showPage('askteacher',this)"><span class="ni-icon">◻</span>Ask My Teacher <span id="unansweredBadge" style="display:none;background:#c0392b;color:#fff;border-radius:10px;padding:1px 6px;font-size:.65rem;margin-left:auto;">!</span></a>
-    <a class="ni" href="index.html"><span class="ni-icon">◻</span>Home</a>
+    <a class="ni" onclick="goExam()"><span class="ni-icon">✏️</span>Take Level Exam</a>
+    <a class="ni" onclick="showPage('notifs',this)"><span class="ni-icon">🔔</span>Notifications<span class="nb" id="notifBadge" style="display:none;">0</span></a>
+    <a class="ni" href="index.html"><span class="ni-icon">🌐</span>Home</a>
   </nav>
   <div class="sb-footer"><a onclick="doLogout()">Log Out</a></div>
 </aside>
@@ -279,6 +266,18 @@ body{font-family:'Nunito',sans-serif;background:var(--cream);color:#1a2a1e;displ
     <div id="classes-content"></div>
   </div>
 
+  <!-- VIDEO TUTORIALS -->
+  <div class="page" id="page-tutorials">
+    <div class="ph"><h2>📺 Video Tutorials</h2><p>Weekly video lessons for your language and level. Watch, learn, and practice with each tutorial.</p></div>
+    <div id="tutorials-content"></div>
+  </div>
+
+  <!-- WEEKLY TESTS -->
+  <div class="page" id="page-weeklytests">
+    <div class="ph"><h2>📝 Weekly Tests</h2><p>Complete a short 10-question test at the end of each week. Track your progress every week for all 15 weeks.</p></div>
+    <div id="weeklytests-content"></div>
+  </div>
+
   <!-- FEE STATEMENT -->
   <div class="page" id="page-fees">
     <div class="print-header" id="printHeader">
@@ -296,12 +295,7 @@ body{font-family:'Nunito',sans-serif;background:var(--cream);color:#1a2a1e;displ
 
   <!-- EXAM RECORDS -->
   <div class="page" id="page-exams">
-    <div class="ph"><h2>Exam Records</h2><p>Your weekly CAT tests (40%), final exams (50%) and class contribution (10%).</p></div>
-    <div style="display:flex;gap:.7rem;flex-wrap:wrap;margin-bottom:1rem;">
-      <button onclick="startCATTest()" style="padding:9px 20px;background:var(--gold);border:none;border-radius:var(--r-sm);color:#fff;font-family:'Nunito',sans-serif;font-weight:800;font-size:.82rem;cursor:pointer;">📝 Take Weekly CAT Test</button>
-      <button onclick="goExam()" style="padding:9px 20px;background:var(--green);border:none;border-radius:var(--r-sm);color:#fff;font-family:'Nunito',sans-serif;font-weight:800;font-size:.82rem;cursor:pointer;">🎓 Take Final Level Exam</button>
-    </div>
-    <div id="cat-test-area" style="display:none;"></div>
+    <div class="ph"><h2>Exam Records</h2><p>All your exam attempts. Note: each level allows one attempt only.</p></div>
     <div id="exams-content"></div>
   </div>
 
@@ -315,111 +309,6 @@ body{font-family:'Nunito',sans-serif;background:var(--cream);color:#1a2a1e;displ
   <div class="page" id="page-notifs">
     <div class="ph"><h2>Notifications</h2><p>Messages and updates from Study Language Academy.</p></div>
     <div class="panel"><div class="pbd" id="notifs-list"></div></div>
-  </div>
-
-  <!-- ASK MY TEACHER -->
-  <div class="page" id="page-askteacher">
-    <div class="ph"><h2>Ask My Teacher</h2><p>Submit a question to your instructor. You will receive a private reply in this inbox.</p></div>
-    <!-- New Question -->
-    <div class="panel" style="margin-bottom:1rem;">
-      <div class="phd"><h3>📝 Submit a Question</h3></div>
-      <div class="pbd">
-        <div style="margin-bottom:.7rem;">
-          <label style="font-size:.75rem;font-weight:700;display:block;margin-bottom:.3rem;">Topic / Subject *</label>
-          <select id="qTopic" style="width:100%;padding:8px 10px;border:1.5px solid var(--cream2);border-radius:var(--r-sm);font-family:'Nunito',sans-serif;font-size:.84rem;">
-            <option value="">— Select topic —</option>
-            <option value="grammar">Grammar</option>
-            <option value="vocabulary">Vocabulary</option>
-            <option value="pronunciation">Pronunciation</option>
-            <option value="lesson">Specific Lesson</option>
-            <option value="exam">Exam / Assessment</option>
-            <option value="fees">Fees / Payment</option>
-            <option value="other">Other</option>
-          </select>
-        </div>
-        <div style="margin-bottom:.7rem;">
-          <label style="font-size:.75rem;font-weight:700;display:block;margin-bottom:.3rem;">Your Question *</label>
-          <textarea id="qText" rows="4" placeholder="Type your question here. Be as specific as possible so your teacher can help you better..." style="width:100%;padding:9px 12px;border:1.5px solid var(--cream2);border-radius:var(--r-sm);font-family:'Nunito',sans-serif;font-size:.84rem;resize:vertical;outline:none;"></textarea>
-        </div>
-        <button onclick="submitQuestion()" style="padding:8px 22px;background:var(--green);border:none;border-radius:var(--r-sm);color:#fff;font-family:'Nunito',sans-serif;font-weight:700;font-size:.82rem;cursor:pointer;">Send Question</button>
-      </div>
-    </div>
-    <!-- Question History -->
-    <div class="panel">
-      <div class="phd"><h3>💬 My Questions & Answers</h3></div>
-      <div class="pbd" id="questionsList"><p style="font-size:.8rem;color:var(--muted);">No questions yet. Ask your first question above!</p></div>
-    </div>
-  </div>
-
-  <!-- MY ENGLISH COACH — VOICE PROFICIENCY ENGINE -->
-  <div class="page" id="page-aitrainer">
-    <div class="ph"><h2>My English Coach</h2><p>Speak with Coach Amara. Your spoken English will be assessed and scored across 5 skill areas.</p></div>
-
-    <!-- INTRO CARD -->
-    <div id="coach-intro" class="panel" style="text-align:center;padding:2rem 1.5rem;">
-      <div style="width:72px;height:72px;border-radius:50%;background:var(--green-lt);display:flex;align-items:center;justify-content:center;margin:0 auto 1rem;font-size:2.2rem;">🎙️</div>
-      <h3 style="font-family:'Lora',serif;font-size:1.15rem;margin-bottom:.4rem;">Voice Proficiency Session</h3>
-      <p style="font-size:.82rem;color:var(--muted);max-width:440px;margin:0 auto 1.2rem;line-height:1.7;">Coach Amara will speak to you and listen to your responses. Speak clearly and naturally — you will receive a full score report at the end.</p>
-      <div style="display:flex;justify-content:center;gap:.8rem;flex-wrap:wrap;margin-bottom:1.5rem;">
-        <div style="background:var(--cream);border-radius:var(--r-sm);padding:.6rem 1rem;font-size:.75rem;text-align:center;min-width:85px;"><div style="font-weight:800;color:var(--green);font-size:1rem;">🎙️</div><div style="color:var(--muted);">Speak</div></div>
-        <div style="background:var(--cream);border-radius:var(--r-sm);padding:.6rem 1rem;font-size:.75rem;text-align:center;min-width:85px;"><div style="font-weight:800;color:var(--green);font-size:1rem;">🔊</div><div style="color:var(--muted);">Listen</div></div>
-        <div style="background:var(--cream);border-radius:var(--r-sm);padding:.6rem 1rem;font-size:.75rem;text-align:center;min-width:85px;"><div style="font-weight:800;color:var(--green);font-size:1rem;">📊</div><div style="color:var(--muted);">Get Scored</div></div>
-      </div>
-      <div style="background:#fff8e6;border:1px solid #f0d080;border-radius:var(--r-sm);padding:.75rem 1rem;font-size:.75rem;color:#7a5c00;margin:0 auto 1.3rem;max-width:400px;line-height:1.6;">
-        ⚠️ Allow microphone access when prompted by your browser. Use headphones for best results.
-      </div>
-      <button id="coach-start-btn" onclick="startCoachSession()"
-        style="padding:12px 36px;background:var(--green);border:none;border-radius:var(--r-sm);color:#fff;font-family:'Nunito',sans-serif;font-weight:800;font-size:.92rem;cursor:pointer;letter-spacing:.02em;">
-        🎙️ Begin Voice Session
-      </button>
-    </div>
-
-    <!-- VOICE SESSION UI -->
-    <div id="coach-chat" class="panel" style="display:none;flex-direction:column;">
-      <!-- Header -->
-      <div style="background:var(--green);padding:.8rem 1rem;border-radius:var(--r) var(--r) 0 0;display:flex;align-items:center;justify-content:space-between;">
-        <div style="display:flex;align-items:center;gap:.7rem;">
-          <div style="width:38px;height:38px;border-radius:50%;background:rgba(255,255,255,.2);display:flex;align-items:center;justify-content:center;font-size:1.3rem;">🎓</div>
-          <div><div style="font-size:.85rem;font-weight:800;color:#fff;">Coach Amara</div><div style="font-size:.68rem;color:rgba(255,255,255,.75);">Study Language Academy — Voice Session</div></div>
-        </div>
-        <div id="coach-progress-label" style="font-size:.7rem;color:rgba(255,255,255,.85);background:rgba(255,255,255,.15);padding:4px 12px;border-radius:20px;">Session Active</div>
-      </div>
-
-      <!-- Conversation log -->
-      <div id="coach-messages" style="height:300px;overflow-y:auto;padding:1rem;display:flex;flex-direction:column;gap:.7rem;background:#f9f7f3;min-height:200px;"></div>
-
-      <!-- Voice controls -->
-      <div style="padding:1.2rem 1rem;border-top:1px solid var(--cream2);background:#fff;display:flex;flex-direction:column;align-items:center;gap:.8rem;">
-        <!-- Status label -->
-        <div id="voice-status" style="font-size:.78rem;color:var(--muted);font-weight:600;letter-spacing:.02em;">Waiting for Coach Amara...</div>
-        <!-- Mic button -->
-        <button id="mic-btn" onclick="toggleMic()" disabled
-          style="width:72px;height:72px;border-radius:50%;border:none;background:#e0e0e0;cursor:not-allowed;display:flex;align-items:center;justify-content:center;font-size:2rem;transition:all .2s;box-shadow:0 2px 8px rgba(0,0,0,.1);">
-          🎙️
-        </button>
-        <!-- Live transcript -->
-        <div id="live-transcript" style="min-height:36px;width:100%;max-width:480px;text-align:center;font-size:.8rem;color:var(--ink);background:var(--cream);border-radius:var(--r-sm);padding:.5rem .8rem;line-height:1.5;display:none;"></div>
-        <!-- Submit spoken answer -->
-        <button id="submit-voice-btn" onclick="submitVoiceAnswer()" style="display:none;padding:9px 28px;background:var(--green);border:none;border-radius:var(--r-sm);color:#fff;font-family:'Nunito',sans-serif;font-weight:700;font-size:.82rem;cursor:pointer;">
-          ✅ Submit Answer
-        </button>
-        <div style="font-size:.7rem;color:var(--muted);text-align:center;">Press the mic to speak · Press again to stop</div>
-      </div>
-    </div>
-
-    <!-- SCORE REPORT -->
-    <div id="coach-report" class="panel" style="display:none;padding:1.5rem;">
-      <div style="text-align:center;margin-bottom:1.4rem;">
-        <div style="width:64px;height:64px;border-radius:50%;background:var(--green-lt);display:flex;align-items:center;justify-content:center;margin:0 auto .85rem;font-size:2rem;">📊</div>
-        <h3 style="font-family:'Lora',serif;font-size:1.1rem;margin-bottom:.25rem;">Your Voice Proficiency Report</h3>
-        <p style="font-size:.78rem;color:var(--muted);">Based on your spoken session with Coach Amara</p>
-      </div>
-      <div id="report-content"></div>
-      <button onclick="resetCoachSession()"
-        style="margin-top:1.2rem;width:100%;padding:10px;background:var(--green);border:none;border-radius:var(--r-sm);color:#fff;font-family:'Nunito',sans-serif;font-weight:800;font-size:.85rem;cursor:pointer;">
-        🎙️ Start New Session
-      </button>
-    </div>
   </div>
 </div>
 
@@ -454,19 +343,33 @@ body{font-family:'Nunito',sans-serif;background:var(--cream);color:#1a2a1e;displ
 </div>
 
 
-  <!-- Firebase v9 Compat SDKs -->
-  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
-  <!-- EmailJS for email notifications -->
-  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
-  <!-- SEA Shared Data Layer -->
+  <!-- Shared data layer and auth — always load these first (local files) -->
   <script src="sea-shared.js"></script>
-  <!-- SEA Firebase Integration -->
   <script src="sea-firebase.js"></script>
+  <script src="sea-curriculum.js"></script>
+  <!-- Firebase + EmailJS: only injected when online so offline mode never hangs -->
+  <script>
+  (function(){
+    if(!navigator.onLine) return;
+    ['https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js',
+     'https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js',
+     'https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js',
+     'https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js'
+    ].forEach(src=>{const s=document.createElement('script');s.src=src;s.async=true;document.head.appendChild(s);});
+  })();
+  </script>
 <script>
 let _SEA_INIT_DONE=false;
-async function ensureInit(){if(!_SEA_INIT_DONE){await SEA_FIREBASE_INIT();_SEA_INIT_DONE=true;}}
+async function ensureInit(){
+  if(_SEA_INIT_DONE) return;
+  try{
+    await Promise.race([
+      (typeof SEA_FIREBASE_INIT==='function' ? SEA_FIREBASE_INIT() : Promise.resolve()),
+      new Promise(r=>setTimeout(r,2000))
+    ]);
+  }catch(e){ console.warn('[SLA] Offline — using localStorage'); }
+  _SEA_INIT_DONE=true;
+}
 
 let S=null,payLevel=0,payType='',activeLevelTab=1;
 
@@ -474,23 +377,8 @@ async function init(){
   await ensureInit();
   const uid=DB.currentUser();
   if(!uid){window.location.href='index.html';return;}
-  // Try cache first, then fetch directly from Firestore if not found
   S=DB.getStudent(uid);
-  if(!S){
-    try{
-      const snap=await _FS.collection('students').doc(uid).get();
-      if(snap.exists){
-        S=snap.data();if(!S.id)S.id=snap.id;
-        // Add to cache so future calls work
-        _C.students.push(S);
-      }
-    }catch(e){console.warn('Firestore fetch failed',e);}
-  }
   if(!S){window.location.href='index.html';return;}
-  // Update last login and daily contribution score
-  S.lastLogin=Date.now();
-  DB.saveStudent(S);
-  updateContribution();
   renderAll();
 }
 
@@ -564,7 +452,8 @@ function renderAll(){
   renderExams();
   renderCerts();
   renderNotifs();
-  renderQuestions();
+  renderTutorials();
+  renderWeeklyTests();
 }
 
 function setLevelTab(l,btn){
@@ -577,73 +466,87 @@ function setLevelTab(l,btn){
 function renderLevelTab(l){
   const lv=SEA.levels[l-1];const f=studentFeeStatus(S,l);const p=S.progress[l]||{units:[]};
   const done=(p.units||[]).length;const total=lv.units;const pp=Math.round((done/total)*100);
-  const sc=p.examScore!==null?pct(p.examScore,(QUIZ_BANKS[l]||EXAM_QUESTIONS[l]||[]).length):null;
+  const sc=p.examScore!==null?pct(p.examScore,QUIZ_BANKS?.[l]?.length||40):null;
   const el=document.getElementById('level-tab-content');
   if(!f.hasAccess&&!f.inGrace){
-    el.innerHTML=`<div class="locked-banner"><h3>🔒 Level ${l} — Locked</h3>
-      <p>Pay the enrolment fee of <strong>$${f.enrollFee.toFixed(2)}</strong> to unlock all ${total} units, lesson notes, videos and your Level ${l} exam.</p>
-      <p style="font-size:.78rem;margin-top:.4rem;">Contact us to pay: <strong>${SEA_CONTACT.email}</strong> &nbsp;|&nbsp; <strong>${SEA_CONTACT.phone}</strong></p>
-      <button class="btn-pay" onclick="openPayment(${l})">Contact Academy to Pay</button></div>`;
+    el.innerHTML=`<div class="locked-banner"><h3>🔒 Level ${l} is Locked</h3><p>Pay the <strong>50% enrolment fee ($${f.enrollFee.toFixed(2)})</strong> to unlock all Level ${l} materials and classes.</p><p style="margin-top:.4rem;">Contact: <strong>${SEA_CONTACT.email}</strong> · <strong>${SEA_CONTACT.phone}</strong></p><button class="btn-pay" onclick="openPayment(${l})">Contact Academy to Pay</button></div>`;
     return;
   }
-
-  // Get lesson content for student's language
-  const lang = (S.targetLanguage||'english').toLowerCase();
-  const langContent = (typeof LESSON_CONTENT !== 'undefined' && LESSON_CONTENT[lang] && LESSON_CONTENT[lang][l]) || {};
-  const teachLang = (S.learningLanguage||'english').toLowerCase();
-
-  // Build unit titles from LESSON_CONTENT or fallback to UNIT_TITLES
-  // Use UNIT_TITLES for English, or build from LESSON_CONTENT for other langs
-  const unitTitles = UNIT_TITLES && UNIT_TITLES[l] ? UNIT_TITLES[l] : [];
-  const unitsHTML = Array.from({length:total},(_, i)=>{
-    const unitNum=i+1;
-    const isDone=(p.units||[]).includes(unitNum);
-    const lessonData = langContent[unitNum];
-    const unitTitle = lessonData ? lessonData.title : (unitTitles[i] || 'Unit '+unitNum+' — '+( S.targetLanguageLabel||'Language')+' Foundations');
-
-    let noteHTML = '';
-    if(lessonData){
-      // Teaching language note
-      let langNote = '';
-      if(teachLang==='swahili' && lessonData.swahili_note) langNote=`<div style="background:#f0faf2;border-left:3px solid var(--green);padding:.5rem .8rem;border-radius:0 4px 4px 0;font-size:.78rem;margin-bottom:.7rem;"><strong>📌 Kiswahili:</strong> ${lessonData.swahili_note}</div>`;
-      if(teachLang==='french' && lessonData.french_note) langNote=`<div style="background:#eaf3fb;border-left:3px solid #1a3a7a;padding:.5rem .8rem;border-radius:0 4px 4px 0;font-size:.78rem;margin-bottom:.7rem;"><strong>📌 Français:</strong> ${lessonData.french_note}</div>`;
-
-      noteHTML=`<div class="notes-card">
-        <div class="notes-hd"><h4>${lessonData.title}</h4><span style="font-size:.68rem;opacity:.7;">Lesson Notes · ${lv.cefr}</span></div>
-        <div class="notes-body">
-          ${langNote}
-          ${lessonData.youtube?`<div style="margin-bottom:1rem;">
-            <div style="font-size:.72rem;font-weight:800;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:.4rem;">📺 Video Lesson</div>
-            <div style="position:relative;padding-bottom:56.25%;height:0;border-radius:var(--r-sm);overflow:hidden;">
-              <iframe src="${lessonData.youtube}" style="position:absolute;top:0;left:0;width:100%;height:100%;border:none;" allowfullscreen loading="lazy"></iframe>
-            </div>
-          </div>`:''}
-          <div class="lesson-css-scope">${lessonData.content||''}</div>
-        </div>
-      </div>`;
-    }
-
+  // Build unit notes — check for staff overrides first, then LESSON_CONTENT default
+  const lang=S.language||'english';
+  const unitsHTML=(UNIT_TITLES[l]||[]).map((ut,i)=>{
+    const unitNum=i+1;const isDone=(p.units||[]).includes(unitNum);
+    // Prefer staff-saved override, then LESSON_CONTENT default, then DB materials fallback
+    const overrideKey='notes_override_'+lang+'_'+l+'_'+unitNum;
+    const override=DB.load(overrideKey,null);
+    const defaultLesson=LESSON_CONTENT[lang]?.[l]?.[unitNum];
+    const lesson=override||defaultLesson||null;
+    const dbMat=DB.getMaterials().filter(m=>m.level===l).find(m=>m.unit===unitNum);
+    const hasNotes=!!(lesson||dbMat);
     return`<div>
       <div class="unit-item ${isDone?'done':''}" onclick="toggleUnit(${l},${unitNum})">
         <div class="u-num" style="background:${isDone?lv.color:'var(--cream2)'};color:${isDone?'#fff':'var(--muted)'};">${unitNum}</div>
-        <div class="u-info"><div class="u-title">Unit ${unitNum}: ${unitTitle}</div><div class="u-sub">${isDone?'Completed':'Click to mark complete'}${lessonData?' · Notes &amp; video available':''}</div></div>
+        <div class="u-info"><div class="u-title">Unit ${unitNum}: ${ut}</div><div class="u-sub">${isDone?'✓ Completed':'Click to mark complete'}${hasNotes?' · Notes available':''}</div></div>
         <span style="font-size:.82rem;">${isDone?'✓':''}</span>
       </div>
-      ${noteHTML}
+      ${lesson?`<div class="notes-card">
+        <div class="notes-hd">
+          <div><h4>${lesson.title||ut}</h4><div style="font-size:.7rem;color:var(--muted);margin-top:.1rem;">${lesson.objective||''}</div></div>
+          ${override?'<span style="font-size:.65rem;background:var(--gold-bg);color:var(--gold);padding:2px 7px;border-radius:3px;font-weight:700;">UPDATED</span>':''}
+        </div>
+        ${lesson.youtube?`<div style="padding:.7rem 1rem .3rem;"><iframe width="100%" height="220" src="${lesson.youtube}" frameborder="0" allow="accelerometer;autoplay;encrypted-media" allowfullscreen style="border-radius:var(--r-sm);max-width:480px;"></iframe></div>`:''}
+        ${lesson.swahili_note?`<div style="background:#f0faf2;border-left:3px solid var(--sage);padding:.5rem .9rem;margin:.4rem 1rem;font-size:.78rem;font-style:italic;border-radius:0 var(--r-sm) var(--r-sm) 0;">${lesson.swahili_note}</div>`:''}
+        <div class="notes-body">${lesson.content||''}</div>
+        ${dbMat?.pdfData?`<div style="padding:.5rem 1rem .8rem;"><a href="${dbMat.pdfData}" download="${dbMat.pdfName||'notes.pdf'}" class="pdf-btn">📄 Download PDF: ${dbMat.pdfName||'notes.pdf'}</a></div>`:''}
+      </div>`:dbMat?`<div class="notes-card">
+        <div class="notes-hd"><h4>${dbMat.title}</h4></div>
+        <div class="notes-body">${dbMat.content}</div>
+        ${dbMat.pdfData?`<div style="padding:.5rem 1rem .8rem;"><a href="${dbMat.pdfData}" download="${dbMat.pdfName||'notes.pdf'}" class="pdf-btn">📄 Download PDF</a></div>`:''}
+      </div>`:''}
     </div>`;
   }).join('');
 
-  el.innerHTML=`<div class="panel">
-    <div class="phd" style="background:${lv.color}18;"><h3 style="color:${lv.color};">Level ${l} — ${lv.name} (${lv.cefr})</h3><span style="font-size:.75rem;color:var(--muted);">${done}/${total} units · ${pp}%</span></div>
-    <div class="pbd">
-      ${f.inGrace?`<div class="grace-box">Grace period active until ${fmtDate(new Date(f.gracePeriod.until).getTime())}. Please make payment soon.</div>`:''}
-      <div style="margin-bottom:.5rem;font-size:.75rem;color:var(--muted);">Studying: <strong style="color:var(--green);">${S.targetLanguageLabel||S.targetLanguage||'English'}</strong> · Learning in: <strong>${S.learningLanguage||'English'}</strong></div>
-      <div class="prog-bar"><div class="prog-fill" style="width:${pp}%;background:${lv.color};"></div></div>
-      <div class="unit-list" style="margin-bottom:1rem;">${unitsHTML}</div>
-      <div style="display:flex;gap:.5rem;flex-wrap:wrap;align-items:center;">
-        <button onclick="goExamLevel(${l})" style="padding:6px 16px;border-radius:3px;background:${lv.color};border:none;color:#fff;font-family:'Nunito',sans-serif;font-weight:700;font-size:.77rem;cursor:pointer;">Take Level ${l} Exam</button>
-        ${sc!==null?`<span class="badge ${sc>=CONFIG.passMarkAllLevels?'b-g':'b-r'}">Last score: ${sc}% — ${grade(sc)}</span>`:''}
-        ${f.certUploaded?`<span class="badge b-g">Certificate Issued ✓</span>`:''}
+  // Build 15-week CAT schedule summary
+  const schedule=typeof WEEK_SCHEDULE!=='undefined'?WEEK_SCHEDULE[l]||[]:[];
+  const catsDone=(p.catScores||{});
+  const catsTotal=schedule.filter(w=>w.catMarks>0).length;
+  const catsDoneCount=Object.keys(catsDone).length;
+  const weekScheduleHTML=schedule.length?`
+    <div class="panel" style="margin-bottom:1rem;">
+      <div class="phd"><h3>📅 15-Week Schedule & CAT Assessments</h3><span style="font-size:.75rem;color:var(--muted);">${catsDoneCount}/${catsTotal} CATs submitted</span></div>
+      <div class="pbd" style="overflow-x:auto;">
+        <table class="data-table"><thead><tr><th>Week</th><th>Topic</th><th>CAT Marks</th><th>Your Score</th><th>Status</th></tr></thead><tbody>
+        ${schedule.map(w=>{
+          const sc=catsDone['w'+w.week];
+          const badge=sc!=null?`<span class="badge ${sc>=w.catMarks*0.7?'b-g':'b-r'}">${sc}/${w.catMarks}</span>`:'<span class="badge b-gold">Pending</span>';
+          return`<tr>
+            <td><strong>Wk ${w.week}</strong></td>
+            <td style="font-size:.77rem;">${w.topic}</td>
+            <td>${w.catMarks>0?w.catMarks+'pts':'Revision'}</td>
+            <td>${w.catMarks>0?badge:'—'}</td>
+            <td>${w.catMarks>0?(sc!=null?'Submitted':'Not yet submitted'):'No CAT this week'}</td>
+          </tr>`;
+        }).join('')}
+        </tbody></table>
+      </div>
+      <div class="pbd" style="padding-top:0;font-size:.75rem;color:var(--muted);">
+        CATs contribute <strong>40%</strong> · Attendance <strong>10%</strong> · Final Exam <strong>50%</strong> · Pass mark <strong>70%</strong>
+      </div>
+    </div>`:'' ;
+
+  el.innerHTML=`<div>
+    ${weekScheduleHTML}
+    <div class="panel">
+      <div class="phd" style="background:${lv.color}18;"><h3 style="color:${lv.color};">Level ${l} — ${lv.cefr}</h3><span style="font-size:.75rem;color:var(--muted);">${done}/${total} units · ${pp}%</span></div>
+      <div class="pbd">
+        ${f.inGrace?`<div class="grace-box">⚠ Grace period active until ${fmtDate(new Date(f.gracePeriod?.until||Date.now()).getTime())}. Please make payment soon.</div>`:''}
+        <div class="prog-bar"><div class="prog-fill" style="width:${pp}%;background:${lv.color};"></div></div>
+        <div class="unit-list" style="margin-bottom:1rem;">${unitsHTML}</div>
+        <div style="display:flex;gap:.5rem;flex-wrap:wrap;align-items:center;">
+          <button onclick="goExamLevel(${l})" style="padding:9px 18px;border-radius:3px;background:${lv.color};border:none;color:#fff;font-family:'Nunito',sans-serif;font-weight:700;font-size:.8rem;cursor:pointer;min-height:40px;">📝 Take Level ${l} Final Exam</button>
+          ${sc!==null?`<span class="badge ${sc>=70?'b-g':'b-r'}">Last exam score: ${sc}% — ${grade(sc)}</span>`:''}
+          ${f.certUploaded?'<span class="badge b-g">🏆 Certificate Issued</span>':''}
+        </div>
       </div>
     </div>
   </div>`;
@@ -668,8 +571,6 @@ function renderClasses(){
   if(!cls){el.innerHTML='<div class="panel"><div class="pbd" style="text-align:center;color:var(--muted);padding:1.5rem;">Class not found.</div></div>';return;}
   const now=Date.now();
   const sessions=(cls.sessions||[]).sort((a,b)=>new Date(a.datetime)-new Date(b.datetime));
-  const nextSess=sessions.filter(s=>new Date(s.datetime).getTime()>now-3600000).sort((a,b)=>new Date(a.datetime)-new Date(b.datetime))[0];
-  const jitsiRoom=cls.jitsiRoom||cls.id;
   const sessHTML=sessions.length?sessions.map(sess=>{
     const sessTime=new Date(sess.datetime).getTime();
     const isNow=Math.abs(sessTime-now)<3600000;
@@ -680,26 +581,12 @@ function renderClasses(){
         <div class="cc-meta">${new Date(sess.datetime).toLocaleString('en-GB',{weekday:'long',day:'2-digit',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit'})} · ${sess.duration||60} minutes</div>
         ${sess.notes?`<div style="font-size:.72rem;color:var(--muted);margin-top:.2rem;">${sess.notes}</div>`:''}
       </div>
-      ${isNow?`<button class="btn-join" onclick="joinClass('${jitsiRoom}')">🔴 Join Live Now</button>`:
+      ${isNow?`<button class="btn-join" onclick="joinClass('${cls.jitsiRoom||cls.id}')">Join Now</button>`:
        isPast?`<span class="badge b-r">Ended</span>`:
        `<span class="badge b-gold">Upcoming</span>`}
     </div>`;
-  }).join(''):'<div style="text-align:center;color:var(--muted);padding:1rem;font-size:.82rem;">No sessions scheduled yet — your class is open and ready.</div>';
-  el.innerHTML=`<div class="panel">
-    <div class="phd" style="background:var(--green);color:#fff;">
-      <div><h3 style="color:#fff;">${cls.name}</h3><span style="font-size:.72rem;opacity:.8;">Level ${cls.level} · ${cls.language||'All Languages'} · Instructor: ${cls.instructorName||'—'}</span></div>
-      <span style="background:rgba(255,255,255,.2);padding:3px 10px;border-radius:12px;font-size:.7rem;font-weight:700;">🟢 Always Open</span>
-    </div>
-    <div class="pbd">
-      ${cls.schedule?`<div style="background:var(--green-lt);border-radius:var(--r-sm);padding:.5rem .8rem;font-size:.78rem;margin-bottom:.7rem;">📅 Schedule: <strong>${cls.schedule}</strong></div>`:''}
-      ${cls.plannedStart?`<div style="background:var(--gold-bg);border-radius:var(--r-sm);padding:.5rem .8rem;font-size:.78rem;margin-bottom:.7rem;">🗓️ Planned Start: <strong>${new Date(cls.plannedStart).toLocaleString('en-GB',{weekday:'long',day:'2-digit',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit'})}</strong></div>`:''}
-      <div style="margin-bottom:.8rem;">
-        <button class="btn-join" onclick="joinClass('${jitsiRoom}')" style="width:100%;">🎙️ Join Live Class Room — Always Open</button>
-      </div>
-      <div style="font-size:.7rem;color:var(--muted);margin-bottom:.7rem;">Room link: <a href="https://meet.jit.si/SLA_${jitsiRoom.replace(/\s+/g,'_')}" target="_blank" style="color:var(--green);">meet.jit.si/SLA_${jitsiRoom.replace(/\s+/g,'_')}</a></div>
-      ${sessHTML}
-    </div>
-  </div>`;
+  }).join(''):'<div style="text-align:center;color:var(--muted);padding:1rem;font-size:.82rem;">No sessions scheduled yet.</div>';
+  el.innerHTML=`<div class="panel"><div class="phd"><h3>${cls.name} — Level ${cls.level}</h3><span style="font-size:.75rem;color:var(--muted);">Instructor: ${cls.instructorName||'—'}</span></div><div class="pbd">${sessHTML}</div></div>`;
 }
 
 function joinClass(room){
@@ -714,7 +601,7 @@ function renderFees(){
   // Show current level always, show previous only if balance > 0
   SEA.levels.forEach(l=>{
     const f=studentFeeStatus(S,l.id);
-    // Always show all 3 levels so student can see full fee history
+    if(l.id<lv&&f.balance===0&&f.paid===f.total)return; // hide fully paid previous levels
     const histRows=f.history.length?f.history.map(h=>`<tr><td>${fmtDate(h.date)}</td><td>${h.type}</td><td style="color:var(--green);font-weight:700;">+$${h.amount.toFixed(2)}</td><td>${h.ref||'—'}</td></tr>`).join(''):'<tr><td colspan="4" style="text-align:center;color:var(--muted);padding:.8rem;">No payments recorded</td></tr>';
     html+=`<div class="panel" style="margin-bottom:1rem;">
       <div class="phd" style="background:${SEA.levels[l.id-1].color}15;"><h3 style="color:${SEA.levels[l.id-1].color};">Level ${l.id} — ${l.cefr} Fee Statement</h3></div>
@@ -736,79 +623,24 @@ function renderFees(){
 }
 
 function renderExams(){
-  const allResults=DB.getResults().filter(r=>r.studentId===S.id).sort((a,b)=>b.date-a.date);
-  const finalExams=allResults.filter(r=>r.type==='final'||!r.type);
-  const catTests=allResults.filter(r=>r.type==='cat'||r.type==='weekly');
+  const results=DB.getResults().filter(r=>r.studentId===S.id).sort((a,b)=>b.date-a.date);
   const el=document.getElementById('exams-content');
-
-  // Grading summary per level
-  const gradeSummaryHTML=SEA.levels.map(l=>{
-    const p=S.progress[l.id]||{};
-    const catScores=(p.catScores||[]);
-    const catAvg=catScores.length?Math.round(catScores.reduce((a,b)=>a+b,0)/catScores.length):null;
-    const finalScore=p.examScore!==null&&p.examScore!==undefined?pct(p.examScore,(typeof QUIZ_BANKS!=='undefined'&&QUIZ_BANKS[l.id]?QUIZ_BANKS[l.id].length:20)):null;
-    const contribution=p.contribution||0;
-    const totalGrade=finalScore!==null?Math.round((catAvg||0)*0.4 + finalScore*0.5 + contribution*0.1):null;
-    const f=studentFeeStatus(S,l.id);
-    return`<div style="border:1px solid var(--cream2);border-radius:var(--r-sm);padding:.9rem;background:${f.hasAccess?'var(--white)':'var(--cream)'};opacity:${f.hasAccess?1:.6};">
-      <div style="font-size:.82rem;font-weight:800;margin-bottom:.5rem;color:${SEA.levels[l.id-1].color};">Level ${l.id} — ${l.cefr}</div>
-      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:.4rem;text-align:center;font-size:.72rem;margin-bottom:.4rem;">
-        <div style="background:#f0faf2;border-radius:4px;padding:.35rem;"><div style="font-weight:800;color:var(--green);">${catAvg!==null?catAvg+'%':'—'}</div><div style="color:var(--muted);">CAT (40%)</div></div>
-        <div style="background:#eaf3fb;border-radius:4px;padding:.35rem;"><div style="font-weight:800;color:var(--blue);">${finalScore!==null?finalScore+'%':'—'}</div><div style="color:var(--muted);">Final (50%)</div></div>
-        <div style="background:#fff8e6;border-radius:4px;padding:.35rem;"><div style="font-weight:800;color:var(--gold);">${contribution}%</div><div style="color:var(--muted);">Contrib (10%)</div></div>
-      </div>
-      <div style="text-align:center;font-size:.85rem;font-weight:800;padding:.3rem;border-radius:4px;background:${totalGrade!==null?(totalGrade>=90?'#d6ead9':totalGrade>=75?'#d6e8fa':totalGrade>=70?'#f0faf2':'#fde8e8'):'var(--cream)'};color:${totalGrade!==null?(totalGrade>=90?'var(--green)':totalGrade>=75?'var(--blue)':totalGrade>=70?'#1e6b3a':'var(--red)'):'var(--muted)'};">
-        ${totalGrade!==null?'Overall: '+totalGrade+'% — '+grade(totalGrade):(f.hasAccess?'No exams yet':'Locked')}
-      </div>
-    </div>`;
-  }).join('');
-
-  // Final exam history
-  const finalRows=finalExams.length?finalExams.map(r=>`<tr>
-    <td><span class="badge b-b">Final</span></td>
-    <td>Level ${r.level}</td><td>${r.score}/${r.total}</td>
-    <td><strong>${r.pct}%</strong></td>
-    <td><span class="badge ${r.grade==='Distinction'||r.grade==='Merit'?'b-b':r.passed?'b-g':'b-r'}">${r.grade}</span></td>
+  const rows=results.length?results.map(r=>`<tr>
+    <td>Level ${r.level}</td><td>${r.score}/${r.total}</td><td><strong>${r.pct}%</strong></td>
+    <td>${CONFIG.passMarkAllLevels}%</td>
+    <td><span class="badge ${r.grade==='Distinction'?'b-b':r.grade==='Merit'?'b-b':r.passed?'b-g':'b-r'}">${r.grade}</span></td>
     <td>${fmtDate(r.date)}</td>
-  </tr>`).join(''):'<tr><td colspan="6" style="text-align:center;color:var(--muted);padding:1rem;">No final exams taken yet. <a onclick="goExam()" style="color:var(--green);font-weight:700;cursor:pointer;">Take Exam →</a></td></tr>';
-
-  // Weekly CAT history
-  const catRows=catTests.length?catTests.map(r=>`<tr>
-    <td><span class="badge b-gold">CAT</span></td>
-    <td>Level ${r.level}${r.unit?' · Unit '+r.unit:''}</td>
-    <td>${r.score}/${r.total}</td>
-    <td><strong>${r.pct}%</strong></td>
-    <td><span class="badge ${r.passed?'b-g':'b-r'}">${r.passed?'Pass':'Fail'}</span></td>
-    <td>${fmtDate(r.date)}</td>
-  </tr>`).join(''):'<tr><td colspan="6" style="text-align:center;color:var(--muted);padding:1rem;">No weekly tests recorded yet.</td></tr>';
-
-  el.innerHTML=`
-    <div class="panel" style="margin-bottom:1rem;">
-      <div class="phd"><h3>📊 Grade Summary</h3><span style="font-size:.72rem;color:var(--muted);">40% CAT · 50% Final · 10% Contribution</span></div>
-      <div class="pbd"><div style="display:grid;grid-template-columns:repeat(3,1fr);gap:.7rem;">${gradeSummaryHTML}</div></div>
-    </div>
-    <div class="panel" style="margin-bottom:1rem;">
-      <div class="phd"><h3>📝 Final Exam Records</h3>
-        <button onclick="goExam()" style="padding:5px 14px;background:var(--green);border:none;border-radius:3px;color:#fff;font-family:'Nunito',sans-serif;font-weight:700;font-size:.73rem;cursor:pointer;">Take Exam</button>
-      </div>
-      <div class="pbd" style="overflow-x:auto;"><table class="fee-table">
-        <thead><tr><th>Type</th><th>Level</th><th>Score</th><th>%</th><th>Grade</th><th>Date</th></tr></thead>
-        <tbody>${finalRows}</tbody>
-      </table></div>
-    </div>
-    <div class="panel">
-      <div class="phd"><h3>📋 Weekly CAT Records</h3></div>
-      <div class="pbd" style="overflow-x:auto;"><table class="fee-table">
-        <thead><tr><th>Type</th><th>Level / Unit</th><th>Score</th><th>%</th><th>Grade</th><th>Date</th></tr></thead>
-        <tbody>${catRows}</tbody>
-      </table></div>
-    </div>
-    <div class="panel"><div class="pbd" style="display:grid;grid-template-columns:repeat(4,1fr);gap:.7rem;text-align:center;font-size:.75rem;">
-      <div style="padding:.65rem;background:var(--green-lt);border-radius:var(--r-sm);"><div style="font-weight:800;color:var(--green);">Distinction</div><div style="color:var(--muted);">90–100%</div></div>
-      <div style="padding:.65rem;background:#d6e8fa;border-radius:var(--r-sm);"><div style="font-weight:800;color:var(--blue);">Merit</div><div style="color:var(--muted);">75–89%</div></div>
-      <div style="padding:.65rem;background:#e8f5e9;border-radius:var(--r-sm);"><div style="font-weight:800;color:var(--green);">Pass</div><div style="color:var(--muted);">70–74%</div></div>
-      <div style="padding:.65rem;background:var(--red-lt);border-radius:var(--r-sm);"><div style="font-weight:800;color:var(--red);">Fail</div><div style="color:var(--muted);">Below 70%</div></div>
-    </div></div>`;
+  </tr>`).join(''):'<tr><td colspan="6" style="text-align:center;color:var(--muted);padding:1.2rem;"><a onclick="goExam()" style="color:var(--green);font-weight:700;cursor:pointer;">Take your first exam</a></td></tr>';
+  el.innerHTML=`<div class="panel"><div class="pbd" style="overflow-x:auto;"><table class="fee-table">
+    <thead><tr><th>Level</th><th>Score</th><th>%</th><th>Pass Mark</th><th>Grade</th><th>Date</th></tr></thead>
+    <tbody>${rows}</tbody>
+  </table></div></div>
+  <div class="panel"><div class="pbd" style="display:grid;grid-template-columns:repeat(4,1fr);gap:.7rem;text-align:center;font-size:.77rem;">
+    <div style="padding:.65rem;background:var(--purple-lt);border-radius:var(--r-sm);"><div style="font-weight:800;color:var(--purple);">Distinction</div><div style="color:var(--muted);">90–100%</div></div>
+    <div style="padding:.65rem;background:var(--blue-lt);border-radius:var(--r-sm);"><div style="font-weight:800;color:var(--blue);">Merit</div><div style="color:var(--muted);">75–89%</div></div>
+    <div style="padding:.65rem;background:var(--green-lt);border-radius:var(--r-sm);"><div style="font-weight:800;color:var(--green);">Pass</div><div style="color:var(--muted);">70–74%</div></div>
+    <div style="padding:.65rem;background:var(--red-lt);border-radius:var(--r-sm);"><div style="font-weight:800;color:var(--red);">Fail</div><div style="color:var(--muted);">Below 70%</div></div>
+  </div></div>`;
 }
 
 function renderCerts(){
@@ -894,7 +726,7 @@ function showPage(id,item){
   document.getElementById('page-'+id).classList.add('active');
   document.querySelectorAll('.ni').forEach(n=>n.classList.remove('active'));
   if(item)item.classList.add('active');
-  const titles={overview:'Overview',mylevels:'Lessons & Notes',classes:'Live Classes',fees:'Fee Statement',exams:'Exam Records',certs:'Certificates',notifs:'Notifications',aitrainer:'My English Coach',askteacher:'Ask My Teacher'};
+  const titles={overview:'Overview',mylevels:'Lessons & Notes',tutorials:'Video Tutorials',weeklytests:'Weekly Tests',classes:'Live Classes',fees:'Fee Statement',exams:'Exam Records',certs:'Certificates',notifs:'Notifications'};
   document.getElementById('topTitle').textContent=titles[id]||id;
   window.scrollTo(0,0);
 }
@@ -918,719 +750,129 @@ function closeSidebar(){
 // Show mobile menu button on small screens
 function checkMobMenu(){const mb=document.querySelector('.mob-menu-btn');if(mb)mb.style.display=window.innerWidth<=860?'flex':'none';}
 checkMobMenu();window.addEventListener('resize',()=>{checkMobMenu();if(window.innerWidth>860)closeSidebar();});
-function doLogout(){DB.logoutStudent();window.location.href='index.html';}
-
-// ── AUTO LOGOUT AFTER 30 MINUTES INACTIVITY ──────────────────
-const INACTIVITY_LIMIT = 30 * 60 * 1000;
-let _inactivityTimer, _warningTimer;
-function resetInactivityTimer(){
-  clearTimeout(_inactivityTimer);clearTimeout(_warningTimer);
-  _warningTimer=setTimeout(()=>{showToast('You will be logged out in 5 minutes due to inactivity.','warning');},25*60*1000);
-  _inactivityTimer=setTimeout(()=>{showToast('Session expired. Logging out...','error');setTimeout(doLogout,2000);},INACTIVITY_LIMIT);
-}
-['mousemove','mousedown','keydown','touchstart','scroll','click'].forEach(evt=>{document.addEventListener(evt,resetInactivityTimer,{passive:true});});
-resetInactivityTimer();
-
-// ── MY ENGLISH COACH — VOICE PROFICIENCY ENGINE ───────────────
-const GEMINI_KEY = 'AIzaSyBkSJDP29Z6ehi3qqKHZjbyL_YqQ833IOc';
-const GEMINI_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${GEMINI_KEY}`;
-
-const _coachHistory = [];
-let _sessionEnded = false;
-let _exchangeCount = 0;
-const MAX_EXCHANGES = 8;
-
-// ── SPEECH SYNTHESIS (Coach speaks) ──────────────────────────
-function coachSpeak(text,onEnd){ amaraSpeak(text,onEnd); }
-
-// ── SPEECH RECOGNITION (Student speaks) ──────────────────────
-let _recognition = null;
-let _isListening = false;
-let _transcript = '';
-
-function initRecognition(){
-  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
-  if(!SR){ 
-    setVoiceStatus('❌ Voice not supported. Use Chrome or Edge.');
-    alert('Your browser does not support voice input. Please use Google Chrome or Microsoft Edge.');
-    return false; 
-  }
-  _recognition = new SR();
-  _recognition.lang = 'en-US';
-  _recognition.continuous = false;
-  _recognition.interimResults = true;
-  _recognition.maxAlternatives = 1;
-
-  let _finalText = '';
-  _recognition.onstart = ()=>{ 
-    _finalText=''; 
-    setVoiceStatus('🎙️ Listening... speak now');
-    console.log('[Coach] Recognition started');
-  };
-
-  _recognition.onresult = e => {
-    let interim='';
-    for(let i=e.resultIndex;i<e.results.length;i++){
-      if(e.results[i].isFinal){
-        _finalText += e.results[i][0].transcript+' ';
-      } else {
-        interim += e.results[i][0].transcript;
-      }
-    }
-    _transcript = _finalText;
-    const lt=document.getElementById('live-transcript');
-    const display=(_finalText+interim).trim();
-    if(display){ lt.textContent=display; lt.style.display='block'; }
-  };
-
-  _recognition.onerror = e => {
-    console.error('[Coach] Recognition error:',e.error);
-    if(e.error==='not-allowed'||e.error==='permission-denied'){
-      setVoiceStatus('❌ Microphone blocked! Allow mic in browser settings then refresh.');
-      alert('Microphone access was denied.\n\nTo fix:\n1. Click the padlock 🔒 in the address bar\n2. Set Microphone to "Allow"\n3. Refresh the page');
-      _isListening=false;
-      resetMicBtn();
-      return;
-    }
-    if(e.error==='no-speech'){
-      setVoiceStatus('🎙️ Still listening... speak clearly');
-      return;
-    }
-    if(e.error==='audio-capture'){
-      setVoiceStatus('❌ No microphone found. Check your mic is connected.');
-      _isListening=false; resetMicBtn(); return;
-    }
-    setVoiceStatus('Mic issue: '+e.error+'. Try again.');
-    stopListening();
-  };
-
-  _recognition.onend = ()=>{
-    console.log('[Coach] Recognition ended. isListening:',_isListening,'transcript:',_finalText);
-    if(_isListening){
-      // Show submit if we have something, otherwise restart
-      if(_finalText.trim()){
-        stopListening();
-      } else {
-        try{ _recognition.start(); }catch(e){ stopListening(); }
-      }
-    }
-  };
-  return true;
-}
-
-function resetMicBtn(){
-  const btn=document.getElementById('mic-btn');
-  if(btn){ btn.style.background='var(--green)'; btn.style.boxShadow='0 2px 8px rgba(0,0,0,.15)'; btn.textContent='🎙️'; }
-}
-
-function toggleMic(){
-  if(_isListening) stopListening();
-  else startListening();
-}
-
-async function startListening(){
-  // Request mic permission explicitly first
-  try{
-    await navigator.mediaDevices.getUserMedia({audio:true});
-  }catch(err){
-    setVoiceStatus('❌ Microphone blocked! Click padlock in address bar → Allow mic → Refresh.');
-    alert('Microphone access denied.\n\nFix:\n1. Click 🔒 in the address bar\n2. Set Microphone → Allow\n3. Refresh the page and try again.');
+function renderTutorials(){
+  const el=document.getElementById('tutorials-content');
+  const lang=S.language||'english';
+  const level=S.currentLevel||1;
+  if(typeof SEA_WEEKLY_CURRICULUM==='undefined'){
+    el.innerHTML='<div class="panel"><div class="pbd" style="text-align:center;padding:2rem;color:var(--muted);">Curriculum data not loaded. Make sure sea-curriculum.js is linked.</div></div>';
     return;
   }
-  if(!_recognition && !initRecognition()) return;
-  _transcript='';
-  document.getElementById('live-transcript').textContent='';
-  document.getElementById('live-transcript').style.display='block';
-  document.getElementById('submit-voice-btn').style.display='none';
-  try{
-    _recognition.start();
-    _isListening=true;
-    const btn=document.getElementById('mic-btn');
-    btn.style.background='#e53935';
-    btn.style.boxShadow='0 0 0 8px rgba(229,57,53,.2)';
-    btn.textContent='⏹️';
-    document.getElementById('live-transcript').textContent='Listening...';
-    setVoiceStatus('🎙️ Listening... speak now');
-  }catch(e){
-    console.error('[Coach] Start error:',e);
-    setVoiceStatus('Could not start mic. Try again.');
+  const prog=SEA_WEEKLY_CURRICULUM[lang]?.[level];
+  if(!prog){
+    el.innerHTML='<div class="panel"><div class="pbd" style="text-align:center;padding:2rem;color:var(--muted);">No tutorials found for your language/level combination.</div></div>';
+    return;
   }
-}
-
-function stopListening(){
-  try{_recognition.stop();}catch(e){}
-  _isListening=false;
-  resetMicBtn();
-  const answer=_transcript.trim();
-  if(answer){
-    setVoiceStatus('✅ Got your answer — press Submit or re-record.');
-    document.getElementById('submit-voice-btn').style.display='inline-block';
-  } else {
-    setVoiceStatus('No speech detected. Press 🎙️ and speak clearly.');
-    document.getElementById('live-transcript').style.display='none';
-  }
-}
-
-function setVoiceStatus(msg){ document.getElementById('voice-status').textContent=msg; }
-function setMicEnabled(on){
-  const btn=document.getElementById('mic-btn');
-  btn.disabled=!on;
-  btn.style.cursor=on?'pointer':'not-allowed';
-  btn.style.background=on?'var(--green)':'#e0e0e0';
-}
-
-// ── CONVERSATION LOG ──────────────────────────────────────────
-function addCoachMsg(role, text, isSystem=false){
-  const el=document.getElementById('coach-messages');
-  if(!el||!text)return;
-  // Sanitise text for innerHTML — replace newlines with <br>
-  const safeText = String(text).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\n/g,'<br>');
-  const isUser=role==='user';
-  const div=document.createElement('div');
-  div.style.cssText=`display:flex;justify-content:${isUser?'flex-end':'flex-start'};align-items:flex-end;gap:.4rem;margin-bottom:.2rem;`;
-  if(isSystem){
-    div.innerHTML=`<div style="width:100%;text-align:center;font-size:.7rem;color:var(--muted);padding:.25rem 0;font-style:italic;">${safeText}</div>`;
-  } else if(isUser){
-    div.innerHTML=`<div style="max-width:78%;padding:.65rem 1rem;border-radius:18px 18px 4px 18px;background:var(--green);color:#fff;font-size:.83rem;line-height:1.6;">🎙️ ${safeText}</div>`;
-  } else {
-    div.innerHTML=`
-      <div style="width:32px;height:32px;border-radius:50%;background:var(--green);display:flex;align-items:center;justify-content:center;font-size:1rem;flex-shrink:0;margin-bottom:2px;">🎓</div>
-      <div style="max-width:78%;padding:.65rem 1rem;border-radius:18px 18px 18px 4px;background:#fff;color:var(--ink);font-size:.83rem;line-height:1.6;border:1px solid var(--cream2);box-shadow:0 1px 3px rgba(0,0,0,.06);">${safeText}</div>`;
-  }
-  el.appendChild(div);
-  el.scrollTop=el.scrollHeight;
-}
-
-// ── LIVE SCORE TRACKER ────────────────────────────────────────
-const _liveScores={grammar:[],vocabulary:[],fluency:[],comprehension:[],pronunciation:[]};
-let _liveOverall=0;
-
-async function updateLiveScore(studentAnswer){
-  try{
-    const name=(S?.name||'Student').split(' ')[0];
-    const prompt=`You are scoring a student's spoken English. Based ONLY on this one answer, give a quick score update (0-100) for each skill. Be strict but fair. Output ONLY JSON, no other text:
-{"grammar":72,"vocabulary":68,"fluency":70,"comprehension":75,"pronunciation":65}
-
-Student answer: "${studentAnswer}"`;
-    const body={contents:[{role:'user',parts:[{text:prompt}]}],generationConfig:{maxOutputTokens:60,temperature:0.3}};
-    const resp=await fetch(GEMINI_URL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});
-    const data=await resp.json();
-    const raw=(data.candidates?.[0]?.content?.parts?.[0]?.text||'').replace(/```json|```/g,'').trim();
-    const scores=JSON.parse(raw);
-    Object.keys(scores).forEach(k=>{ if(_liveScores[k]) _liveScores[k].push(scores[k]); });
-    // Running average
-    const avg=k=>_liveScores[k].length?Math.round(_liveScores[k].reduce((a,b)=>a+b,0)/_liveScores[k].length):0;
-    _liveOverall=Math.round((avg('grammar')+avg('vocabulary')+avg('fluency')+avg('comprehension')+avg('pronunciation'))/5);
-    renderLiveScore(avg);
-  }catch(e){ console.warn('Live score error:',e); }
-}
-
-function renderLiveScore(avg){
-  let panel=document.getElementById('live-score-panel');
-  if(!panel){
-    panel=document.createElement('div');
-    panel.id='live-score-panel';
-    panel.style.cssText='margin:0 0 .5rem 0;background:#fff;border:1px solid var(--cream2);border-radius:var(--r-sm);padding:.6rem .9rem;';
-    const msgs=document.getElementById('coach-messages');
-    if(msgs) msgs.parentNode.insertBefore(panel,msgs);
-  }
-  const color=_liveOverall>=80?'#2d7a4f':_liveOverall>=60?'#c47c00':'#b83232';
-  const skills=['grammar','vocabulary','fluency','comprehension','pronunciation'];
-  const bars=skills.map(k=>{
-    const s=_liveScores[k].length?Math.round(_liveScores[k].reduce((a,b)=>a+b,0)/_liveScores[k].length):0;
-    const c=s>=80?'#2d7a4f':s>=60?'#c47c00':'#b83232';
-    return`<div style="display:flex;align-items:center;gap:.4rem;margin-bottom:2px;">
-      <span style="font-size:.65rem;color:var(--muted);width:72px;flex-shrink:0;">${k.charAt(0).toUpperCase()+k.slice(1)}</span>
-      <div style="flex:1;height:5px;border-radius:3px;background:var(--cream2);overflow:hidden;"><div style="height:100%;width:${s}%;background:${c};border-radius:3px;transition:width .5s;"></div></div>
-      <span style="font-size:.65rem;font-weight:700;color:${c};width:26px;text-align:right;">${s}%</span>
-    </div>`;
-  }).join('');
-  panel.innerHTML=`<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.4rem;">
-    <span style="font-size:.68rem;font-weight:800;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);">Live Score</span>
-    <span style="font-size:.82rem;font-weight:900;color:${color};">${_liveOverall}/100</span>
-  </div>${bars}`;
-}
-
-// ── GEMINI STREAMING — speaks sentences as they arrive ─────────
-// ── GEMINI API CALL ───────────────────────────────────────────
-async function callGemini(systemPrompt, messages){
-  const fixed=[];
-  for(let i=0;i<messages.length;i++){
-    const role=messages[i].role==='assistant'?'model':'user';
-    if(fixed.length>0&&fixed[fixed.length-1].role===role){
-      fixed[fixed.length-1].parts[0].text+='\n'+messages[i].content;
-    } else { fixed.push({role,parts:[{text:messages[i].content}]}); }
-  }
-  if(!fixed.length||fixed[0].role!=='user') fixed.unshift({role:'user',parts:[{text:'Hello'}]});
-  const body={system_instruction:{parts:[{text:systemPrompt}]},contents:fixed,generationConfig:{maxOutputTokens:300,temperature:0.7}};
-  const resp=await fetch(GEMINI_URL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});
-  const data=await resp.json();
-  if(data.error){console.error('Gemini error:',data.error);return '';}
-  return data.candidates?.[0]?.content?.parts?.[0]?.text||'';
-}
-
-// ── SESSION START ─────────────────────────────────────────────
-const COACH_SYSTEM=`You are Coach Amara, a warm and professional English language examiner at Study Language Academy in Nairobi, Kenya. Your students are Swahili-speaking learners.
-
-YOUR ROLE: Conduct a friendly spoken English proficiency assessment as a natural conversation.
-
-RULES:
-1. Start with a warm greeting using the student's name, then choose ONE topic to discuss (pick randomly: weekend plans, favourite food, their job or studies, a place they want to visit, or technology they use).
-2. Keep YOUR responses SHORT — maximum 2 sentences. This is the student's assessment, not yours.
-3. Ask ONE follow-up question per turn to keep the conversation going naturally.
-4. After ${MAX_EXCHANGES} student responses, end warmly: say goodbye and that you will prepare their report. Then on a NEW LINE write exactly: [GENERATE_REPORT]
-5. Silently note errors in Grammar, Vocabulary, Fluency, Comprehension, Pronunciation throughout.
-6. When asked for [GENERATE_REPORT], output ONLY this JSON and nothing else:
-{"cefrLevel":"B1","overallScore":67,"breakdown":{"grammar":{"score":65,"comment":"Explain here"},"vocabulary":{"score":70,"comment":"Explain here"},"fluency":{"score":68,"comment":"Explain here"},"comprehension":{"score":72,"comment":"Explain here"},"pronunciation":{"score":60,"comment":"Explain here"}},"strengths":"Write strengths here","improvements":"Write improvements here","recommendation":"Level 2 — Intermediate (CEFR B1)"}
-
-Student name: ${'{NAME}'}. Be warm, encouraging and professional at all times.`;
-
-async function startCoachSession(){
-  _sessionEnded=false;_exchangeCount=0;_coachHistory.length=0;_transcript='';
-  // Reset live scores
-  Object.keys(_liveScores).forEach(k=>_liveScores[k]=[]);
-  _liveOverall=0;
-  const lsp=document.getElementById('live-score-panel');if(lsp)lsp.remove();
-
-  document.getElementById('coach-intro').style.display='none';
-  document.getElementById('coach-chat').style.display='flex';
-  document.getElementById('coach-messages').innerHTML='';
-  document.getElementById('live-transcript').style.display='none';
-  document.getElementById('submit-voice-btn').style.display='none';
-  setMicEnabled(false);
-  setVoiceStatus('Coach Amara is preparing...');
-  addCoachMsg('system','— Voice session started —',true);
-
-  const name=(S?.name||'Student').split(' ')[0];
-  const system=COACH_SYSTEM.replace("${'NAME'}",name).replace('${MAX_EXCHANGES}',MAX_EXCHANGES);
-
-  // Warm up TTS with silent utterance (unlocks audio on mobile)
-  try{ window.speechSynthesis.speak(new SpeechSynthesisUtterance('')); }catch(e){}
-
-  try{
-    const reply=await callGemini(system,[{role:'user',content:'Hello, I am ready to begin.'}]);
-    const text=reply||`Good day, ${name}! I am Coach Amara from Study Language Academy. It is wonderful to meet you. Could you start by telling me a little about yourself?`;
-    _coachHistory.push({role:'user',content:'Hello, I am ready to begin.'},{role:'assistant',content:text});
-    addCoachMsg('assistant',text);
-    // Speak immediately — no delay needed since button click already unlocked audio
-    amaraSpeak(text,()=>{ setMicEnabled(true); setVoiceStatus('Your turn — press 🎙️ to speak'); });
-  }catch(e){
-    const fallback=`Good day, ${name}! I am Coach Amara. It is wonderful to meet you. Could you start by telling me a little about yourself — where you are from and what you do?`;
-    _coachHistory.push({role:'user',content:'Hello.'},{role:'assistant',content:fallback});
-    addCoachMsg('assistant',fallback);
-    amaraSpeak(fallback,()=>{ setMicEnabled(true); setVoiceStatus('Your turn — press 🎙️ to speak'); });
-  }
-}
-
-// ── SUBMIT VOICE ANSWER ───────────────────────────────────────
-async function submitVoiceAnswer(){
-  const answer=_transcript.trim();
-  if(!answer){ setVoiceStatus('No answer recorded. Please try again.'); return; }
-  _exchangeCount++;
-  addCoachMsg('user',answer);
-  _coachHistory.push({role:'user',content:answer});
-  document.getElementById('live-transcript').style.display='none';
-  document.getElementById('submit-voice-btn').style.display='none';
-  setMicEnabled(false);
-  _transcript='';
-  const pct=Math.min(Math.round((_exchangeCount/MAX_EXCHANGES)*100),99);
-  document.getElementById('coach-progress-label').textContent=`Session ${pct}% complete`;
-  setVoiceStatus('Coach Amara is thinking...');
-
-  // Update live score in background
-  updateLiveScore(answer);
-
-  const name=(S?.name||'Student').split(' ')[0];
-  const system=COACH_SYSTEM.replace("${'NAME'}",name).replace('${MAX_EXCHANGES}',MAX_EXCHANGES);
-  const msgs=[..._coachHistory];
-  if(_exchangeCount>=MAX_EXCHANGES){
-    msgs.push({role:'user',content:'Please wrap up the session warmly now and output [GENERATE_REPORT] on a new line.'});
-  }
-
-  try{
-
-    setVoiceStatus('🔊 Coach Amara is responding...');
-
-    const reply=await callGemini(system,msgs);
-    if(!reply){ setVoiceStatus('No response. Press mic to try again.'); setMicEnabled(true); return; }
-
-    if(reply.includes('[GENERATE_REPORT]')){
-      const wrapUp=reply.replace('[GENERATE_REPORT]','').trim();
-      _coachHistory.push({role:'assistant',content:reply});
-      _sessionEnded=true;
-      document.getElementById('coach-progress-label').textContent='Generating Report...';
-      if(wrapUp){
-        addCoachMsg('assistant',wrapUp);
-        amaraSpeak(wrapUp,()=>{
-          setVoiceStatus('Preparing your proficiency report...');
-          setTimeout(()=>generateReport(system),600);
-        });
-      } else {
-        setVoiceStatus('Preparing your proficiency report...');
-        setTimeout(()=>generateReport(system),600);
-      }
-    } else {
-      addCoachMsg('assistant',reply);
-      _coachHistory.push({role:'assistant',content:reply});
-      amaraSpeak(reply,()=>{
-        if(!_sessionEnded){ setMicEnabled(true); setVoiceStatus('Your turn — press 🎙️ to speak'); }
-      });
-    }
-  }catch(e){
-    console.error('submitVoiceAnswer error:',e);
-    addCoachMsg('assistant','I apologise, there was a connection issue. Please try again.');
-    setMicEnabled(true);
-    setVoiceStatus('Connection error. Press 🎙️ to try again.');
-  }
-}
-
-// ── AMARA SPEAK — reliable sentence-chained TTS ──────────────
-function amaraSpeak(text, onDone){
-  window.speechSynthesis.cancel();
-  const sentences=text.replace(/[^\S\n]+/g,' ').match(/[^.!?]+[.!?]+|\S[^.!?]*/g)||[text];
-  let idx=0;
-
-  function pickVoice(){
-    const all=window.speechSynthesis.getVoices();
-    return all.find(v=>v.name==='Google UK English Female')
-      ||all.find(v=>v.name==='Microsoft Zira - English (United States)')
-      ||all.find(v=>v.name==='Samantha')
-      ||all.find(v=>v.lang==='en-US'&&!v.name.includes('Male'))
-      ||all.find(v=>v.lang==='en-US')
-      ||all.find(v=>v.lang.startsWith('en'))
-      ||null;
-  }
-
-  function next(){
-    if(idx>=sentences.length){ if(onDone) onDone(); return; }
-    const s=sentences[idx].trim();
-    idx++;
-    if(!s){ next(); return; }
-    const utt=new SpeechSynthesisUtterance(s);
-    utt.rate=0.88; utt.pitch=1.0; utt.volume=1.0;
-    const v=pickVoice();
-    if(v){ utt.voice=v; utt.lang=v.lang; } else { utt.lang='en-US'; }
-    utt.onend=next;
-    utt.onerror=next;
-    window.speechSynthesis.speak(utt);
-    // Chrome pause bug fix
-    setTimeout(()=>{ try{if(window.speechSynthesis.paused)window.speechSynthesis.resume();}catch(e){} },150);
-  }
-
-  setVoiceStatus('🔊 Coach Amara is speaking...');
-  // Wait for voices if not yet loaded
-  const voices=window.speechSynthesis.getVoices();
-  if(voices.length){ next(); }
-  else { window.speechSynthesis.onvoiceschanged=()=>next(); }
-}
-
-// ── GENERATE REPORT ───────────────────────────────────────────
-async function generateReport(system){
-  try{
-    const raw=await callGemini(system,[..._coachHistory,{role:'user',content:'[GENERATE_REPORT] Output ONLY the JSON object. No other text.'}]);
-    const clean=raw.replace(/```json|```/g,'').trim();
-    const report=JSON.parse(clean);
-    renderScoreReport(report);
-  }catch(e){
-    renderScoreReport({cefrLevel:'B1',overallScore:65,breakdown:{grammar:{score:63,comment:'Shows reasonable control of basic grammar.'},vocabulary:{score:67,comment:'Adequate vocabulary for everyday topics.'},fluency:{score:65,comment:'Communicates clearly with minor hesitations.'},comprehension:{score:70,comment:'Understood questions and responded relevantly.'},pronunciation:{score:60,comment:'Generally clear. Continue practising natural intonation.'}},strengths:'Good comprehension and relevant responses.',improvements:'Expand vocabulary and practise longer, more detailed answers.',recommendation:'Level 2 — Intermediate (CEFR B1)'});
-  }
-}
-
-function renderScoreReport(r){
-  const score=r.overallScore||0;
-
-  // ── SAVE COACH SCORE — counts as 20% of final exam ───────────
-  if(S && typeof DB !== 'undefined'){
-    const coachRecord={
-      id:'coach_'+Date.now(),
-      studentId:S.id,
-      studentName:S.name,
-      date:Date.now(),
-      overallScore:score,
-      cefrLevel:r.cefrLevel||'—',
-      examWeight:20, // 20% of final exam
-      weightedScore:Math.round(score*0.20), // e.g. 65 * 0.20 = 13 points toward exam
-      breakdown:r.breakdown||{},
-      strengths:r.strengths||'',
-      improvements:r.improvements||'',
-      recommendation:r.recommendation||''
-    };
-    // Save to student record
-    S.lastCoachScore=coachRecord;
-    S.lastCoachDate=Date.now();
-    if(typeof DB.saveStudent==='function') DB.saveStudent(S);
-    // Save to logs
-    if(typeof DB.addLog==='function') DB.addLog({type:'coach_session',studentId:S.id,studentName:S.name,score,cefrLevel:r.cefrLevel,timestamp:Date.now()});
-    console.log('[Coach] Score saved:',score,'— weighted exam contribution:',coachRecord.weightedScore,'%');
-  }
-  const color=score>=80?'#2d7a4f':score>=60?'#c47c00':'#b83232';
-  const skills=[{key:'grammar',label:'Grammar 📝'},{key:'vocabulary',label:'Vocabulary 📖'},{key:'fluency',label:'Fluency 💬'},{key:'comprehension',label:'Comprehension 👂'},{key:'pronunciation',label:'Pronunciation 🗣️'}];
-  const skillsHTML=skills.map(sk=>{
-    const s=r.breakdown?.[sk.key]?.score||0;
-    const c=r.breakdown?.[sk.key]?.comment||'';
-    const sc=s>=80?'#2d7a4f':s>=60?'#c47c00':'#b83232';
-    return`<div style="margin-bottom:.9rem;"><div style="display:flex;justify-content:space-between;margin-bottom:.3rem;"><span style="font-size:.78rem;font-weight:700;">${sk.label}</span><span style="font-size:.78rem;font-weight:800;color:${sc};">${s}%</span></div><div style="height:8px;border-radius:4px;background:var(--cream2);overflow:hidden;"><div style="height:100%;width:${s}%;background:${sc};border-radius:4px;"></div></div><div style="font-size:.72rem;color:var(--muted);margin-top:.25rem;">${c}</div></div>`;
-  }).join('');
-
-  document.getElementById('report-content').innerHTML=`
-    <div style="text-align:center;margin-bottom:1.3rem;">
-      <div style="display:inline-flex;align-items:center;justify-content:center;width:95px;height:95px;border-radius:50%;border:5px solid ${color};margin-bottom:.6rem;">
-        <div><div style="font-size:1.7rem;font-weight:900;color:${color};line-height:1;">${score}</div><div style="font-size:.65rem;color:var(--muted);">/ 100</div></div>
-      </div>
-      <div style="font-size:1rem;font-weight:800;color:${color};">${r.cefrLevel} — ${score>=80?'Good':score>=60?'Intermediate':'Beginner'}</div>
-      <div style="font-size:.75rem;color:var(--muted);">Overall Spoken English Score</div>
-    </div>
-    <div style="background:var(--cream);border-radius:var(--r-sm);padding:1rem;margin-bottom:1rem;">${skillsHTML}</div>
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:.8rem;margin-bottom:1rem;">
-      <div style="background:#eafaf1;border-radius:var(--r-sm);padding:.85rem;"><div style="font-size:.68rem;font-weight:800;text-transform:uppercase;color:var(--green);margin-bottom:.35rem;">✅ Strengths</div><div style="font-size:.78rem;line-height:1.6;">${r.strengths||'—'}</div></div>
-      <div style="background:#fff8e6;border-radius:var(--r-sm);padding:.85rem;"><div style="font-size:.68rem;font-weight:800;text-transform:uppercase;color:#b07800;margin-bottom:.35rem;">📈 Improve</div><div style="font-size:.78rem;line-height:1.6;">${r.improvements||'—'}</div></div>
-    </div>
-    <div style="background:var(--green-lt);border-radius:var(--r-sm);padding:.85rem;text-align:center;">
-      <div style="font-size:.7rem;font-weight:800;text-transform:uppercase;color:var(--green);margin-bottom:.2rem;">Coach Recommendation</div>
-      <div style="font-size:.85rem;font-weight:700;">${r.recommendation||'Continue to Level 2'}</div>
-    </div>
-    <div style="margin-top:.8rem;background:#f0f7ff;border:1px solid #b8d4f0;border-radius:var(--r-sm);padding:.85rem;text-align:center;">
-      <div style="font-size:.7rem;font-weight:800;text-transform:uppercase;color:#2060a0;margin-bottom:.3rem;">📊 Exam Contribution</div>
-      <div style="font-size:.82rem;color:var(--ink);line-height:1.6;">This session score counts as <strong>20%</strong> of your final level exam.<br>Your contribution: <strong style="color:#2060a0;">${Math.round(score*0.20)} / 20 points</strong></div>
-    </div>`;
-  document.getElementById('coach-chat').style.display='none';
-  document.getElementById('coach-report').style.display='block';
-  window.speechSynthesis.cancel();
-}
-
-function resetCoachSession(){
-  _sessionEnded=false;_exchangeCount=0;_coachHistory.length=0;_transcript='';_isListening=false;
-  window.speechSynthesis.cancel();
-  if(_recognition){try{_recognition.stop();}catch(e){}}
-  document.getElementById('coach-report').style.display='none';
-  document.getElementById('coach-chat').style.display='none';
-  document.getElementById('coach-intro').style.display='block';
-  document.getElementById('coach-messages').innerHTML='';
-}
-
-// Preload voices on page load
-if(window.speechSynthesis){
-  window.speechSynthesis.getVoices();
-  window.speechSynthesis.onvoiceschanged = ()=>window.speechSynthesis.getVoices();
-}
-
-// ── ASK TEACHER ───────────────────────────────────────────────
-function submitQuestion(){
-  const topic=document.getElementById('qTopic').value;
-  const text=document.getElementById('qText').value.trim();
-  if(!topic){showToast('Please select a topic.','warning');return;}
-  if(!text||text.length<10){showToast('Please write your question (at least 10 characters).','warning');return;}
-  const q={
-    id:'q_'+Date.now()+'_'+Math.random().toString(36).slice(2,6),
-    studentId:S.id,
-    studentName:S.name,
-    studentAdm:S.admissionNumber,
-    language:S.targetLanguageLabel||S.targetLanguage||'English',
-    topic,text,
-    date:Date.now(),
-    status:'pending',
-    answer:null,
-    answeredBy:null,
-    answeredDate:null
-  };
-  // Ensure questions array exists and save
-  if(!S.questions) S.questions=[];
-  S.questions.unshift(q);
-  S=DB.getStudent(S.id)||S; // refresh
-  S.questions=S.questions||[];
-  // Remove any duplicate by id then add new
-  S.questions=S.questions.filter(x=>x.id!==q.id);
-  S.questions.unshift(q);
-  DB.saveStudent(S);
-  // Also save to Firebase if online
-  if(typeof _fsSet==='function') _fsSet('students',S.id,S);
-  // Notify all staff
-  DB.addNotification({
-    type:'student_question',
-    title:'New Question from '+S.name,
-    message:S.name+' ('+S.admissionNumber+') asked about "'+topic+'": '+text.substring(0,100)+(text.length>100?'...':''),
-    studentId:S.id,
-    questionId:q.id,
-    date:Date.now(),
-    read:false
-  });
-  document.getElementById('qTopic').value='';
-  document.getElementById('qText').value='';
-  showToast('✅ Question submitted! Your teacher will reply soon.','success');
-  renderQuestions();
-}
-
-function renderQuestions(){
-  // Always reload fresh student data to show latest answers
-  const fresh=DB.getStudent(S.id);
-  if(fresh) S=fresh;
-  const qs=(S.questions||[]);
-  const el=document.getElementById('questionsList');
-  if(!el) return;
-  if(!qs.length){el.innerHTML='<p style="font-size:.8rem;color:var(--muted);">No questions yet. Ask your first question above!</p>';return;}
-  const topicLabels={grammar:'Grammar',vocabulary:'Vocabulary',pronunciation:'Pronunciation',lesson:'Specific Lesson',exam:'Exam / Assessment',fees:'Fees / Payment',other:'Other'};
-  el.innerHTML=qs.map(q=>`
-    <div style="border:1px solid var(--cream2);border-radius:var(--r-sm);margin-bottom:.8rem;overflow:hidden;">
-      <div style="background:var(--cream);padding:.55rem .9rem;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:.3rem;">
-        <div style="display:flex;align-items:center;gap:.5rem;">
-          <span style="background:var(--green-lt);color:var(--green);padding:2px 8px;border-radius:3px;font-size:.68rem;font-weight:800;">${topicLabels[q.topic]||q.topic}</span>
-          <span style="font-size:.7rem;color:var(--muted);">${formatDateTime(q.date)}</span>
-        </div>
-        <span style="font-size:.7rem;font-weight:800;color:${q.status==='answered'?'var(--green)':'var(--gold)'};">${q.status==='answered'?'✅ Answered':'⏳ Awaiting reply'}</span>
-      </div>
-      <div style="padding:.7rem .9rem;">
-        <div style="font-size:.82rem;font-weight:600;margin-bottom:.35rem;color:var(--ink);">Q: ${q.text}</div>
-        ${q.answer?`
-          <div style="background:#f0faf2;border-left:3px solid var(--green);padding:.55rem .8rem;border-radius:0 var(--r-sm) var(--r-sm) 0;margin-top:.4rem;">
-            <div style="font-size:.7rem;font-weight:800;color:var(--green);margin-bottom:.2rem;">📩 Reply from ${q.answeredBy||'Your Teacher'} · ${formatDateTime(q.answeredDate)}</div>
-            <div style="font-size:.82rem;line-height:1.6;">${q.answer}</div>
-          </div>`:
-          '<div style="font-size:.75rem;color:var(--muted);margin-top:.3rem;font-style:italic;">Your teacher will reply here shortly.</div>'
-        }
-      </div>
-    </div>`).join('');
-}
-
-// ── WEEKLY CAT TEST ENGINE ────────────────────────────────────
-let _catAnswers={};
-let _catQuestions=[];
-let _catLevel=1;
-
-function startCATTest(){
-  const f=studentFeeStatus(S,S.currentLevel);
-  if(!f.hasAccess){showToast('Please activate your level first.','error');return;}
-  _catLevel=S.currentLevel;
-  const lang=(S.targetLanguage||'english').toLowerCase();
-  // Get CAT questions for student's language
-  _catQuestions=typeof getCATQuestions==='function'?getCATQuestions(lang,_catLevel):[];
-  if(!_catQuestions.length){
-    // Fallback to EXAM_QUESTIONS if no CAT questions
-    _catQuestions=(EXAM_QUESTIONS[_catLevel]||[]).slice(0,10);
-  }
-  if(!_catQuestions.length){showToast('No CAT questions available for your level yet.','warning');return;}
-  _catAnswers={};
-  const el=document.getElementById('cat-test-area');
-  el.style.display='block';
-  el.scrollIntoView({behavior:'smooth'});
-  const lang_label=S.targetLanguageLabel||'English';
-  el.innerHTML=`
-    <div class="panel" style="margin-bottom:1rem;">
-      <div class="phd" style="background:var(--gold);color:#fff;">
-        <h3 style="color:#fff;">📝 Weekly CAT — Level ${_catLevel} (${lang_label})</h3>
-        <span style="font-size:.72rem;opacity:.9;">${_catQuestions.length} questions · Counts 40% of your grade</span>
-      </div>
-      <div class="pbd" id="cat-questions-body">
-        ${_catQuestions.map((q,i)=>`
-          <div style="margin-bottom:1.2rem;padding:.9rem;background:var(--cream);border-radius:var(--r-sm);border:1px solid var(--cream2);" id="catq-${i}">
-            <div style="font-size:.85rem;font-weight:700;margin-bottom:.6rem;">${i+1}. ${q.q}</div>
-            <div style="display:flex;flex-direction:column;gap:.35rem;">
-              ${q.opts.map((opt,j)=>`
-                <label style="display:flex;align-items:center;gap:.5rem;cursor:pointer;padding:.4rem .6rem;border-radius:4px;border:1px solid var(--cream2);background:#fff;font-size:.82rem;transition:background .15s;" id="catlbl-${i}-${j}">
-                  <input type="radio" name="cat-q-${i}" value="${j}" onchange="selectCATAnswer(${i},${j})" style="accent-color:var(--gold);" />
-                  ${opt}
-                </label>`).join('')}
-            </div>
-          </div>`).join('')}
-        <div style="display:flex;gap:.7rem;margin-top:1rem;">
-          <button onclick="submitCATTest()" style="padding:10px 28px;background:var(--green);border:none;border-radius:var(--r-sm);color:#fff;font-family:'Nunito',sans-serif;font-weight:800;font-size:.88rem;cursor:pointer;">Submit CAT Test</button>
-          <button onclick="document.getElementById('cat-test-area').style.display='none';" style="padding:10px 18px;background:none;border:1.5px solid var(--cream2);border-radius:var(--r-sm);color:var(--muted);font-family:'Nunito',sans-serif;font-weight:700;font-size:.82rem;cursor:pointer;">Cancel</button>
-        </div>
-      </div>
-    </div>`;
-}
-
-function selectCATAnswer(qIdx,optIdx){
-  _catAnswers[qIdx]=optIdx;
-  // Highlight selected
-  _catQuestions[qIdx].opts.forEach((_,j)=>{
-    const lbl=document.getElementById(`catlbl-${qIdx}-${j}`);
-    if(lbl) lbl.style.background=j===optIdx?'#fff8e6':'#fff';
-    if(lbl) lbl.style.borderColor=j===optIdx?'var(--gold)':'var(--cream2)';
-  });
-}
-
-function submitCATTest(){
-  const answered=Object.keys(_catAnswers).length;
-  if(answered<_catQuestions.length){
-    if(!confirm(`You have answered ${answered} of ${_catQuestions.length} questions. Submit anyway?`)) return;
-  }
-  let correct=0;
-  _catQuestions.forEach((q,i)=>{
-    if(_catAnswers[i]===q.ans) correct++;
-  });
-  const total=_catQuestions.length;
-  const pctScore=Math.round((correct/total)*100);
-  const passed=pctScore>=CONFIG.passMarkAllLevels;
-
-  // Save CAT result
-  const result={
-    id:'cat_'+Date.now(),
-    studentId:S.id,
-    studentName:S.name,
-    level:_catLevel,
-    type:'cat',
-    score:correct,total,
-    pct:pctScore,
-    passed,
-    grade:grade(pctScore),
-    date:Date.now(),
-    language:S.targetLanguage||'english'
-  };
-  DB.addResult(result);
-  if(typeof _fsSet==='function') _fsSet('results3',result.id,result);
-
-  // Update CAT scores in progress
-  if(!S.progress[_catLevel]) S.progress[_catLevel]={units:[],examScore:null,catScores:[],contribution:0};
-  if(!S.progress[_catLevel].catScores) S.progress[_catLevel].catScores=[];
-  S.progress[_catLevel].catScores.push(pctScore);
-  DB.saveStudent(S);
-
-  // Show results with answer review
-  const el=document.getElementById('cat-test-area');
-  const reviewHTML=_catQuestions.map((q,i)=>{
-    const selected=_catAnswers[i];
-    const isCorrect=selected===q.ans;
-    return`<div style="padding:.6rem .8rem;border-radius:4px;margin-bottom:.4rem;background:${isCorrect?'#f0faf2':'#fde8e8'};border:1px solid ${isCorrect?'#b8dfc1':'#f5c6c6'};">
-      <div style="font-size:.8rem;font-weight:700;">${i+1}. ${q.q}</div>
-      <div style="font-size:.76rem;margin-top:.25rem;">Your answer: <strong style="color:${isCorrect?'var(--green)':'var(--red)'};">${selected!==undefined?q.opts[selected]:'Not answered'}</strong>${!isCorrect?` · Correct: <strong style="color:var(--green);">${q.opts[q.ans]}</strong>`:' ✓'}</div>
-    </div>`;
-  }).join('');
-
-  el.innerHTML=`<div class="panel" style="margin-bottom:1rem;">
-    <div class="phd" style="background:${passed?'var(--green)':'var(--red)'};color:#fff;">
-      <h3 style="color:#fff;">${passed?'✅':'❌'} CAT Result — ${pctScore}%</h3>
-      <span style="font-size:.75rem;opacity:.9;">${correct}/${total} correct · ${grade(pctScore)}</span>
-    </div>
-    <div class="pbd">
-      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:.6rem;margin-bottom:.9rem;text-align:center;">
-        <div style="background:var(--cream);border-radius:var(--r-sm);padding:.7rem;"><div style="font-size:1.3rem;font-weight:900;color:${passed?'var(--green)':'var(--red)'};">${pctScore}%</div><div style="font-size:.68rem;color:var(--muted);">Your Score</div></div>
-        <div style="background:var(--cream);border-radius:var(--r-sm);padding:.7rem;"><div style="font-size:1.3rem;font-weight:900;">${correct}/${total}</div><div style="font-size:.68rem;color:var(--muted);">Correct</div></div>
-        <div style="background:var(--cream);border-radius:var(--r-sm);padding:.7rem;"><div style="font-size:1.3rem;font-weight:900;color:var(--gold);">${Math.round(pctScore*0.4)}%</div><div style="font-size:.68rem;color:var(--muted);">Contributes to Grade</div></div>
-      </div>
-      <div style="margin-bottom:.8rem;">${reviewHTML}</div>
-      <div style="display:flex;gap:.6rem;flex-wrap:wrap;">
-        <button onclick="startCATTest()" style="padding:8px 18px;background:var(--gold);border:none;border-radius:var(--r-sm);color:#fff;font-family:'Nunito',sans-serif;font-weight:700;font-size:.8rem;cursor:pointer;">Retake CAT</button>
-        <button onclick="document.getElementById('cat-test-area').style.display='none';renderExams();" style="padding:8px 18px;background:var(--green);border:none;border-radius:var(--r-sm);color:#fff;font-family:'Nunito',sans-serif;font-weight:700;font-size:.8rem;cursor:pointer;">View All Records</button>
-      </div>
+  const langLabel=lang==='swahili'?'Kiswahili':'English';
+  let html=`<div style="background:var(--white);border-radius:var(--r);border:1px solid var(--cream2);padding:1rem 1.2rem;margin-bottom:1rem;display:flex;align-items:center;gap:10px;">
+    <div style="font-size:1.4rem;">📺</div>
+    <div>
+      <div style="font-weight:800;font-size:.9rem;">${langLabel} — ${prog.title} (${prog.cefr})</div>
+      <div style="font-size:.75rem;color:var(--muted);">15 weeks of video lessons. Watch each video, take notes, then sit the weekly test.</div>
     </div>
   </div>`;
-  renderExams();
+  const wkProgress=DB.load('wk_progress_'+S.id+'_'+lang+'_'+level,{});
+  prog.weeks.forEach(wk=>{
+    const hasVideo=!!wk.youtube;
+    const wtDone=wkProgress[wk.week]?.testPassed;
+    const isExamWeek=wk.week===15;
+    html+=`<div class="panel" style="margin-bottom:.8rem;">
+      <div style="padding:.7rem 1rem;background:${isExamWeek?'#2a5c3f22':'var(--cream)'};border-bottom:1px solid var(--cream2);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.5rem;">
+        <div>
+          <span style="font-size:.65rem;font-weight:800;text-transform:uppercase;letter-spacing:.07em;color:${isExamWeek?'var(--green)':'var(--gold)'};margin-right:.5rem;">Week ${wk.week}</span>
+          <span style="font-weight:700;font-size:.88rem;">${wk.title}</span>
+        </div>
+        <div style="display:flex;gap:.4rem;align-items:center;">
+          ${wtDone?'<span style="background:var(--green-lt);color:var(--green);font-size:.65rem;font-weight:800;padding:2px 7px;border-radius:3px;">✅ Test Passed</span>':''}
+        </div>
+      </div>
+      <div class="pbd" style="padding:.8rem 1rem;">
+        <p style="font-size:.78rem;color:var(--muted);margin-bottom:.6rem;">${wk.objectives}</p>
+        <div style="display:flex;flex-wrap:wrap;gap:.35rem;margin-bottom:.7rem;">
+          ${wk.topics.map(t=>`<span style="background:var(--cream2);border-radius:3px;padding:2px 8px;font-size:.68rem;font-weight:700;color:#3a4d3e;">${t}</span>`).join('')}
+        </div>
+        ${hasVideo?`<div style="position:relative;width:100%;padding-bottom:56.25%;height:0;border-radius:var(--r-sm);overflow:hidden;margin-bottom:.8rem;background:#000;">
+          <iframe src="https://www.youtube.com/embed/${wk.youtube}?rel=0&modestbranding=1"
+            style="position:absolute;top:0;left:0;width:100%;height:100%;border:none;"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowfullscreen title="Week ${wk.week} Tutorial"></iframe>
+        </div>`:`<div style="background:var(--cream);border-radius:var(--r-sm);padding:1rem;text-align:center;font-size:.78rem;color:var(--muted);margin-bottom:.8rem;">📹 Exam week — no tutorial video. Review all previous weeks.</div>`}
+        <div style="display:flex;gap:.5rem;flex-wrap:wrap;">
+          ${!isExamWeek?`<button onclick="launchWeeklyTest('${lang}',${level},${wk.week})"
+            style="padding:7px 16px;border-radius:3px;background:${wtDone?'var(--green)':'var(--gold)'};border:none;color:#fff;font-family:'Nunito',sans-serif;font-weight:700;font-size:.78rem;cursor:pointer;">
+            ${wtDone?'✅ Retake Week '+wk.week+' Test':'📝 Take Week '+wk.week+' Test'}
+          </button>`:`<button onclick="goExam()"
+            style="padding:7px 16px;border-radius:3px;background:var(--green);border:none;color:#fff;font-family:'Nunito',sans-serif;font-weight:700;font-size:.78rem;cursor:pointer;">
+            🎓 Take Level ${level} Final Exam
+          </button>`}
+        </div>
+      </div>
+    </div>`;
+  });
+  el.innerHTML=html;
 }
 
-// Update contribution score on login (daily)
-function updateContribution(){
-  const level=S.currentLevel;
-  const today=new Date().toDateString();
-  const lastLogin=S.lastLoginDate;
-  if(!S.progress[level]) S.progress[level]={units:[],examScore:null,catScores:[],contribution:0};
-  if(lastLogin!==today){
-    S.lastLoginDate=today;
-    // Increment contribution (max 10, each login = 0.5 points)
-    S.progress[level].contribution=Math.min(10,(S.progress[level].contribution||0)+0.5);
-    DB.saveStudent(S);
+function renderWeeklyTests(){
+  const el=document.getElementById('weeklytests-content');
+  const lang=S.language||'english';
+  const level=S.currentLevel||1;
+  if(typeof SEA_WEEKLY_CURRICULUM==='undefined'){
+    el.innerHTML='<div class="panel"><div class="pbd" style="padding:2rem;text-align:center;color:var(--muted);">Curriculum data not loaded.</div></div>';
+    return;
   }
+  const prog=SEA_WEEKLY_CURRICULUM[lang]?.[level];
+  if(!prog){
+    el.innerHTML='<div class="panel"><div class="pbd" style="padding:2rem;text-align:center;color:var(--muted);">No tests found for your language/level.</div></div>';
+    return;
+  }
+  const wkProgress=DB.load('wk_progress_'+S.id+'_'+lang+'_'+level,{});
+  const passedCount=Object.values(wkProgress).filter(w=>w.testPassed).length;
+  let html=`<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:.7rem;margin-bottom:1rem;">
+    <div class="sc g"><span class="sc-icon">📝</span><div class="sc-val">${passedCount}</div><div class="sc-lbl">Weeks Passed</div></div>
+    <div class="sc gd"><span class="sc-icon">📅</span><div class="sc-val">14</div><div class="sc-lbl">Total Weekly Tests</div></div>
+    <div class="sc b"><span class="sc-icon">🎯</span><div class="sc-val">70%</div><div class="sc-lbl">Pass Mark</div></div>
+  </div>
+  <div class="panel"><div class="phd"><h3>Weekly Test Progress — Level ${level} ${lang==='swahili'?'Kiswahili':'English'}</h3></div><div class="pbd">`;
+  for(let w=1;w<=14;w++){
+    const wd=prog.weeks[w-1];
+    const wpData=wkProgress[w]||{};
+    const passed=wpData.testPassed;
+    const score=wpData.score;
+    const date=wpData.date?formatDate(wpData.date):'—';
+    const hasTest=typeof SEA_WEEKLY_TESTS!=='undefined'&&SEA_WEEKLY_TESTS[lang]?.[level]?.[w];
+    html+=`<div style="display:flex;align-items:center;justify-content:space-between;padding:.55rem .7rem;border-bottom:1px solid var(--cream2);flex-wrap:wrap;gap:.35rem;">
+      <div style="display:flex;align-items:center;gap:.55rem;">
+        <div style="width:28px;height:28px;border-radius:50%;background:${passed?'var(--green)':'var(--cream2)'};color:${passed?'#fff':'var(--muted)'};display:flex;align-items:center;justify-content:center;font-size:.68rem;font-weight:800;flex-shrink:0;">${w}</div>
+        <div><div style="font-size:.8rem;font-weight:700;">${wd?wd.title:'Week '+w}</div>
+        <div style="font-size:.68rem;color:var(--muted);">${passed?`Passed · ${score}% · ${date}`:'Not attempted yet'}</div></div>
+      </div>
+      ${hasTest?`<button onclick="launchWeeklyTest('${lang}',${level},${w})"
+        style="padding:5px 14px;border-radius:3px;background:${passed?'var(--green)':'var(--gold)'};border:none;color:#fff;font-family:'Nunito',sans-serif;font-weight:700;font-size:.72rem;cursor:pointer;flex-shrink:0;">
+        ${passed?'Retake':'Start'} Test
+      </button>`:`<span style="font-size:.7rem;color:var(--muted);font-style:italic;">Coming soon</span>`}
+    </div>`;
+  }
+  html+=`</div></div>
+  <div class="panel" style="margin-top:.6rem;"><div class="phd"><h3>🎓 Week 15 — Level ${level} Final Exam</h3></div>
+  <div class="pbd" style="text-align:center;padding:1.2rem;">
+    <p style="font-size:.82rem;color:var(--muted);margin-bottom:.9rem;">The end-of-level exam covers all 14 weeks. It includes MCQ, Short Answers, Extended Writing, and a Voice Recording section. One attempt per level.</p>
+    <button onclick="goExam()" style="padding:10px 24px;border-radius:3px;background:var(--green);border:none;color:#fff;font-family:'Nunito',sans-serif;font-weight:800;font-size:.88rem;cursor:pointer;">📝 Take Level ${level} Final Exam</button>
+  </div></div>`;
+  el.innerHTML=html;
 }
 
+function launchWeeklyTest(lang,level,week){
+  if(typeof SEA_WEEKLY_TESTS==='undefined'||!SEA_WEEKLY_TESTS[lang]?.[level]?.[week]){
+    showToast('Test for Week '+week+' is not yet available.','warning');return;
+  }
+  localStorage.setItem('sea_exam_mode','weekly');
+  localStorage.setItem('sea_exam_lang',lang);
+  localStorage.setItem('sea_exam_level',level);
+  localStorage.setItem('sea_exam_week',week);
+  window.location.href='exam.html';
+}
+
+function doLogout(){DB.logoutStudent();window.location.href='index.html';}
 init().catch(e=>console.error(e));
 </script>
 </body>

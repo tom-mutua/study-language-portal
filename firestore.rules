@@ -1,19 +1,78 @@
 rules_version = '2';
-
 service cloud.firestore {
   match /databases/{database}/documents {
 
-    // This rule allows anyone with your Firestore database reference to view, edit,
-    // and delete all data in your Firestore database. It is useful for getting
-    // started, but it is configured to expire after 30 days because it
-    // leaves your app open to attackers. At that time, all client
-    // requests to your Firestore database will be denied.
-    //
-    // Make sure to write security rules for your app before that time, or else
-    // all client requests to your Firestore database will be denied until you Update
-    // your rules
-    match /{document=**} {
-      allow read, write: if request.time < timestamp.date(2026, 6, 7);
+    // ── STUDENTS ──────────────────────────────────────────────────
+    // A student can read/write their own document only.
+    // Staff with a valid auth token can read/write any student.
+    match /students/{studentId} {
+      allow read, write: if request.auth != null &&
+        (request.auth.uid == studentId || isStaff());
+    }
+
+    // ── STAFF ─────────────────────────────────────────────────────
+    // Only other authenticated staff can read staff documents.
+    // Only chief_admin can create or delete staff.
+    match /staff/{staffId} {
+      allow read: if request.auth != null && isStaff();
+      allow write: if request.auth != null && isChiefAdmin();
+    }
+
+    // ── RECRUITERS ────────────────────────────────────────────────
+    match /recruiters/{recruiterId} {
+      allow read: if request.auth != null && isStaff();
+      allow write: if request.auth != null && isStaff();
+    }
+
+    // ── CLASSES ───────────────────────────────────────────────────
+    match /classes/{classId} {
+      allow read: if request.auth != null;
+      allow write: if request.auth != null && isStaff();
+    }
+
+    // ── MATERIALS ─────────────────────────────────────────────────
+    match /materials/{matId} {
+      allow read: if request.auth != null;
+      allow write: if request.auth != null && isStaff();
+    }
+
+    // ── EXAM WINDOWS ──────────────────────────────────────────────
+    match /exam_windows/{winId} {
+      allow read: if request.auth != null;
+      allow write: if request.auth != null && isStaff();
+    }
+
+    // ── RESULTS ───────────────────────────────────────────────────
+    match /results/{resultId} {
+      allow read: if request.auth != null && isStaff();
+      allow create: if request.auth != null;
+      allow update, delete: if request.auth != null && isStaff();
+    }
+
+    // ── MESSAGES / LOGS ───────────────────────────────────────────
+    match /messages/{msgId} {
+      allow read, write: if request.auth != null && isStaff();
+    }
+    match /logs/{logId} {
+      allow read: if request.auth != null && isChiefAdmin();
+      allow create: if request.auth != null && isStaff();
+    }
+
+    // ── PENDING APPLICATIONS ──────────────────────────────────────
+    // Anyone (even unauthenticated) can create a pending application.
+    // Only staff can read or update (approve/reject).
+    match /pending_apps/{appId} {
+      allow create: if true;
+      allow read, update, delete: if request.auth != null && isStaff();
+    }
+
+    // ── HELPER FUNCTIONS ──────────────────────────────────────────
+    function isStaff() {
+      return exists(/databases/$(database)/documents/staff/$(request.auth.uid));
+    }
+    function isChiefAdmin() {
+      let staffDoc = get(/databases/$(database)/documents/staff/$(request.auth.uid));
+      return staffDoc != null && staffDoc.data.role == 'chief_admin';
     }
   }
 }

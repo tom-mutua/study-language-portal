@@ -1,4 +1,37 @@
 {
-  "indexes": [],
+  "indexes": [
+    {
+      "collectionGroup": "students",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "currentLevel", "order": "ASCENDING" },
+        { "fieldPath": "joinDate",     "order": "DESCENDING" }
+      ]
+    },
+    {
+      "collectionGroup": "students",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "recruiterCode", "order": "ASCENDING" },
+        { "fieldPath": "joinDate",      "order": "DESCENDING" }
+      ]
+    },
+    {
+      "collectionGroup": "results",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "level",   "order": "ASCENDING" },
+        { "fieldPath": "date",    "order": "DESCENDING" }
+      ]
+    },
+    {
+      "collectionGroup": "pending_apps",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "status",       "order": "ASCENDING" },
+        { "fieldPath": "submittedAt",  "order": "DESCENDING" }
+      ]
+    }
+  ],
   "fieldOverrides": []
 }
